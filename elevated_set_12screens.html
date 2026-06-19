@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Quiet Guide for Immersive Space — Photo Essay</title>
+<meta name="viewport" content="width=1240">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #08090C;
+  --ink-deep: #050608;
+  --soot: #14151A;
+  --surface: #1C1D24;
+  --line: rgba(232,229,222,0.06);
+  --line-2: rgba(232,229,222,0.12);
+  --line-3: rgba(232,229,222,0.18);
+
+  --text: #E8E5DE;
+  --text-2: rgba(232,229,222,0.50);
+  --text-3: rgba(232,229,222,0.28);
+  --whisper: rgba(232,229,222,0.14);
+
+  --water: #8FBDC9;
+  --water-soft: rgba(143,189,201,0.18);
+  --pale: #DFEDF2;
+
+  --serif: 'Source Serif 4', 'Times New Roman', 'Hiragino Mincho ProN', serif;
+  --sans: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --jp: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+}
+
+@page { size: A3 landscape; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ink); color: var(--text); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body { font-family: var(--sans); font-size: 14px; font-weight: 400; line-height: 1.5; }
+
+/* ─────────────────────────────────────
+   Page — A3 landscape canvas
+   ───────────────────────────────────── */
+.page {
+  width: 1240px;
+  height: 877px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+}
+.page + .page { margin-top: 24px; }
+
+/* one quiet folio bottom-left on every page — no page numbers, just identity */
+.folio {
+  position: absolute; left: 56px; bottom: 36px;
+  font-family: var(--sans); font-size: 8.5px; font-weight: 400;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text-3);
+}
+.folio em { font-style: normal; color: var(--text-2); }
+
+/* helpers */
+.mark { font-family: var(--sans); font-size: 9px; font-weight: 400; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-2); }
+.mark.w { color: var(--water); }
+.thin { height: 0.5px; background: var(--line-2); }
+
+/* ─────────────────────────────────────
+   01 — COVER
+   ───────────────────────────────────── */
+.cover-mark   { position: absolute; top: 56px; left: 56px; font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-3); }
+.cover-rule   { position: absolute; top: 56px; right: 56px; width: 320px; height: 0.5px; background: var(--line-2); }
+.cover-tag    { position: absolute; top: 70px; right: 56px; font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-3); }
+
+.cover-title  {
+  position: absolute; right: 56px; bottom: 220px;
+  font-family: var(--serif); font-weight: 300;
+  font-size: 96px; line-height: 0.96; letter-spacing: -0.018em;
+  color: var(--text);
+  text-align: right;
+}
+.cover-sub {
+  position: absolute; right: 56px; bottom: 158px;
+  font-family: var(--serif); font-weight: 300; font-style: normal;
+  font-size: 17px; color: var(--text-2); letter-spacing: 0.01em;
+  max-width: 480px; text-align: right;
+}
+
+.cover-meta {
+  position: absolute; right: 56px; bottom: 70px; max-width: 480px;
+  display: flex; flex-direction: column; gap: 4px;
+  text-align: right;
+  font-family: var(--sans); font-size: 10px; color: var(--text-3); letter-spacing: 0.05em;
+}
+.cover-meta strong { display: block; font-weight: 400; color: var(--text-2); margin-top: 2px; }
+.cover-meta .jp { font-family: var(--jp); letter-spacing: 0.02em; }
+
+/* a single quiet pool of light bottom-left as anchor — not particles */
+.cover-pool {
+  position: absolute; left: -240px; bottom: -300px;
+  width: 720px; height: 720px; border-radius: 50%;
+  background: radial-gradient(circle at 55% 45%, rgba(143,189,201,0.16), rgba(143,189,201,0.04) 45%, transparent 70%);
+  filter: blur(3px);
+}
+
+/* ─────────────────────────────────────
+   02 — MANIFESTO
+   ───────────────────────────────────── */
+.mft-mark { position: absolute; top: 56px; left: 56px; }
+.mft-statement {
+  position: absolute; top: 200px; left: 56px; right: 56px; max-width: 1080px;
+  font-family: var(--serif); font-weight: 300;
+  font-size: 78px; line-height: 1.04; letter-spacing: -0.018em;
+  color: var(--text);
+}
+/* tiny footnote-style principles at the very bottom */
+.mft-principles {
+  position: absolute; bottom: 80px; left: 56px; right: 56px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 60px;
+  padding-top: 18px; border-top: 0.5px solid var(--line);
+}
+.mft-p { display: flex; gap: 14px; align-items: baseline; }
+.mft-p .n {
+  font-family: var(--sans); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.22em; color: var(--water);
+  flex-shrink: 0;
+}
+.mft-p .body { display: flex; flex-direction: column; gap: 3px; }
+.mft-p .t {
+  font-family: var(--sans); font-size: 10.5px; font-weight: 500;
+  color: var(--text);
+}
+.mft-p .d {
+  font-family: var(--sans); font-size: 9.5px; font-weight: 400;
+  color: var(--text-3); line-height: 1.55;
+}
+.mft-p .d.jp { font-family: var(--jp); font-size: 9.5px; color: var(--whisper); }
+
+/* ─────────────────────────────────────
+   STAGE SPREADS (Pre-visit, During pair, After)
+   ───────────────────────────────────── */
+.spread-mark { position: absolute; top: 56px; left: 56px; }
+.spread-quote {
+  position: absolute; top: 56px; right: 56px; max-width: 360px;
+  font-family: var(--serif); font-weight: 300; font-style: normal;
+  font-size: 18px; line-height: 1.4; color: var(--text-2);
+  text-align: right;
+}
+
+/* iPhone frame — documentary print feel */
+.ph {
+  position: relative; aspect-ratio: 393/852; background: var(--ink-deep);
+  border-radius: 30px; overflow: hidden;
+  border: 0.5px solid rgba(232,229,222,0.10);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.55);
+  color: var(--text);
+}
+.ph::after {
+  content: ""; position: absolute; top: 0; left: 22%; right: 22%; height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(232,229,222,0.18), transparent);
+  pointer-events: none;
+}
+
+/* small text helpers for phone interiors */
+.eb { font-family: var(--sans); font-size: 7.5px; font-weight: 500; letter-spacing: 0.22em; color: rgba(232,229,222,0.55); text-transform: uppercase; }
+.eb.w { color: var(--water); }
+.eb.faint { color: rgba(232,229,222,0.35); }
+.glass-bg { background: rgba(15,16,20,0.62); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.soft-bg  { background: rgba(28,29,36,0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 0.5px solid var(--line); }
+
+/* caption near each screen */
+.cap { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; }
+.cap .l { font-family: var(--sans); font-size: 9px; font-weight: 500; letter-spacing: 0.24em; color: var(--text-3); text-transform: uppercase; }
+.cap .n { font-family: var(--serif); font-size: 17px; font-weight: 400; color: var(--text); letter-spacing: -0.003em; }
+.cap .d { font-family: var(--sans); font-size: 10.5px; color: var(--text-2); margin-top: 4px; line-height: 1.6; max-width: 230px; }
+.cap .d.jp { font-family: var(--jp); font-size: 10px; color: var(--text-3); margin-top: 2px; max-width: 230px; }
+
+/* ─────────────────────────────────────
+   HERO PAGES (one phone per page)
+   ───────────────────────────────────── */
+.hero-mark { position: absolute; top: 56px; left: 56px; }
+.hero-num  { position: absolute; top: 56px; right: 56px; font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; color: var(--text-3); text-transform: uppercase; }
+
+.hero-phone {
+  position: absolute; right: 92px; top: 110px;
+  width: 320px; aspect-ratio: 393/852;
+}
+
+/* HERO TEXT — museum didactic label */
+.hero-text {
+  position: absolute; left: 56px; bottom: 110px; max-width: 440px;
+}
+.hero-text .cat { font-family: var(--sans); font-size: 9px; font-weight: 500; letter-spacing: 0.22em; color: var(--text-2); text-transform: uppercase; }
+.hero-text .n { font-family: var(--serif); font-size: 42px; font-weight: 300; line-height: 1.0; letter-spacing: -0.012em; margin-top: 14px; color: var(--text); }
+.hero-text .meta { font-family: var(--sans); font-size: 10px; font-weight: 400; letter-spacing: 0.10em; color: var(--text-3); text-transform: uppercase; margin-top: 18px; }
+.hero-text .pdash { width: 32px; height: 0.5px; background: var(--line-3); margin: 16px 0; }
+.hero-text .d { font-family: var(--sans); font-size: 12.5px; color: var(--text-2); line-height: 1.75; max-width: 360px; margin-top: 0; }
+.hero-text .d.jp { font-family: var(--jp); font-size: 11.5px; color: var(--text-3); margin-top: 8px; line-height: 1.9; }
+.hero-text .l { font-family: var(--sans); font-size: 9px; font-weight: 500; letter-spacing: 0.28em; color: var(--water); text-transform: uppercase; }
+
+/* MARGINALIA — small analytical notes in the page margins */
+.note {
+  position: absolute; right: 56px;
+  width: 200px;
+  font-family: var(--sans); font-size: 9.5px; line-height: 1.7; color: var(--text-3);
+  padding-left: 14px; border-left: 0.5px solid var(--line-3);
+}
+.note .n { font-family: var(--sans); font-size: 8.5px; letter-spacing: 0.24em; color: var(--water); text-transform: uppercase; font-weight: 500; display: block; margin-bottom: 6px; }
+.note em { font-style: normal; color: var(--text-2); }
+
+/* the silent page — slightly deeper */
+.silent { background: var(--ink-deep); }
+
+/* ─────────────────────────────────────
+   DESIGN SYSTEM (reference page)
+   ───────────────────────────────────── */
+.ds-wrap { position: absolute; top: 56px; left: 56px; right: 56px; bottom: 70px; }
+.ds-head { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 18px; border-bottom: 0.5px solid var(--line-2); }
+.ds-head .l { font-family: var(--serif); font-size: 32px; font-weight: 300; letter-spacing: -0.005em; color: var(--text); }
+.ds-head .r { font-family: var(--sans); font-size: 9px; letter-spacing: 0.28em; color: var(--text-3); text-transform: uppercase; }
+
+.ds-body { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+.ds-col h4 { font-family: var(--sans); font-size: 10px; font-weight: 500; letter-spacing: 0.24em; color: var(--water); text-transform: uppercase; margin-bottom: 14px; }
+
+.ds-tokens { display: grid; grid-template-columns: 14px 1fr 90px; gap: 6px 14px; align-items: center; font-size: 11px; }
+.ds-tokens .sw { width: 14px; height: 14px; border-radius: 3px; border: 0.5px solid var(--line-2); }
+.ds-tokens .nm { font-family: var(--sans); color: var(--text); font-weight: 400; }
+.ds-tokens .hx { font-family: var(--sans); font-size: 10px; color: var(--text-3); letter-spacing: 0.04em; text-align: right; }
+
+.ds-type { display: grid; grid-template-columns: 90px 1fr; gap: 10px 18px; align-items: baseline; }
+.ds-type .l { font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; color: var(--text-3); padding-top: 4px; }
+
+.ds-refs { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 36px; padding-top: 20px; border-top: 0.5px solid var(--line); }
+.ds-refs .h { font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; color: var(--water); text-transform: uppercase; }
+.ds-refs .v { font-family: var(--serif); font-size: 20px; font-weight: 400; margin-top: 8px; color: var(--text); }
+.ds-refs .d { font-family: var(--sans); font-size: 10.5px; color: var(--text-2); margin-top: 8px; line-height: 1.7; }
+.ds-refs .d.jp { font-family: var(--jp); font-size: 10px; color: var(--text-3); margin-top: 2px; }
+
+/* ─────────────────────────────────────
+   CLOSING
+   ───────────────────────────────────── */
+.close-pool {
+  position: absolute; right: -200px; bottom: -260px;
+  width: 660px; height: 660px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 60%, rgba(143,189,201,0.14), rgba(143,189,201,0.03) 50%, transparent 75%);
+  filter: blur(4px);
+}
+.close-mark { position: absolute; top: 56px; left: 56px; }
+.close-msg {
+  position: absolute; left: 56px; bottom: 220px; max-width: 880px;
+  font-family: var(--serif); font-weight: 300;
+  font-size: 56px; line-height: 1.06; letter-spacing: -0.012em;
+  color: var(--text);
+}
+.close-msg em { font-style: italic; color: var(--text-2); font-weight: 300; }
+.close-jp {
+  position: absolute; left: 56px; bottom: 150px; max-width: 720px;
+  font-family: var(--jp); font-size: 12px; color: var(--text-3); line-height: 1.95; letter-spacing: 0.005em;
+}
+.close-sign {
+  position: absolute; left: 56px; right: 56px; bottom: 70px;
+  padding-top: 16px; border-top: 0.5px solid var(--line);
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.close-sign .who { font-family: var(--serif); font-size: 15px; color: var(--text); letter-spacing: -0.002em; }
+.close-sign .who span { display: block; font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; color: var(--text-3); margin-top: 6px; text-transform: uppercase; }
+.close-sign .right { font-family: var(--sans); font-size: 9px; letter-spacing: 0.24em; color: var(--text-3); text-align: right; text-transform: uppercase; line-height: 2; }
+
+/* ─────────────────────────────────────
+   PRINT
+   ───────────────────────────────────── */
+@media print {
+  html, body {
+    background: var(--ink) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .page {
+    width: 297mm; height: 210mm;
+    margin: 0 !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  .page + .page { margin-top: 0 !important; }
+  .glass-bg, .soft-bg { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  .ph { box-shadow: 0 6px 18px rgba(0,0,0,0.5) !important; }
+}
+
+@media print and (max-width: 230mm) {
+  .cover-title { font-size: 64px; }
+  .mft-statement { font-size: 36px; }
+  .close-msg { font-size: 40px; }
+  .hero-text .n { font-size: 38px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     01 — COVER
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="cover-pool"></div>
+
+  <!-- architectural vertical rule — a single quiet structural line -->
+  <div style="position:absolute; left:300px; top:56px; bottom:56px; width:0.5px; background:var(--line-2);"></div>
+  <!-- tiny tick on the rule, at golden ratio -->
+  <div style="position:absolute; left:288px; top:540px; width:25px; height:0.5px; background:var(--line-3);"></div>
+  <div style="position:absolute; left:318px; top:534px; font-family:var(--sans); font-size:8.5px; letter-spacing:0.20em; color:var(--text-3); text-transform:uppercase;">01 / 11</div>
+
+  <div class="cover-mark">Quiet Guide for Immersive Space</div>
+  <div class="cover-rule"></div>
+  <div class="cover-tag">teamLab UI / UX Designer Challenge — Supplemental</div>
+
+  <h1 class="cover-title">A quiet interface<br/>for an<br/>immersive world.</h1>
+  <div class="cover-sub">teamLab Guide App · Elevated Set · 12 Screens</div>
+
+  <div class="cover-meta">
+    <span>Author <strong>Avendano Shintaro</strong></span>
+    <span>School <strong class="jp">専門学校 中央情報大学校</strong></span>
+    <span>Section <strong>Supplemental UX Proposal</strong></span>
+    <span>Format <strong>iPhone 15 · 393 × 852 pt</strong></span>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>Cover</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     02 — MANIFESTO
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="mft-mark mark">01 / Manifesto</div>
+
+  <h2 class="mft-statement">The interface should not become the experience.<br/>It should stay behind it.<br/>Guiding only when needed. Silent when it is not.</h2>
+
+  <div class="mft-principles">
+    <div class="mft-p">
+      <div class="n">01</div>
+      <div class="body">
+        <div class="t">Low Brightness</div>
+        <div class="d">Restrained contrast. One accent. No decoration.</div>
+        <div class="d jp">低輝度・低彩度・装飾なし。</div>
+      </div>
+    </div>
+    <div class="mft-p">
+      <div class="n">02</div>
+      <div class="body">
+        <div class="t">Less Text During Immersion</div>
+        <div class="d">Only direction, distance, and one short hint remain.</div>
+        <div class="d jp">方向・距離・短いヒントだけが残る。</div>
+      </div>
+    </div>
+    <div class="mft-p">
+      <div class="n">03</div>
+      <div class="body">
+        <div class="t">Movement-first Guidance</div>
+        <div class="d">Large tap areas. Short directions. Vibration over sound.</div>
+        <div class="d jp">大きなタップ領域・短い指示・音より振動。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>Manifesto</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     03 — PRE-VISIT spread (3 screens, asymmetric)
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="spread-mark mark">02 / Before — Pre-visit</div>
+  <div class="spread-quote">Three quiet preparations before the dark begins.</div>
+
+  <!-- thin journey hairline connecting the three screens -->
+  <svg width="100%" height="100%" viewBox="0 0 1240 877" preserveAspectRatio="none" style="position:absolute; inset:0; pointer-events:none;">
+    <line x1="320" y1="378" x2="450" y2="378" stroke="rgba(232,229,222,0.10)" stroke-width="0.5" stroke-dasharray="2 4"/>
+    <line x1="690" y1="378" x2="820" y2="378" stroke="rgba(232,229,222,0.10)" stroke-width="0.5" stroke-dasharray="2 4"/>
+  </svg>
+
+  <!-- Screen 01 Onboarding (left, slightly low) -->
+  <div style="position:absolute; left:90px; top:200px; width:230px;">
+    <div class="ph">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, rgba(143,189,201,0.15), transparent 55%);"></div>
+      <div style="padding:30px 20px 0;">
+        <div class="eb w">WELCOME</div>
+        <div style="font-family:var(--serif); font-weight:300; font-size:22px; margin-top:14px; line-height:1.18;">A quiet guide<br/>for the dark.</div>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:64px;">
+        <div style="width:118px; height:118px; border-radius:50%; background:radial-gradient(circle,rgba(143,189,201,0.6),rgba(106,157,171,0.18) 55%,transparent); border:0.5px solid rgba(143,189,201,0.22);"></div>
+      </div>
+      <div style="position:absolute; bottom:130px; left:20px; right:20px; font-size:11px; color:rgba(232,229,222,0.55); line-height:1.7;">Three short steps to set up audio, haptics and language.</div>
+      <div style="position:absolute; bottom:22px; left:18px; right:18px; display:flex; align-items:center; gap:8px;">
+        <div style="display:flex; gap:4px;">
+          <div style="width:18px; height:2.5px; background:#8FBDC9; border-radius:99px;"></div>
+          <div style="width:6px; height:2.5px; background:rgba(232,229,222,0.18); border-radius:99px;"></div>
+          <div style="width:6px; height:2.5px; background:rgba(232,229,222,0.18); border-radius:99px;"></div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="border:0.5px solid rgba(232,229,222,0.35); border-radius:999px; padding:6px 14px; font-size:10px;">Continue ›</div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">01 — Stage 01</div>
+      <div class="n">Onboarding</div>
+      <div class="d">Introduces the guide without interrupting anticipation.</div>
+      <div class="d jp">期待感を切らさず、ガイドを静かに伝える。</div>
+    </div>
+  </div>
+
+  <!-- Screen 02 Today's Visit (center, slightly high) -->
+  <div style="position:absolute; left:455px; top:155px; width:235px;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:11px 13px 8px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+        <div style="display:flex; flex-direction:column; gap:3px;">
+          <div style="height:1.2px; width:13px; background:rgba(232,229,222,0.85);"></div>
+          <div style="height:1.2px; width:17px; background:rgba(232,229,222,0.85);"></div>
+        </div>
+        <div style="font-family:var(--serif); font-size:12px;">teamLab Borderless</div>
+        <div style="width:13px; height:13px; border:1px solid var(--water); border-radius:50%;"></div>
+      </div>
+      <div style="padding:48px 7px 0;">
+        <div style="height:110px; background:linear-gradient(135deg,#2a0a36,#a04a6c 40%,#c47640); border-radius:13px; margin-bottom:6px; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.55));"></div>
+          <div class="eb" style="position:absolute; top:7px; left:11px;">FLORAL · 5 ROOMS</div>
+          <div style="position:absolute; bottom:9px; left:11px; font-family:var(--serif); font-size:13px;">teamLab Borderless</div>
+        </div>
+        <div style="height:110px; background:linear-gradient(135deg,#0c2532,#3a8298 50%,#a7cfd9); border-radius:13px; margin-bottom:6px; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.55));"></div>
+          <div class="eb w" style="position:absolute; top:7px; left:11px;">YOU ARE HERE</div>
+          <div style="position:absolute; bottom:9px; left:11px; font-family:var(--serif); font-size:13px;">Borderless World</div>
+        </div>
+        <div style="height:110px; background:linear-gradient(135deg,#162d18,#4b8c75 50%,#86a05a); border-radius:13px; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.55));"></div>
+          <div class="eb" style="position:absolute; top:7px; left:11px;">ACTIVE · 6 ROOMS</div>
+          <div style="position:absolute; bottom:9px; left:11px; font-family:var(--serif); font-size:13px;">Athletics Forest</div>
+        </div>
+      </div>
+      <div class="soft-bg" style="position:absolute; left:9px; right:9px; bottom:13px; border-radius:13px; padding:9px; display:flex; gap:9px; align-items:center;">
+        <div style="width:34px; height:34px; border-radius:7px; background:linear-gradient(135deg,#3a8298,#a7cfd9);"></div>
+        <div style="flex:1;">
+          <div class="eb w">YOU ARE HERE</div>
+          <div style="font-family:var(--serif); font-size:11.5px; margin-top:1px;">Borderless World</div>
+        </div>
+        <div style="color:rgba(232,229,222,0.4); font-size:12px;">›</div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">02 — Stage 02</div>
+      <div class="n">Today's Visit</div>
+      <div class="d">Gives only the essentials before entering.</div>
+      <div class="d jp">今いる場所と、今日起きていることだけを伝える。</div>
+    </div>
+  </div>
+
+  <!-- Screen 03 Ticket (right, slightly low) -->
+  <div style="position:absolute; left:820px; top:225px; width:235px;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:11px 14px; display:flex; justify-content:center; z-index:3;">
+        <div style="font-family:var(--serif); font-size:12px;">Ticket</div>
+      </div>
+      <div style="padding:48px 15px 0;">
+        <div class="eb w">VALID TODAY</div>
+        <div style="font-family:var(--serif); font-size:17px; margin-top:4px;">teamLab Borderless</div>
+      </div>
+      <div class="soft-bg" style="margin:14px 13px; border-radius:17px; padding:17px; text-align:center;">
+        <div style="background:#E8E5DE; width:125px; height:125px; margin:0 auto; border-radius:9px; padding:7px;">
+          <div style="width:100%; height:100%; background-image: radial-gradient(#08090C 28%, transparent 30%); background-size: 10px 10px;"></div>
+        </div>
+        <div class="eb faint" style="margin-top:11px;">ADULT · JUN 15</div>
+        <div style="font-family:var(--serif); font-size:12.5px; margin-top:3px;">Entry 10:00 – 18:00</div>
+      </div>
+      <div style="padding:0 13px;">
+        <div style="background:rgba(143,189,201,0.08); border:0.5px solid rgba(143,189,201,0.20); border-radius:11px; padding:9px; font-size:9.5px; color:var(--pale); line-height:1.55;">Scan at the entrance gate.</div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">03 — Stage 02</div>
+      <div class="n">Ticket</div>
+      <div class="d">Keeps entry clear and quick to access.</div>
+      <div class="d jp">入場を単純に。役割は QR を見せることだけ。</div>
+    </div>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>Before</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     04 — HERO: Exhibition Map
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="hero-mark mark">03 / During — Stage 03</div>
+  <div class="hero-num">Hero · 04 / 12</div>
+
+  <div class="hero-phone">
+    <div class="ph" style="background:#0a0d12;">
+      <div style="position:absolute; inset:0; background:radial-gradient(circle at 30% 35%, rgba(143,189,201,0.07), transparent 55%), radial-gradient(circle at 70% 70%, rgba(106,157,171,0.05), transparent 55%);"></div>
+      <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(232,229,222,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(232,229,222,0.022) 1px, transparent 1px); background-size: 26px 26px;"></div>
+      <div style="position:absolute; top:32%; left:38%; width:12px; height:12px; border-radius:50%; background:var(--water); box-shadow:0 0 18px rgba(143,189,201,0.65);"></div>
+      <div style="position:absolute; top:32%; left:38%; width:30px; height:30px; border-radius:50%; border:0.5px solid rgba(143,189,201,0.45); transform:translate(-9px,-9px);"></div>
+      <div style="position:absolute; top:22%; left:62%; width:9px; height:9px; border-radius:50%; background:#9DD0B3;"></div>
+      <div style="position:absolute; top:48%; left:25%; width:9px; height:9px; border-radius:50%; background:#E6C387;"></div>
+      <div style="position:absolute; top:50%; left:65%; width:9px; height:9px; border-radius:50%; background:rgba(232,229,222,0.28);"></div>
+      <div class="glass-bg" style="position:absolute; top:14px; left:14px; right:14px; border-radius:999px; padding:8px 14px; font-family:var(--sans); font-size:9px; letter-spacing:0.18em; color:rgba(232,229,222,0.75); text-transform:uppercase;">FLOOR 2 · BORDERLESS WORLD</div>
+      <div class="soft-bg" style="position:absolute; left:0; right:0; bottom:0; border-top-left-radius:22px; border-top-right-radius:22px; padding:14px;">
+        <div style="width:36px; height:3px; background:rgba(232,229,222,0.18); border-radius:99px; margin:0 auto 12px;"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div class="eb w">NEXT ON ROUTE</div>
+          <div class="eb">3 / 8</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:12px;">
+          <div style="width:46px; height:46px; border-radius:11px; background:radial-gradient(circle, #A7CFD9, #3a8298); flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:14px;">Forest of Lamps</div>
+            <div style="font-size:10px; color:rgba(232,229,222,0.55); margin-top:1px;">28m · 3 min · Less crowded</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <div style="flex:1; border:0.5px solid rgba(232,229,222,0.16); border-radius:999px; text-align:center; padding:8px; font-size:10px;">Detail</div>
+          <div style="flex:1; background:var(--water); color:#0c1a20; border-radius:999px; text-align:center; padding:8px; font-size:10px; font-weight:600;">Quiet Guide ▶</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-text">
+    <div class="cat">Quiet Guide / Cat. 04</div>
+    <h3 class="n">Exhibition Map.</h3>
+    <div class="meta">Stage 03 · Exploring<br/>iPhone 15 · 393 × 852 pt</div>
+    <div class="pdash"></div>
+    <p class="d">A simplified map that prioritizes location, direction, and the nearest works. In dark spaces, orientation matters more than detail.</p>
+    <p class="d jp">暗所では地図の詳細より「方向感」と「次の作品」を優先する。歩きながら一目で把握できる縮約。</p>
+  </div>
+
+  <div class="note" style="top:160px;">
+    <span class="n">Note · 04</span>
+    The map removes street names and category icons. <em>Five visible elements only</em>: location, route, three pin states. Less to read, more to feel.
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>04 / Exhibition Map</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     05 — HERO: Nearby Guide
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="hero-mark mark">03 / During — Stage 03</div>
+  <div class="hero-num">Hero · 05 / 12</div>
+
+  <div class="hero-phone" style="left:90px; right:auto;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+        <div style="width:24px; height:24px; border-radius:50%; background:rgba(28,29,36,0.7); display:flex; align-items:center; justify-content:center; font-size:11px;">‹</div>
+        <div style="font-family:var(--serif); font-size:13px;">Borderless World</div>
+        <div style="width:24px;"></div>
+      </div>
+      <div style="height:190px; background:linear-gradient(135deg,#0c2532,#3a8298 50%,#a7cfd9); position:relative;">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 45%, var(--ink-deep));"></div>
+        <div style="position:absolute; bottom:14px; left:16px;">
+          <div class="eb w">YOU ARE HERE</div>
+          <div style="font-family:var(--serif); font-size:18px; margin-top:4px;">Borderless World</div>
+          <div style="font-size:9px; color:rgba(232,229,222,0.6); margin-top:3px;">8 artworks · 35 min suggested</div>
+        </div>
+      </div>
+      <div style="padding:10px 14px;">
+        <div class="eb" style="margin-bottom:8px;">ARTWORKS IN THIS AREA</div>
+        <div style="display:flex; gap:10px; align-items:center; padding:6px 0;">
+          <div style="width:40px; height:40px; border-radius:8px; background:linear-gradient(135deg,#A7CFD9,#3a8298);"></div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Universe of Water Particles</div>
+            <div style="font-size:8px; color:rgba(232,229,222,0.5); margin-top:1px;">5 min · Now playing audio</div>
+          </div>
+          <div style="background:rgba(143,189,201,0.15); color:var(--water); border-radius:99px; padding:2px 7px; font-size:7px; letter-spacing:0.16em; font-weight:500;">LIVE</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; padding:6px 0; opacity:0.7;">
+          <div style="width:40px; height:40px; border-radius:8px; background:linear-gradient(135deg,#2a0a36,#a04a6c);"></div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Forest of Lamps</div>
+            <div style="font-size:8px; color:rgba(232,229,222,0.5); margin-top:1px;">4 min · 28m away</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; padding:6px 0; opacity:0.5;">
+          <div style="width:40px; height:40px; border-radius:8px; background:linear-gradient(135deg,#162d18,#4b8c75);"></div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Crystal Universe</div>
+            <div style="font-size:8px; color:#9DD0B3; margin-top:1px;">✓ Visited</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute; left:14px; right:14px; bottom:16px;">
+        <div style="background:var(--water); color:#0c1a20; border-radius:999px; text-align:center; padding:9px; font-size:10px; font-weight:600;">Start Quiet Guide ▶</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-text" style="left:auto; right:56px; text-align:right; max-width:420px;">
+    <div class="cat">Quiet Guide / Cat. 05</div>
+    <h3 class="n">Nearby Guide.</h3>
+    <div class="meta">Stage 03 · Exploring<br/>iPhone 15 · 393 × 852 pt</div>
+    <div class="pdash" style="margin-left:auto;"></div>
+    <p class="d" style="margin-left:auto;">Suggests the next artwork without overwhelming the visitor. Three works at a time, ranked by silence rather than relevance.</p>
+    <p class="d jp" style="margin-left:auto;">近くの作品を押しつけがましくなく案内する。一度に3件、静けさで並び替える。</p>
+  </div>
+
+  <div class="note" style="left:56px; right:auto; bottom:130px; border-left:none; border-right:0.5px solid var(--line-3); padding-left:0; padding-right:14px; text-align:right;">
+    <span class="n" style="text-align:right;">Note · 05</span>
+    Live state is the only place Water Blue appears in this list — <em>color signals attention, not decoration</em>.
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>05 / Nearby Guide</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     06 — HERO: Artwork Detail
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="hero-mark mark">03 / During — Stage 03</div>
+  <div class="hero-num">Hero · 06 / 12</div>
+
+  <div class="hero-phone">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+        <div style="width:26px; height:26px; border-radius:50%; background:rgba(28,29,36,0.7); display:flex; align-items:center; justify-content:center; font-size:12px;">‹</div>
+        <div class="eb">ARTWORK 03 / 47</div>
+        <div style="width:26px; height:26px; border-radius:50%; background:rgba(28,29,36,0.7); display:flex; align-items:center; justify-content:center;">
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <div style="height:1.2px; width:11px; background:#E8E5DE;"></div>
+            <div style="height:1.2px; width:11px; background:#E8E5DE;"></div>
+            <div style="height:1.2px; width:11px; background:#E8E5DE;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="height:260px; background:radial-gradient(ellipse at 50% 70%, var(--pale), #3a8298 40%, #08090C 90%); position:relative;">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, var(--ink-deep));"></div>
+      </div>
+      <div style="padding:0 16px;">
+        <div class="eb w">UNIVERSE OF WATER PARTICLES</div>
+        <div style="font-family:var(--serif); font-size:18px; line-height:1.25; margin-top:5px; letter-spacing:-0.005em;">on a Rock where People Gather</div>
+        <div style="display:flex; gap:5px; margin-top:10px;">
+          <div style="background:rgba(232,229,222,0.06); border-radius:5px; padding:2.5px 6px; font-family:var(--sans); font-size:7.5px; letter-spacing:0.12em; text-transform:uppercase;">teamLab</div>
+          <div style="background:rgba(232,229,222,0.06); border-radius:5px; padding:2.5px 6px; font-family:var(--sans); font-size:7.5px; letter-spacing:0.12em;">2018</div>
+          <div style="background:rgba(232,229,222,0.06); border-radius:5px; padding:2.5px 6px; font-family:var(--sans); font-size:7.5px; letter-spacing:0.12em;">Installation</div>
+        </div>
+        <div style="font-size:10px; line-height:1.7; color:rgba(232,229,222,0.78); margin-top:12px;">Crossing the boundaries of other works, water flows from the Athletics Forest…</div>
+      </div>
+      <div class="soft-bg" style="position:absolute; left:14px; right:14px; bottom:74px; border-radius:18px; padding:13px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div>
+            <div class="eb w">AUDIO GUIDE</div>
+            <div style="font-family:var(--serif); font-size:12px; margin-top:1px;">Narrated by teamLab</div>
+          </div>
+          <div class="eb">1:24 / 3:40</div>
+        </div>
+        <div style="width:100%; height:2.5px; background:rgba(232,229,222,0.10); border-radius:999px; position:relative; margin-bottom:12px;">
+          <div style="position:absolute; left:0; top:0; bottom:0; width:38%; background:var(--water); border-radius:999px;"></div>
+          <div style="position:absolute; left:38%; top:-3px; width:8px; height:8px; border-radius:50%; background:var(--water);"></div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:22px; align-items:center;">
+          <div style="font-size:13px; opacity:0.7;">⏮</div>
+          <div style="width:40px; height:40px; border-radius:50%; background:var(--water); color:#0c1a20; display:flex; align-items:center; justify-content:center; font-size:12px;">▶</div>
+          <div style="font-size:13px; opacity:0.7;">⏭</div>
+        </div>
+      </div>
+      <div style="position:absolute; left:14px; right:14px; bottom:14px; display:flex; gap:6px;">
+        <div style="flex:1; border:0.5px solid rgba(232,229,222,0.16); border-radius:999px; text-align:center; padding:7px; font-size:10px;">Nearby</div>
+        <div style="flex:1; background:var(--water); color:#0c1a20; border-radius:999px; text-align:center; padding:7px; font-size:10px; font-weight:600;">Quiet Mode</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-text">
+    <div class="cat">Quiet Guide / Cat. 06</div>
+    <h3 class="n">Artwork Detail.</h3>
+    <div class="meta">Stage 03 · Exploring<br/>iPhone 15 · 393 × 852 pt</div>
+    <div class="pdash"></div>
+    <p class="d">Lets the artwork speak first. The audio guide is offered, not autoplayed. Words come after the image.</p>
+    <p class="d jp">作品を先に語らせる。音声ガイドは任意で、静かに添える。</p>
+  </div>
+
+  <div class="note" style="top:170px;">
+    <span class="n">Note · 06</span>
+    The audio guide is the only Water Blue surface on this page — its presence asks, never insists. <em>Autoplay is off by default.</em>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>06 / Artwork Detail</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     07 — HERO: Quiet Guide (the silent page)
+     ════════════════════════════════════════ -->
+<section class="page silent">
+  <div class="hero-mark mark" style="color:var(--text-3);">04 / Immersing — Stage 04</div>
+  <div class="hero-num" style="color:var(--text-3);">Hero · 07 / 12</div>
+
+  <div class="hero-phone">
+    <div class="ph" style="background:#000000;">
+      <div style="padding:28px 22px 0; opacity:0.45;">
+        <div class="eb">▮▮▯ ROUTE 3 / 8</div>
+      </div>
+      <div style="display:flex; justify-content:center; margin-top:54px;">
+        <div style="width:130px; height:130px; border-radius:50%; background:radial-gradient(circle, rgba(143,189,201,0.12), transparent 70%); display:flex; align-items:center; justify-content:center;">
+          <svg width="60" height="60" viewBox="0 0 80 80" fill="none">
+            <path d="M40 12 L40 68" stroke="#E8E5DE" stroke-width="3" stroke-linecap="round" opacity="0.82"/>
+            <path d="M14 38 L40 12 L66 38" stroke="#E8E5DE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.82"/>
+          </svg>
+        </div>
+      </div>
+      <div style="position:absolute; bottom:200px; left:0; right:0; text-align:center;">
+        <div style="font-family:var(--serif); font-size:54px; font-weight:300; letter-spacing:-0.025em; opacity:0.92;">28<span style="font-size:18px; opacity:0.5;">m</span></div>
+        <div style="font-size:10px; opacity:0.42; margin-top:6px;">turn left at corridor</div>
+      </div>
+      <div style="position:absolute; bottom:74px; left:24px; right:24px; text-align:center; padding-top:18px; border-top:0.5px solid rgba(232,229,222,0.06);">
+        <div class="eb" style="color:rgba(232,229,222,0.28);">NEXT</div>
+        <div style="font-family:var(--serif); font-size:14px; opacity:0.74; margin-top:5px;">Forest of Resonating Lamps</div>
+        <div style="font-family:var(--serif); font-size:10px; opacity:0.42; margin-top:8px; line-height:1.6;">stand still<br/>and watch the color travel</div>
+      </div>
+      <div style="position:absolute; bottom:18px; left:0; right:0; text-align:center;">
+        <div class="eb" style="opacity:0.28;">▼ SWIPE TO EXIT</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-text">
+    <div class="cat" style="color:var(--text-3);">Quiet Guide / Cat. 07</div>
+    <h3 class="n" style="color:var(--text); font-size:38px;">Quiet Guide.</h3>
+    <div class="meta" style="color:var(--whisper);">Stage 04 · Immersing<br/>iPhone 15 · 393 × 852 pt</div>
+    <div class="pdash" style="background:var(--line-2);"></div>
+    <p class="d" style="color:var(--text-3);">The screen lowers when you do. Brightness drops, text reduces to direction and distance, sound stops. The vibration takes over.</p>
+    <p class="d jp" style="color:var(--whisper);">没入中、画面の輝度と情報量を絞る。案内は振動が補い、音声は自動再生しない。</p>
+  </div>
+
+  <div class="note" style="top:180px; color:var(--whisper); border-left-color:var(--line-2);">
+    <span class="n" style="color:var(--text-3);">Note · 07</span>
+    The most quiet page of this document. <em>Five words remain on the screen.</em> The arrow does the rest.
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>07 / Quiet Guide</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     08 — DURING PAIR (Route Assist + Crowd Balance)
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="spread-mark mark">04 / Immersing — Continued</div>
+  <div class="spread-quote">Movement and crowd, handled in the background.</div>
+
+  <!-- Route Assist (left, larger) -->
+  <div style="position:absolute; left:90px; top:170px; width:260px;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+        <div style="width:24px; height:24px; border-radius:50%; background:rgba(28,29,36,0.7); display:flex; align-items:center; justify-content:center; font-size:11px;">‹</div>
+        <div style="font-family:var(--serif); font-size:13px;">Your Route</div>
+        <div style="width:24px;"></div>
+      </div>
+      <div style="padding:50px 16px 0;">
+        <div class="eb">8 ARTWORKS · 1H 20M</div>
+        <div style="font-family:var(--serif); font-size:20px; margin-top:5px; line-height:1.15;">Less crowded path.</div>
+        <div style="font-size:10px; color:rgba(232,229,222,0.55); margin-top:6px; line-height:1.6;">Suggested for the next 90 minutes.</div>
+      </div>
+      <div style="padding:22px 16px 0; position:relative;">
+        <div style="position:absolute; left:26px; top:30px; bottom:120px; width:0.5px; background:linear-gradient(180deg,var(--water),rgba(232,229,222,0.10));"></div>
+        <div style="display:flex; gap:12px; padding:8px 0; align-items:center;">
+          <div style="width:20px; height:20px; border-radius:50%; background:var(--water); display:flex; align-items:center; justify-content:center; color:#0c1a20; font-family:var(--sans); font-size:9px; font-weight:600;">1</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Universe of Water Particles</div>
+            <div class="eb" style="margin-top:2px; color:rgba(232,229,222,0.4);">5 MIN · NOW</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:12px; padding:8px 0; align-items:center;">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(232,229,222,0.10); display:flex; align-items:center; justify-content:center; font-family:var(--sans); font-size:9px;">2</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Forest of Lamps</div>
+            <div class="eb" style="margin-top:2px; color:rgba(232,229,222,0.4);">28M · 4 MIN</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:12px; padding:8px 0; align-items:center; opacity:0.7;">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(232,229,222,0.06); display:flex; align-items:center; justify-content:center; font-family:var(--sans); font-size:9px;">3</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Crystal Universe</div>
+            <div class="eb" style="margin-top:2px; color:rgba(232,229,222,0.4);">42M · 6 MIN</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:12px; padding:8px 0; align-items:center; opacity:0.5;">
+          <div style="width:20px; height:20px; border-radius:50%; background:rgba(232,229,222,0.06); display:flex; align-items:center; justify-content:center; font-family:var(--sans); font-size:9px;">4</div>
+          <div style="flex:1;">
+            <div style="font-family:var(--serif); font-size:12px;">Drawing on the Water Surface</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute; left:14px; right:14px; bottom:16px;">
+        <div style="background:var(--water); color:#0c1a20; border-radius:999px; text-align:center; padding:9px; font-size:10px; font-weight:600;">Start Route</div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">08 — Stage 04</div>
+      <div class="n">Route Assist</div>
+      <div class="d">Supports movement with short directions and clear cues.</div>
+      <div class="d jp">時間・距離・歩く速さに合わせて、静かな順路を提案する。</div>
+    </div>
+  </div>
+
+  <!-- Crowd Balance (right, slightly smaller, offset down) -->
+  <div style="position:absolute; right:90px; top:240px; width:240px;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+        <div style="width:24px; height:24px; border-radius:50%; background:rgba(28,29,36,0.7); display:flex; align-items:center; justify-content:center; font-size:11px;">‹</div>
+        <div style="font-family:var(--serif); font-size:13px;">Crowd Balance</div>
+        <div style="width:24px;"></div>
+      </div>
+      <div style="padding:50px 16px 0;">
+        <div class="eb w">RIGHT NOW</div>
+        <div style="font-family:var(--serif); font-size:18px; margin-top:5px; line-height:1.2;">A quieter route<br/>is open now.</div>
+        <div style="font-size:10px; color:rgba(232,229,222,0.5); margin-top:6px;">Crowd density · live</div>
+      </div>
+      <div style="padding:22px 16px 0; display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-family:var(--sans); font-size:8px; letter-spacing:0.16em; color:rgba(232,229,222,0.6); width:72px; font-weight:500;">BORDERLESS</div>
+          <div style="flex:1; height:5px; background:rgba(232,229,222,0.06); border-radius:99px; overflow:hidden;">
+            <div style="width:78%; height:100%; background:#E6C387;"></div>
+          </div>
+          <div style="font-family:var(--sans); font-size:7.5px; letter-spacing:0.14em; color:#E6C387; width:30px; text-align:right; font-weight:500;">BUSY</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-family:var(--sans); font-size:8px; letter-spacing:0.16em; color:rgba(232,229,222,0.6); width:72px; font-weight:500;">ATHLETICS</div>
+          <div style="flex:1; height:5px; background:rgba(232,229,222,0.06); border-radius:99px; overflow:hidden;">
+            <div style="width:42%; height:100%; background:var(--water);"></div>
+          </div>
+          <div style="font-family:var(--sans); font-size:7.5px; letter-spacing:0.14em; color:var(--water); width:30px; text-align:right; font-weight:500;">OPEN</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-family:var(--sans); font-size:8px; letter-spacing:0.16em; color:rgba(232,229,222,0.6); width:72px; font-weight:500;">CRYSTAL</div>
+          <div style="flex:1; height:5px; background:rgba(232,229,222,0.06); border-radius:99px; overflow:hidden;">
+            <div style="width:22%; height:100%; background:#9DD0B3;"></div>
+          </div>
+          <div style="font-family:var(--sans); font-size:7.5px; letter-spacing:0.14em; color:#9DD0B3; width:30px; text-align:right; font-weight:500;">QUIET</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="font-family:var(--sans); font-size:8px; letter-spacing:0.16em; color:rgba(232,229,222,0.6); width:72px; font-weight:500;">FOREST</div>
+          <div style="flex:1; height:5px; background:rgba(232,229,222,0.06); border-radius:99px; overflow:hidden;">
+            <div style="width:62%; height:100%; background:var(--pale);"></div>
+          </div>
+          <div style="font-family:var(--sans); font-size:7.5px; letter-spacing:0.14em; color:rgba(232,229,222,0.6); width:30px; text-align:right; font-weight:500;">MID</div>
+        </div>
+      </div>
+      <div style="padding:18px 14px 0;">
+        <div class="soft-bg" style="border-radius:13px; padding:11px; display:flex; gap:10px; align-items:center;">
+          <div style="width:36px; height:36px; border-radius:8px; background:linear-gradient(135deg,#162d18,#4b8c75);"></div>
+          <div style="flex:1;">
+            <div class="eb w">SUGGESTED NEXT</div>
+            <div style="font-family:var(--serif); font-size:12px;">Crystal Universe</div>
+            <div style="font-size:9px; color:rgba(232,229,222,0.5);">42m · 5 min · quiet</div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute; left:14px; right:14px; bottom:16px;">
+        <div style="background:var(--water); color:#0c1a20; border-radius:999px; text-align:center; padding:9px; font-size:10px; font-weight:600;">Take this route</div>
+      </div>
+    </div>
+    <div class="cap" style="text-align:right;">
+      <div class="l">09 — Stage 04</div>
+      <div class="n">Crowd Balance</div>
+      <div class="d" style="margin-left:auto;">Suggests alternative routes to improve circulation.</div>
+      <div class="d jp" style="margin-left:auto;">混雑を避ける別ルートを提案し、回遊全体の流れを整える。</div>
+    </div>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>During (continued)</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     09 — AFTER spread (3 screens)
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="spread-mark mark">05 / After — Beyond the dark</div>
+  <div class="spread-quote">Accessibility runs alongside. Memory waits at the door.</div>
+
+  <!-- Accessibility (left, low) -->
+  <div style="position:absolute; left:85px; top:215px; width:225px;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:11px 13px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+        <div style="width:22px; height:22px; border-radius:50%; background:rgba(28,29,36,0.7); display:flex; align-items:center; justify-content:center; font-size:10px;">‹</div>
+        <div style="font-family:var(--serif); font-size:12px;">Accessibility</div>
+        <div style="width:22px;"></div>
+      </div>
+      <div style="padding:46px 14px 0;">
+        <div style="font-family:var(--serif); font-size:19px; line-height:1.2;">Made for<br/>everyone.</div>
+        <div style="font-size:9.5px; color:rgba(232,229,222,0.55); margin-top:8px; line-height:1.65;">Adjust to your needs. Settings sync to Quiet Mode.</div>
+      </div>
+      <div style="padding:16px 14px 0;">
+        <div class="soft-bg" style="border-radius:13px; overflow:hidden;">
+          <div style="padding:10px 12px; border-bottom:0.5px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10.5px;">High contrast text</span>
+            <div style="width:26px; height:15px; border-radius:99px; background:var(--water); position:relative;"><div style="position:absolute; right:2px; top:2px; width:11px; height:11px; border-radius:50%; background:#E8E5DE;"></div></div>
+          </div>
+          <div style="padding:10px 12px; border-bottom:0.5px solid var(--line);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
+              <span style="font-size:10.5px;">Text size</span>
+              <span class="eb">120%</span>
+            </div>
+            <div style="height:2.5px; background:rgba(232,229,222,0.08); border-radius:99px; position:relative;">
+              <div style="position:absolute; left:0; top:0; bottom:0; width:55%; background:var(--water); border-radius:99px;"></div>
+              <div style="position:absolute; left:55%; top:-3.5px; width:9px; height:9px; border-radius:50%; background:#E8E5DE;"></div>
+            </div>
+          </div>
+          <div style="padding:10px 12px; border-bottom:0.5px solid var(--line); display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10.5px;">Audio description</span>
+            <div style="width:26px; height:15px; border-radius:99px; background:var(--water); position:relative;"><div style="position:absolute; right:2px; top:2px; width:11px; height:11px; border-radius:50%; background:#E8E5DE;"></div></div>
+          </div>
+          <div style="padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10.5px;">Reduce motion</span>
+            <div style="width:26px; height:15px; border-radius:99px; background:rgba(232,229,222,0.15); position:relative;"><div style="position:absolute; left:2px; top:2px; width:11px; height:11px; border-radius:50%; background:#E8E5DE;"></div></div>
+          </div>
+        </div>
+        <div style="background:rgba(143,189,201,0.06); border:0.5px solid rgba(143,189,201,0.18); border-radius:11px; padding:10px; margin-top:11px;">
+          <div class="eb w">VENUE STAFF</div>
+          <div style="font-size:9.5px; color:rgba(232,229,222,0.78); margin-top:4px; line-height:1.55;">Show this screen to nearby staff for assistance.</div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">10 — All stages</div>
+      <div class="n">Accessibility</div>
+      <div class="d">Supports visitors who need clearer guidance in dark spaces.</div>
+      <div class="d jp">暗くて混雑する空間で、より明確な案内が必要な来場者を支える。</div>
+    </div>
+  </div>
+
+  <!-- Memory (center, slightly raised — the after moment) -->
+  <div style="position:absolute; left:480px; top:165px; width:240px;">
+    <div class="ph">
+      <div class="glass-bg" style="position:absolute; top:0; left:0; right:0; padding:11px 13px; display:flex; justify-content:center; z-index:3;">
+        <div style="font-family:var(--serif); font-size:12px;">Your Visit</div>
+      </div>
+      <div style="padding:46px 15px 0;">
+        <div style="font-family:var(--serif); font-size:24px; line-height:1; letter-spacing:-0.005em;">8<span style="font-size:11px; color:rgba(232,229,222,0.5); margin-left:6px;">/ 47 artworks</span></div>
+        <div class="eb faint" style="margin-top:6px;">SUN · JUN 15 · 2H 14M</div>
+      </div>
+      <div style="padding:16px 15px 0; display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px;">
+        <div style="aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#2a0a36,#a04a6c);"></div>
+        <div style="aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#3a8298,#a7cfd9);"></div>
+        <div style="aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#162d18,#4b8c75);"></div>
+        <div style="aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#544a8b,#7f77dd);"></div>
+        <div style="aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#c47640,#7b4912);"></div>
+        <div style="aspect-ratio:1; border-radius:8px; background:linear-gradient(135deg,#A7CFD9,#3a8298);"></div>
+      </div>
+      <div style="padding:13px 15px 0;">
+        <div class="eb">QUIET SHARE</div>
+        <div class="soft-bg" style="border-radius:11px; padding:10px; margin-top:6px; display:flex; gap:10px; align-items:center;">
+          <div style="width:32px; height:32px; border-radius:7px; background:linear-gradient(135deg,#3a8298,#a7cfd9);"></div>
+          <div style="flex:1; font-size:9px; color:rgba(232,229,222,0.78); line-height:1.55;">Generate a quiet album with artwork names captioned.</div>
+        </div>
+      </div>
+      <div style="position:absolute; left:13px; right:13px; bottom:14px;">
+        <div style="background:var(--water); color:#0c1a20; border-radius:999px; text-align:center; padding:8px; font-size:10px; font-weight:600;">Save & Share</div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">11 — Stage 05</div>
+      <div class="n">Memory</div>
+      <div class="d">Lets visitors revisit artworks after leaving the exhibition.</div>
+      <div class="d jp">展示を出たあとも、作品を静かに振り返れる場所をつくる。</div>
+    </div>
+  </div>
+
+  <!-- Settings (right, low) -->
+  <div style="position:absolute; left:870px; top:240px; width:225px;">
+    <div class="ph">
+      <div style="padding:20px 15px 12px;">
+        <div style="font-family:var(--serif); font-size:17px;">Settings</div>
+      </div>
+      <div style="padding:0 15px;">
+        <div class="eb">DISPLAY</div>
+        <div class="soft-bg" style="border-radius:12px; overflow:hidden; margin-top:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 11px; border-bottom:0.5px solid var(--line);">
+            <span style="font-size:10.5px;">Quiet Guide Mode</span>
+            <div style="width:26px; height:15px; border-radius:99px; background:var(--water); position:relative;"><div style="position:absolute; right:2px; top:2px; width:11px; height:11px; border-radius:50%; background:#E8E5DE;"></div></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 11px; border-bottom:0.5px solid var(--line);">
+            <span style="font-size:10.5px;">Haptic feedback</span>
+            <div style="width:26px; height:15px; border-radius:99px; background:var(--water); position:relative;"><div style="position:absolute; right:2px; top:2px; width:11px; height:11px; border-radius:50%; background:#E8E5DE;"></div></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 11px;">
+            <span style="font-size:10.5px;">Language</span>
+            <span style="font-size:10px; color:rgba(232,229,222,0.5);">日本語 ›</span>
+          </div>
+        </div>
+        <div class="eb" style="margin-top:13px;">AUDIO</div>
+        <div class="soft-bg" style="border-radius:12px; overflow:hidden; margin-top:6px;">
+          <div style="padding:9px 11px; font-size:10.5px; border-bottom:0.5px solid var(--line); display:flex; justify-content:space-between;"><span>Auto-play on approach</span><span style="color:rgba(232,229,222,0.5); font-size:10px;">On</span></div>
+          <div style="padding:9px 11px; font-size:10.5px;">Headphone reminder</div>
+        </div>
+        <div class="eb" style="margin-top:13px;">ACCOUNT</div>
+        <div class="soft-bg" style="border-radius:12px; overflow:hidden; margin-top:6px;">
+          <div style="padding:9px 11px; font-size:10.5px; border-bottom:0.5px solid var(--line);">Ticket history</div>
+          <div style="padding:9px 11px; font-size:10.5px;">About teamLab</div>
+        </div>
+      </div>
+    </div>
+    <div class="cap">
+      <div class="l">12 — Utility</div>
+      <div class="n">Settings</div>
+      <div class="d">Keeps language, brightness, and guidance controls simple.</div>
+      <div class="d jp">言語・振動・Quiet Mode の設定を一か所に集約する。</div>
+    </div>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>After</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     10 — DESIGN SYSTEM (reference page)
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="ds-wrap">
+    <div class="ds-head">
+      <div class="l">Design System.</div>
+      <div class="r">06 / Reference</div>
+    </div>
+
+    <div class="ds-body">
+      <div class="ds-col">
+        <h4>Color · 14 Tokens</h4>
+        <div class="ds-tokens">
+          <div class="sw" style="background:#08090C;"></div><div class="nm">Ink</div><div class="hx">#08090C</div>
+          <div class="sw" style="background:#14151A;"></div><div class="nm">Soot</div><div class="hx">#14151A</div>
+          <div class="sw" style="background:#1C1D24;"></div><div class="nm">Surface</div><div class="hx">#1C1D24</div>
+          <div class="sw" style="background:rgba(232,229,222,0.08);"></div><div class="nm">Glass</div><div class="hx">8% white</div>
+          <div class="sw" style="background:rgba(0,0,0,0.6);"></div><div class="nm">Scrim</div><div class="hx">60% black</div>
+          <div class="sw" style="background:#E8E5DE;"></div><div class="nm">Text · 1</div><div class="hx">#E8E5DE</div>
+          <div class="sw" style="background:rgba(232,229,222,0.50);"></div><div class="nm">Text · 2</div><div class="hx">50%</div>
+          <div class="sw" style="background:rgba(232,229,222,0.28);"></div><div class="nm">Text · 3</div><div class="hx">28%</div>
+          <div class="sw" style="background:#8FBDC9;"></div><div class="nm">Water</div><div class="hx">#8FBDC9</div>
+          <div class="sw" style="background:#6A9DAB;"></div><div class="nm">Deep</div><div class="hx">#6A9DAB</div>
+          <div class="sw" style="background:#DFEDF2;"></div><div class="nm">Pale</div><div class="hx">#DFEDF2</div>
+          <div class="sw" style="background:#E6C387;"></div><div class="nm">Attention</div><div class="hx">#E6C387</div>
+          <div class="sw" style="background:#9DD0B3;"></div><div class="nm">Success</div><div class="hx">#9DD0B3</div>
+          <div class="sw" style="background:#D98A8E;"></div><div class="nm">Error</div><div class="hx">#D98A8E</div>
+        </div>
+      </div>
+
+      <div class="ds-col">
+        <h4>Typography</h4>
+        <div class="ds-type">
+          <div class="l">DISPLAY</div><div style="font-family:var(--serif); font-size:24px; line-height:1; font-weight:300;">A quiet interface for an immersive world.</div>
+          <div class="l">TITLE</div><div style="font-family:var(--sans); font-size:16px; font-weight:500;">Universe of Water Particles</div>
+          <div class="l">BODY · EN</div><div style="font-family:var(--sans); font-size:12px; line-height:1.7; color:var(--text-2);">The app stays behind the experience.</div>
+          <div class="l">BODY · JP</div><div style="font-family:var(--jp); font-size:11px; line-height:1.8; color:var(--text-2);">アプリは体験の背景に徹する。</div>
+          <div class="l">LABEL</div><div style="font-family:var(--sans); font-size:9.5px; letter-spacing:0.24em; color:var(--water); text-transform:uppercase; font-weight:500;">YOU ARE HERE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-refs">
+      <div>
+        <div class="h">Spacing · 8pt Grid</div>
+        <div class="v">4 / 8 / 16 / 24 / 32 / 48</div>
+        <div class="d">Screen margin 24, card 16–20, section 32 or more.</div>
+        <div class="d jp">画面マージン24、カード内16〜20、セクション間32以上。</div>
+      </div>
+      <div>
+        <div class="h">Radius · 4 Steps</div>
+        <div class="v">8 / 16 / 24 / 999</div>
+        <div class="d">Tag full, Card 24, Bottom Sheet rounds only the top.</div>
+        <div class="d jp">中間値は持たず、4段階に集約。</div>
+      </div>
+      <div>
+        <div class="h">Accessibility · WCAG AA</div>
+        <div class="v">≥ 4.5 : 1  ·  ≥ 44 pt</div>
+        <div class="d">Body ≥ 14pt. All tappable elements ≥ 44pt, 8pt spacing.</div>
+        <div class="d jp">本文14pt以上、タップ領域44pt以上、間隔8pt以上。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>Design System</em></div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     11 — CLOSING
+     ════════════════════════════════════════ -->
+<section class="page">
+  <div class="close-pool"></div>
+
+  <div class="close-mark mark">07 / Closing</div>
+
+  <h2 class="close-msg">Let the artwork remain<br/>the center of the experience.</h2>
+
+  <p class="close-jp">アプリは主役にならず、来場者を静かに支え、<br/>作品が体験の中心であり続けるための背景になる。</p>
+
+  <!-- colophon-style note -->
+  <div class="note" style="top:200px;">
+    <span class="n">Colophon</span>
+    Set in <em>Source Serif 4</em> and <em>Inter</em>.<br/>
+    11 pages. 12 screens.<br/>
+    Designed at 393 × 852 pt,<br/>
+    in deep black.
+  </div>
+
+  <div class="close-sign">
+    <div class="who">Avendano Shintaro<span>UI / UX Designer Challenge — Supplemental UX Proposal</span></div>
+    <div class="right">Quiet Guide for<br/>Immersive Space<br/>2026 · teamLab Inc.</div>
+  </div>
+
+  <div class="folio">QUIET GUIDE — <em>End</em></div>
+</section>
+
+</body>
+</html>

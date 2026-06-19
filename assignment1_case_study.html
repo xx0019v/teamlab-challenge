@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reproduction & Design System — teamLab App · Task 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+/* ════════════════════════════════════════════════════════════
+   TASK 1 — Reproduction & Design System · Case Study
+   Shares the visual language of reproduction_6screens.html
+   ════════════════════════════════════════════════════════════ */
+:root{
+  --ink:#000; --room:#0a0b0d; --room-2:#0e0f12; --surface:#121316; --surface-2:#1b1d21;
+  --glass:rgba(20,21,25,0.55); --hairline:rgba(244,242,236,0.08); --hairline-2:rgba(244,242,236,0.14);
+  --t-1:#F4F2EC; --t-2:rgba(244,242,236,0.60); --t-3:rgba(244,242,236,0.34); --t-4:rgba(244,242,236,0.18);
+  --water:#8FD3E6;
+  --r-md:16px; --r-lg:22px; --r-device:42px; --r-full:999px;
+  --sh-card:0 16px 50px rgba(0,0,0,0.5);
+  --sans:'Inter','Noto Sans JP',-apple-system,sans-serif; --jp:'Noto Sans JP',sans-serif;
+  --serif:'Source Serif 4',serif; --mono:'JetBrains Mono',monospace;
+  --gutter:clamp(22px,6vw,120px); --section-y:clamp(90px,14vh,190px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--room);color:var(--t-1);line-height:1.6;overflow-x:hidden;position:relative;}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 90% at 50% 30%,transparent 60%,rgba(0,0,0,0.5));}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--gutter);position:relative;z-index:2;}
+.eyebrow{font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:var(--t-3);font-weight:500;}
+.eyebrow--water{color:var(--water);}
+.jp{font-family:var(--jp);} .mono{font-family:var(--mono);}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1);}
+.reveal.in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}.device,.glow-b,.particles b{animation:none!important;}}
+.pool{position:absolute;border-radius:50%;pointer-events:none;filter:blur(8px);animation:breathe 8s ease-in-out infinite;}
+@keyframes breathe{0%,100%{opacity:.5;}50%{opacity:1;}}
+@keyframes floatY{0%,100%{transform:translateY(-4px);}50%{transform:translateY(4px);}}
+@keyframes drift{0%{transform:translate(0,0);}50%{transform:translate(var(--dx,4px),var(--dy,-6px));}100%{transform:translate(0,0);}}
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.particles b{position:absolute;border-radius:50%;display:block;}
+
+/* ── device (shared) ── */
+.device{position:relative;aspect-ratio:393/852;border-radius:var(--r-device);background:var(--ink);overflow:hidden;box-shadow:var(--sh-card),inset 0 0 0 1px rgba(244,242,236,0.05);}
+.device.float{animation:floatY 9s ease-in-out infinite;}
+.device__screen{position:absolute;inset:0;overflow:hidden;border-radius:var(--r-device);}
+.device__screen::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:8;background:radial-gradient(130% 100% at 50% 42%,transparent 58%,rgba(0,0,0,0.45));}
+.device__canvas{position:absolute;top:0;left:0;width:393px;height:852px;transform-origin:0 0;}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:78px;height:22px;background:#000;border-radius:var(--r-full);z-index:14;}
+.sbar{position:absolute;top:0;left:0;right:0;height:46px;z-index:12;display:flex;align-items:center;justify-content:space-between;padding:15px 20px 0 24px;}
+.sbar .time{font-size:12.5px;font-weight:600;}
+.sbar .ic{display:flex;gap:6px;align-items:center;}
+.sbar .sig{display:flex;align-items:flex-end;gap:1.6px;height:10px;} .sbar .sig i{width:2.6px;background:var(--t-1);border-radius:1px;display:block;}
+.sbar .bat{width:21px;height:10.5px;border:1px solid rgba(244,242,236,0.55);border-radius:2.5px;padding:1.3px;} .sbar .bat::after{content:"";display:block;height:100%;width:76%;background:var(--t-1);border-radius:1px;}
+.home-ind{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:108px;height:4px;border-radius:var(--r-full);background:rgba(244,242,236,0.28);z-index:14;}
+.topbar{position:absolute;top:50px;left:0;right:0;height:42px;z-index:11;display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+.topbar__t{font-size:13px;font-weight:600;}
+.ico-back{width:20px;height:20px;}
+.ico-ham{display:flex;flex-direction:column;gap:4px;} .ico-ham i{width:18px;height:1.4px;background:var(--t-1);display:block;}
+.ico-menu{display:flex;flex-direction:column;gap:3.4px;} .ico-menu i{width:16px;height:1.4px;background:var(--t-1);display:block;}
+.artwork__layer{position:absolute;inset:0;} .scrim{position:absolute;inset:0;}
+.eb{font-size:7px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(244,242,236,0.55);font-weight:500;} .eb--w{color:var(--water);}
+.glass{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:0.5px solid var(--hairline);border-radius:var(--r-md);}
+
+/* ── HERO ── */
+.hero{min-height:100vh;min-height:100dvh;display:flex;align-items:center;position:relative;padding:120px 0 80px;}
+.hero__grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:clamp(30px,5vw,80px);align-items:center;width:100%;}
+.hero__kicker{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.hero__kicker .line{width:34px;height:0.5px;background:var(--water);}
+.hero__title{font-family:var(--serif);font-weight:300;font-size:clamp(46px,7.5vw,104px);line-height:0.98;letter-spacing:-0.02em;}
+.hero__sub{font-family:var(--serif);font-size:clamp(16px,2.1vw,22px);color:var(--t-2);margin-top:22px;font-weight:300;}
+.hero__copy{font-size:14px;color:var(--t-3);margin-top:28px;max-width:400px;line-height:1.85;}
+.hero__copy.jp{font-family:var(--jp);font-size:12.5px;margin-top:14px;}
+.hero__tags{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:40px;}
+.hero__tags span{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--t-3);}
+.hero__device{justify-self:center;width:min(290px,70vw);}
+.hero__vrule{position:absolute;left:calc(var(--gutter) - 1px);top:0;bottom:0;width:0.5px;background:var(--hairline);}
+
+/* ── section header ── */
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:54px;}
+.sec-head .no{font-family:var(--serif);font-size:15px;color:var(--water);font-style:italic;}
+.sec-head h2{font-family:var(--serif);font-weight:300;font-size:clamp(26px,4vw,44px);letter-spacing:-0.01em;}
+
+/* ── BRIEF ── */
+.brief{padding:var(--section-y) 0;}
+.brief__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);}
+.brief__lead{font-family:var(--serif);font-size:clamp(22px,3vw,34px);font-weight:300;line-height:1.35;letter-spacing:-0.01em;}
+.brief__body{font-size:14px;color:var(--t-2);line-height:1.9;max-width:42ch;}
+.brief__body.jp{font-family:var(--jp);font-size:13px;color:var(--t-3);margin-top:16px;}
+.req{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hairline);border:0.5px solid var(--hairline);border-radius:var(--r-lg);overflow:hidden;margin-top:48px;}
+.req__cell{background:var(--room-2);padding:clamp(22px,2.6vw,34px);}
+.req__cell .t{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--water);font-weight:500;}
+.req__cell .b{font-family:var(--jp);font-size:12.5px;color:var(--t-2);line-height:1.8;margin-top:12px;}
+
+/* ── APPROACH (3 principles) ── */
+.approach{padding:var(--section-y) 0;}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,48px);}
+.principle{padding-top:26px;border-top:0.5px solid var(--hairline-2);}
+.principle .n{font-size:11px;letter-spacing:0.2em;color:var(--water);font-weight:500;}
+.principle h3{font-family:var(--serif);font-weight:400;font-size:clamp(20px,2.4vw,28px);margin-top:16px;letter-spacing:-0.005em;}
+.principle p{font-size:12.5px;color:var(--t-2);line-height:1.8;margin-top:14px;}
+.principle p.jp{font-family:var(--jp);font-size:11.5px;color:var(--t-3);margin-top:6px;}
+
+/* ── SCREENS ── */
+.screens{padding:var(--section-y) 0;}
+.screens__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3.5vw,56px) clamp(22px,3vw,48px);}
+.shot__cap{margin-top:18px;}
+.shot__cap .idx{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--t-3);font-weight:500;}
+.shot__cap .nm{font-size:15px;font-weight:500;margin-top:5px;}
+.shot__cap .ds{font-family:var(--jp);font-size:11.5px;color:var(--t-2);margin-top:6px;line-height:1.6;}
+
+/* ── DESIGN SYSTEM ── */
+.dsys{padding:var(--section-y) 0;}
+.dsys__grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:clamp(28px,4vw,64px);}
+.dsys__grid h4{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--water);margin-bottom:18px;}
+.swatches{display:flex;flex-direction:column;gap:10px;}
+.sw{display:flex;align-items:center;gap:12px;font-size:11.5px;}
+.sw i{width:24px;height:24px;border-radius:6px;border:0.5px solid var(--hairline-2);display:block;flex-shrink:0;}
+.sw .nm{color:var(--t-1);} .sw .hx{color:var(--t-3);margin-left:auto;font-family:var(--mono);font-size:10px;}
+.tk{display:flex;flex-direction:column;gap:13px;}
+.tk .row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding-bottom:11px;border-bottom:0.5px solid var(--hairline);}
+.tk .row .l{color:var(--t-2);} .tk .row .r{color:var(--t-3);font-family:var(--mono);font-size:10.5px;}
+
+/* ── ARCHITECTURE ── */
+.arch{padding:var(--section-y) 0;}
+.arch__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,80px);align-items:start;}
+.tree{font-family:var(--mono);font-size:12px;color:var(--t-2);line-height:2;background:var(--room-2);border:0.5px solid var(--hairline);border-radius:var(--r-lg);padding:clamp(22px,3vw,36px);white-space:pre;overflow-x:auto;}
+.tree .c{color:var(--water);} .tree .d{color:var(--t-3);}
+.arch__notes h3{font-family:var(--serif);font-weight:400;font-size:clamp(20px,2.4vw,28px);letter-spacing:-0.005em;}
+.arch__notes ul{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:18px;}
+.arch__notes li{font-size:13px;color:var(--t-2);line-height:1.7;padding-left:18px;position:relative;}
+.arch__notes li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--water);opacity:0.6;}
+.arch__notes li b{color:var(--t-1);font-weight:500;} .arch__notes li .jp{font-family:var(--jp);color:var(--t-3);font-size:11.5px;}
+
+/* ── HANDOFF ── */
+.handoff{padding:var(--section-y) 0;}
+.handoff__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,52px);}
+.handoff__grid h4{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--water);margin-bottom:16px;}
+.handoff__grid ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.handoff__grid li{font-size:12px;color:var(--t-2);font-family:var(--mono);}
+.handoff__grid li::before{content:"— ";color:var(--t-4);}
+
+/* ── CLOSING ── */
+.closing{min-height:80vh;display:flex;flex-direction:column;justify-content:center;position:relative;padding:var(--section-y) 0;}
+.closing__msg{font-family:var(--serif);font-weight:300;font-size:clamp(28px,5vw,60px);line-height:1.12;letter-spacing:-0.015em;max-width:20ch;}
+.closing__jp{font-family:var(--jp);font-size:14px;color:var(--t-3);margin-top:28px;}
+.closing__sign{margin-top:clamp(60px,10vh,120px);padding-top:22px;border-top:0.5px solid var(--hairline);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;}
+.closing__sign .who{font-family:var(--serif);font-size:16px;}
+.closing__sign .who span{display:block;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--t-3);margin-top:8px;font-family:var(--sans);}
+.closing__sign .meta{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--t-3);text-align:right;line-height:2;}
+
+/* ── responsive ── */
+@media (max-width:980px){
+  .hero__grid{grid-template-columns:1fr;}
+  .hero__device{grid-row:1;width:min(230px,58vw);margin-bottom:8px;}
+  .brief__grid{grid-template-columns:1fr;gap:30px;}
+  .principles{grid-template-columns:1fr;gap:0;} .principle{padding:24px 0;border-top:0.5px solid var(--hairline-2);}
+  .screens__grid{grid-template-columns:1fr 1fr;}
+  .dsys__grid{grid-template-columns:1fr;gap:40px;}
+  .arch__grid{grid-template-columns:1fr;gap:32px;}
+  .handoff__grid{grid-template-columns:1fr 1fr;gap:32px;}
+  .req{grid-template-columns:1fr;}
+}
+@media (max-width:560px){
+  .screens__grid{grid-template-columns:1fr;max-width:320px;margin-inline:auto;}
+  .handoff__grid{grid-template-columns:1fr;} .hero__vrule{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+  <div class="hero__vrule"></div>
+  <div class="pool" style="width:720px;height:720px;left:-200px;bottom:-240px;background:radial-gradient(circle,rgba(143,211,230,0.13),transparent 62%);"></div>
+  <div class="particles" id="hero-p"></div>
+  <div class="wrap hero__grid">
+    <div class="reveal in">
+      <div class="hero__kicker"><span class="line"></span><span class="eyebrow eyebrow--water">Task 1 · Reproduction & Design System</span></div>
+      <h1 class="hero__title">Reproducing<br/>the unseen<br/>structure.</h1>
+      <div class="hero__sub">teamLab Guide App — faithfully rebuilt as developer-ready data.</div>
+      <p class="hero__copy">The brief was not to copy a look, but to rebuild the provided design as data an engineering team and other designers can actually work with — tokens, components, Auto Layout, clear naming.</p>
+      <p class="hero__copy jp">見た目を真似るのではなく、提供デザインを「開発チームや他のデザイナーが使えるデータ」として再構築する。トークン・コンポーネント・Auto Layout・命名まで含めて。</p>
+      <div class="hero__tags"><span>UI Reproduction</span><span>Design System</span><span>Figma Handoff</span><span>6 Screens</span></div>
+    </div>
+    <div class="hero__device reveal in">
+      <div class="device float" data-screen="detail"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════════ BRIEF ════════════════ -->
+<section class="brief">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">01</span><h2>The brief.</h2></div>
+    <div class="brief__grid">
+      <p class="brief__lead">Reproduce the provided design — but aim for data that other people can build on, not a screenshot.</p>
+      <div>
+        <p class="brief__body">teamLab's exhibition guide app was provided as a finished Figma design. The task: rebuild it in a design tool so the structure, not just the surface, survives the handoff.</p>
+        <p class="brief__body jp">チームラボの展示ガイドアプリが完成デザインとして提供された。課題は、表面だけでなく「構造」が受け渡しに耐える形で再現すること。</p>
+      </div>
+    </div>
+    <div class="req">
+      <div class="req__cell"><div class="t">Required · 再現</div><div class="b">提供されたデザインを、デザインツール（Figma）で再現する。</div></div>
+      <div class="req__cell"><div class="t">Required · 構造</div><div class="b">開発チームや他のデザイナーが使いやすいデータであること。</div></div>
+      <div class="req__cell"><div class="t">Deliverable · データ</div><div class="b">Figma ファイルの URL（レイヤー構造が確認できる状態）。</div></div>
+      <div class="req__cell"><div class="t">Context · 環境</div><div class="b">暗所・回遊・身体的没入という展示会場の利用環境。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ APPROACH ════════════════ -->
+<section class="approach">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">02</span><h2>Three rules for an honest reproduction.</h2></div>
+    <div class="principles">
+      <div class="principle"><div class="n">01</div><h3>Fidelity, not invention</h3>
+        <p>Keep the original structure — dark theme, full-bleed artwork, the floating "you are here" card, the audio player. The reproduction earns trust before anything is improved.</p>
+        <p class="jp">元の構造を保つ。再現は、改善する前にまず信頼を得る。</p></div>
+      <div class="principle"><div class="n">02</div><h3>Tokens, not values</h3>
+        <p>Every colour, type style, spacing and radius lives as a named style — never a raw value pasted into a screen. The system is the deliverable.</p>
+        <p class="jp">色・文字・余白・角丸は名前付きスタイルで管理。画面に直接値を書かない。</p></div>
+      <div class="principle"><div class="n">03</div><h3>Named for engineers</h3>
+        <p>Auto Layout everywhere, variants for states, English layer names that map straight to code. The data should read like documentation.</p>
+        <p class="jp">Auto Layout と Variant、コードに直結する英語命名。データ自体がドキュメントになる。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SCREENS ════════════════ -->
+<section class="screens">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">03</span><h2>Six screens, faithfully rebuilt.</h2></div>
+    <div class="screens__grid">
+      <div><div class="device" data-screen="splash"></div><div class="shot__cap"><div class="idx">01 / Onboarding</div><div class="nm">Splash</div><div class="ds">黒地に teamLab ロゴ。世界観に入る入口。</div></div></div>
+      <div><div class="device" data-screen="guide"></div><div class="shot__cap"><div class="idx">02 / Guide</div><div class="nm">Guide (Home)</div><div class="ds">エリア画像を縦積み、浮動の現在地カード。</div></div></div>
+      <div><div class="device" data-screen="list"></div><div class="shot__cap"><div class="idx">03 / Artwork</div><div class="nm">Artwork List</div><div class="ds">作品サムネのグリッド。</div></div></div>
+      <div><div class="device float" data-screen="detail"></div><div class="shot__cap"><div class="idx">04 / Detail ★</div><div class="nm">Artwork Detail</div><div class="ds">作品ビジュアル + 解説 + 音声ガイド。</div></div></div>
+      <div><div class="device" data-screen="map"></div><div class="shot__cap"><div class="idx">05 / Map</div><div class="nm">Map</div><div class="ds">暗所用の抽象マップ、現在地とルート。</div></div></div>
+      <div><div class="device" data-screen="queue"></div><div class="shot__cap"><div class="idx">06 / Queue</div><div class="nm">Virtual Queue</div><div class="ds">整理券番号・待ち時間・入場QR。</div></div></div>
+    </div>
+    <p style="font-size:11px;color:var(--t-4);margin-top:34px;letter-spacing:0.04em;">※ 原寸インタラクティブ版は <code style="color:var(--t-3);font-family:var(--mono);">reproduction_6screens.html</code> に収録。</p>
+  </div>
+</section>
+
+<!-- ════════════════ DESIGN SYSTEM ════════════════ -->
+<section class="dsys">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">04</span><h2>The system underneath.</h2></div>
+    <div class="dsys__grid">
+      <div>
+        <h4>Color Styles</h4>
+        <div class="swatches">
+          <div class="sw"><i style="background:#000"></i><span class="nm">Base / Black</span><span class="hx">#000000</span></div>
+          <div class="sw"><i style="background:#0A0A0A"></i><span class="nm">Base / Near Black</span><span class="hx">#0A0A0A</span></div>
+          <div class="sw"><i style="background:#141414"></i><span class="nm">Surface / Card</span><span class="hx">#141414</span></div>
+          <div class="sw"><i style="background:#1E1E1E"></i><span class="nm">Surface / Elevated</span><span class="hx">#1E1E1E</span></div>
+          <div class="sw"><i style="background:#F4F2EC"></i><span class="nm">Text / Primary</span><span class="hx">#F4F2EC</span></div>
+          <div class="sw"><i style="background:rgba(244,242,236,0.6)"></i><span class="nm">Text / Secondary</span><span class="hx">60%</span></div>
+          <div class="sw"><i style="background:#8FD3E6"></i><span class="nm">Accent / Water</span><span class="hx">#8FD3E6</span></div>
+          <div class="sw"><i style="background:rgba(244,242,236,0.08)"></i><span class="nm">Line / Divider</span><span class="hx">8%</span></div>
+        </div>
+      </div>
+      <div>
+        <h4>Text Styles</h4>
+        <div class="tk">
+          <div class="row"><span class="l">Title / Screen</span><span class="r">22 · 600</span></div>
+          <div class="row"><span class="l">Title / Artwork</span><span class="r">19 · 600</span></div>
+          <div class="row"><span class="l">Body / Default</span><span class="r">14 · 400 · 1.6</span></div>
+          <div class="row"><span class="l">Caption</span><span class="r">11 · 400</span></div>
+          <div class="row"><span class="l">Label / Nav</span><span class="r">10 · 500</span></div>
+          <div class="row"><span class="l">Family</span><span class="r">Inter · Noto JP</span></div>
+        </div>
+      </div>
+      <div>
+        <h4>Spacing · Radius</h4>
+        <div class="tk">
+          <div class="row"><span class="l">Screen margin</span><span class="r">16–20</span></div>
+          <div class="row"><span class="l">Card padding</span><span class="r">14–18</span></div>
+          <div class="row"><span class="l">Grid</span><span class="r">8pt base</span></div>
+          <div class="row"><span class="l">Radius</span><span class="r">10 / 16 / 22</span></div>
+          <div class="row"><span class="l">Device · Full</span><span class="r">42 / 999</span></div>
+          <div class="row"><span class="l">Card shadow</span><span class="r">0 16 50 · .5</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ ARCHITECTURE ════════════════ -->
+<section class="arch">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">05</span><h2>Built like a component library.</h2></div>
+    <div class="arch__grid">
+      <div class="tree">Screen / Artwork Detail
+<span class="d">├─</span> <span class="c">StatusBar</span>        <span class="d">/ component</span>
+<span class="d">├─</span> <span class="c">Topbar</span>           <span class="d">back · title · menu</span>
+<span class="d">├─</span> artwork          <span class="d">/ group</span>
+<span class="d">│   ├─</span> base.gradient
+<span class="d">│   ├─</span> streaks
+<span class="d">│   ├─</span> particles.far  <span class="d">blur</span>
+<span class="d">│   └─</span> particles.near
+<span class="d">├─</span> scrim
+<span class="d">├─</span> content          <span class="d">/ auto-layout</span>
+<span class="d">│   ├─</span> title
+<span class="d">│   ├─</span> meta
+<span class="d">│   └─</span> body
+<span class="d">├─</span> <span class="c">AudioPlayer</span>      <span class="d">/ component</span>
+<span class="d">└─</span> <span class="c">HomeIndicator</span></div>
+      <div class="arch__notes">
+        <h3>Reusable by design.</h3>
+        <ul>
+          <li><b>Auto Layout, everywhere.</b> Cards, lists and the audio player hug their content, so swapping an artwork never breaks the layout.<br/><span class="jp">中身を差し替えても崩れない。</span></li>
+          <li><b>Variants for states.</b> Visited / nearby / current are properties on one component, not separate copies.<br/><span class="jp">状態は1コンポーネントのVariantで管理。</span></li>
+          <li><b>English, code-ready names.</b> <code style="font-family:var(--mono);color:var(--water);font-size:11px;">Screen / [Name] / [State]</code> maps straight to a developer's file.<br/><span class="jp">命名がそのまま実装の手がかりになる。</span></li>
+          <li><b>One source of truth.</b> Change a token, every screen updates — the system, not the screen, holds the value.<br/><span class="jp">トークンを変えれば全画面に反映。</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ HANDOFF ════════════════ -->
+<section class="handoff">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">06</span><h2>Ready to hand off.</h2></div>
+    <div class="handoff__grid">
+      <div><h4>Pages</h4><ul><li>00_Cover &amp; Tokens</li><li>01_Components</li><li>02_Screens Reproduction</li></ul></div>
+      <div><h4>Frames</h4><ul><li>01_Splash</li><li>02_Guide_Home</li><li>03_Artwork_List</li><li>04_Artwork_Detail</li><li>05_Map</li><li>06_Virtual_Queue</li></ul></div>
+      <div><h4>Components</h4><ul><li>iPhone Frame</li><li>Status Bar</li><li>Dynamic Island</li><li>Home Indicator</li><li>Topbar</li><li>Area Card</li><li>Artwork Card</li><li>Audio Player</li><li>Map Pin</li><li>QR Ticket</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ CLOSING ════════════════ -->
+<section class="closing">
+  <div class="pool" style="width:640px;height:640px;right:-200px;bottom:-220px;background:radial-gradient(circle,rgba(143,211,230,0.11),transparent 64%);"></div>
+  <div class="wrap reveal">
+    <div class="eyebrow" style="margin-bottom:30px;">07 — Closing</div>
+    <h2 class="closing__msg">A reproduction is only finished when someone else can build on it.</h2>
+    <p class="closing__jp">再現は、誰かがその上に作り続けられて初めて完成する。</p>
+    <div class="closing__sign">
+      <div class="who">Avendano Shintaro<span>UI / UX Designer Challenge · Task 1</span></div>
+      <div class="meta">teamLab Guide App<br/>Reproduction &amp; Design System<br/>2026</div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ════════ particles ════════ */
+function scatter(el,count,palette,opts){opts=opts||{};if(!el)return;const o=[];for(let i=0;i<count;i++){const far=Math.random()<0.45;const x=opts.bias?50+(Math.random()-0.5)*86:Math.random()*100;const y=opts.bias?100-Math.pow(Math.random(),1.7)*96:Math.random()*100;const r=(Math.random()*(opts.maxR||2.6)+0.6)*(far?1.6:1);const op=far?Math.random()*0.2+0.07:Math.random()*0.5+0.22;const c=palette[(Math.random()*palette.length)|0];const bl=far?(Math.random()*2+1.4):0;const dur=(Math.random()*6+6).toFixed(1),de=(-Math.random()*8).toFixed(1);const dx=(Math.random()*8-4).toFixed(1),dy=(Math.random()*-10-2).toFixed(1);o.push(`<b style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${r.toFixed(1)}px;height:${r.toFixed(1)}px;background:${c};opacity:${op.toFixed(2)};filter:blur(${bl}px);box-shadow:0 0 ${(r*3).toFixed(1)}px ${c};--dx:${dx}px;--dy:${dy}px;animation:drift ${dur}s ease-in-out ${de}s infinite;"></b>`);}el.innerHTML=o.join("");}
+scatter(document.getElementById("hero-p"),26,["#8FD3E6","#bfeaf5","#ffffff"]);
+
+/* ════════ chrome + screen builders (393×852 canvas) ════════ */
+const CHROME=(title,opts)=>{opts=opts||{};return `
+  <div class="island"></div>
+  <div class="sbar"><div class="time">9:41</div><div class="ic"><div class="sig"><i style="height:3px"></i><i style="height:5px"></i><i style="height:7px"></i><i style="height:10px"></i></div><div class="bat"></div></div></div>
+  ${title!==null?`<div class="topbar">${opts.back?'<svg class="ico-back" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#F4F2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>':(opts.ham?'<div class="ico-ham"><i></i><i></i><i></i></div>':'<span style="width:20px"></span>')}<div class="topbar__t" style="margin:0 auto;">${title}</div>${opts.menu?'<div class="ico-menu"><i></i><i></i><i></i></div>':(opts.loc?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#F4F2EC" stroke-width="1.4"/><path d="M12 21c5-5.4 7-8.5 7-11a7 7 0 1 0-14 0c0 2.5 2 5.6 7 11Z" stroke="#F4F2EC" stroke-width="1.4"/></svg>':'<span style="width:20px"></span>')}</div>`:''}
+  <div class="home-ind"></div>`;};
+
+const S={
+  splash:(s)=>{s.style.background='radial-gradient(circle at 50% 52%, #0a1418, #000 72%)';const id='sp'+Math.random().toString(36).slice(2,6);setTimeout(()=>scatter(document.getElementById(id),22,["#78c8e6","#bfeaf5","#ffffff"]),0);return CHROME(null)+`
+    <div class="particles" id="${id}"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+      <div style="text-align:center;"><div style="font-size:30px;font-weight:700;display:inline-flex;align-items:center;gap:6px;letter-spacing:-0.01em;">teamLab<span style="color:#FFD60A;font-size:25px;">★</span></div><div style="font-size:11px;color:rgba(244,242,236,0.42);margin-top:9px;letter-spacing:0.16em;text-transform:uppercase;">Borderless</div></div>
+    </div>`;},
+
+  guide:(s)=>{s.style.background='#000';return CHROME('teamLab Borderless',{ham:true,loc:true})+`
+    <div style="position:absolute;top:92px;left:0;right:0;bottom:0;">
+      <div style="height:33.3%;position:relative;overflow:hidden;">
+        <div class="artwork__layer" style="background:radial-gradient(ellipse at 32% 42%, #ff7ab8, #b41f6c 38%, #2a0518 82%);"></div>
+        <div class="artwork__layer" style="background:radial-gradient(ellipse at 78% 72%, rgba(255,205,90,0.5), transparent 46%);"></div>
+        <div class="scrim" style="background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,0.65));"></div>
+        <div style="position:absolute;bottom:12px;left:16px;font-size:15px;font-weight:600;">teamLab Borderless</div></div>
+      <div style="height:33.3%;position:relative;overflow:hidden;">
+        <div class="artwork__layer" style="background:linear-gradient(180deg,#03171f,#0c6480 56%,#bfeaf5);"></div>
+        <div class="artwork__layer" style="background:repeating-linear-gradient(93deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 5px);"></div>
+        <div class="scrim" style="background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,0.6));"></div>
+        <div style="position:absolute;bottom:12px;left:16px;font-size:15px;font-weight:600;">Borderless World</div></div>
+      <div style="height:33.3%;position:relative;overflow:hidden;">
+        <div class="artwork__layer" style="background:radial-gradient(ellipse at 45% 55%, #4f9d5e, #16421f 55%, #06160a 90%);"></div>
+        <div class="scrim" style="background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,0.6));"></div>
+        <div style="position:absolute;bottom:12px;left:16px;font-size:15px;font-weight:600;">Athletics Forest</div></div>
+    </div>
+    <div class="glass" style="position:absolute;bottom:16px;left:14px;right:14px;padding:10px;display:flex;align-items:center;gap:10px;">
+      <div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,#0c6480,#bfeaf5);"></div>
+      <div style="flex:1;"><div style="font-size:9px;color:var(--t-3);">Area where you are</div><div style="font-size:12px;font-weight:600;margin-top:1px;">Borderless World</div></div>
+      <span style="font-size:15px;color:var(--t-3);">›</span></div>`;},
+
+  list:(s)=>{s.style.background='#000';const g=(a,b,p)=>`<div style="aspect-ratio:1;border-radius:7px;background:radial-gradient(ellipse at ${p}, ${a}, ${b} 70%);"></div>`;return CHROME('Borderless World',{back:true})+`
+    <div style="position:absolute;top:96px;left:0;right:0;bottom:0;padding:4px 12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${g('#ff6ab0','#7a1448','40% 40%')}${g('#bfeaf5','#0d4a66','50% 80%')}
+        ${g('#ff9a3c','#7a2a08','50% 50%')}${g('#6aa0ff','#1a2a66','40% 50%')}
+        ${g('#b388ff','#3a1a66','60% 40%')}${g('#5ee0a8','#10402a','50% 60%')}
+        ${g('#ffd24a','#6a4a08','45% 45%')}${g('#ff5e9a','#661030','55% 55%')}
+      </div>
+      <div style="font-size:11px;color:var(--t-3);margin-top:14px;letter-spacing:0.08em;text-transform:uppercase;">62 Artworks</div>
+    </div>`;},
+
+  detail:(s)=>{s.style.background='#000';const id='w'+Math.random().toString(36).slice(2,6);setTimeout(()=>scatter(document.getElementById(id),54,["#dff6fc","#8FD3E6","#ffffff"],{bias:true,maxR:2.8}),0);return CHROME('Art work',{back:true,menu:true})+`
+    <div style="position:absolute;top:0;left:0;right:0;height:340px;overflow:hidden;background:#01060a;">
+      <div class="artwork__layer" style="background:radial-gradient(120% 80% at 50% 0%, #06141c, #01060a 60%);"></div>
+      <div class="artwork__layer" style="background:radial-gradient(70% 46% at 50% 96%, rgba(220,244,252,0.95), rgba(60,150,180,0.55) 32%, rgba(10,50,70,0.2) 60%, transparent 78%);"></div>
+      <div class="artwork__layer glow-b" style="background:radial-gradient(40% 28% at 50% 98%, rgba(255,255,255,0.85), transparent 70%);animation:breathe 7s ease-in-out infinite;"></div>
+      <div class="artwork__layer" style="opacity:0.65;-webkit-mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent);mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent);background:repeating-linear-gradient(90deg, transparent 0 13px, rgba(223,246,252,0.5) 13px 13.6px, transparent 14px 27px);"></div>
+      <div class="particles" id="${id}"></div>
+      <div class="scrim" style="background:linear-gradient(180deg, rgba(0,0,0,0.22), transparent 20%, transparent 64%, #000 99%);"></div></div>
+    <div style="position:absolute;top:356px;left:0;right:0;padding:0 18px;">
+      <div style="font-size:15px;font-weight:600;line-height:1.32;">Universe of Water Particles on a Rock where People Gather</div>
+      <div style="font-size:9px;color:var(--t-3);margin-top:6px;">teamLab, 2018 · Interactive Digital Installation</div></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 18px 20px;background:linear-gradient(180deg,transparent,#000 34%);">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;"><div class="eb eb--w">Audio Guide</div><div style="font-size:8px;color:var(--t-3);">1:24 / 3:40</div></div>
+      <div style="height:2px;background:rgba(244,242,236,0.18);border-radius:2px;position:relative;margin-bottom:12px;"><div style="position:absolute;left:0;top:0;bottom:0;width:38%;background:var(--t-1);border-radius:2px;"></div></div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:30px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M6 6h2v12H6zm3.2 6 9 6V6z"/></svg>
+        <div style="width:38px;height:38px;border-radius:50%;border:1.4px solid rgba(244,242,236,0.6);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M8 5v14l11-7z"/></svg></div>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M16 6h2v12h-2zM5.5 18l9-6-9-6z"/></svg></div></div>`;},
+
+  map:(s)=>{s.style.background='#080a07';return CHROME('Map',{back:true})+`
+    <div class="artwork__layer" style="background:radial-gradient(circle at 44% 46%, #11150d, #070905 72%);"></div>
+    <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 393 852" preserveAspectRatio="none">
+      <rect x="40" y="150" width="150" height="180" rx="22" fill="#11160c" opacity="0.5"/>
+      <rect x="210" y="300" width="150" height="200" rx="22" fill="#11160c" opacity="0.42"/>
+      <path d="M64 220 Q158 296 134 416 T214 600 Q254 690 192 768" stroke="#33421f" stroke-width="18" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M150 312 Q200 280 248 300" stroke="#8FD3E6" stroke-width="1.5" fill="none" stroke-dasharray="2 5" stroke-linecap="round" opacity="0.85"/></svg>
+    <div style="position:absolute;top:36%;left:38%;width:32px;height:32px;border-radius:50%;border:1px solid rgba(143,211,230,0.4);transform:translate(-10px,-10px);animation:breathe 7s ease-in-out infinite;"></div>
+    <div style="position:absolute;top:36%;left:38%;width:12px;height:12px;border-radius:50%;background:var(--water);box-shadow:0 0 16px rgba(143,211,230,0.8);transform:translate(-6px,-6px);"></div>
+    <div style="position:absolute;top:35%;left:62%;width:8px;height:8px;border-radius:50%;background:#fff;opacity:0.85;"></div>
+    <div class="glass" style="position:absolute;bottom:16px;left:14px;right:14px;padding:13px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:9px;"><div class="eb eb--w">Next on route</div><div class="eb">3 / 8</div></div>
+      <div style="display:flex;align-items:center;gap:9px;"><div style="width:42px;height:42px;border-radius:10px;background:radial-gradient(ellipse at 50% 70%, #d8f3fb, #1a8fb0 50%);"></div><div style="flex:1;"><div style="font-size:12px;font-weight:600;">Forest of Lamps</div><div style="font-size:9px;color:var(--t-2);margin-top:1px;">28m · 3 min</div></div></div></div>`;},
+
+  queue:(s)=>{s.style.background='#000';return CHROME('Virtual Queue',{back:true})+`
+    <div style="height:230px;margin-top:92px;position:relative;overflow:hidden;">
+      <div class="artwork__layer" style="background:radial-gradient(ellipse at 50% 38%, #ff7ab8, #c41e6a 42%, #1a0510 88%);"></div>
+      <div class="artwork__layer" style="background:radial-gradient(ellipse at 30% 65%, rgba(255,180,220,0.5), transparent 45%);"></div>
+      <div class="artwork__layer" style="background:radial-gradient(ellipse at 75% 55%, rgba(180,90,255,0.35), transparent 45%);"></div>
+      <div class="scrim" style="background:linear-gradient(180deg,transparent 58%,#000);"></div></div>
+    <div style="padding:18px 20px 0;text-align:center;">
+      <div class="eb" style="color:var(--t-3);">Your Number</div>
+      <div style="font-size:44px;font-weight:700;margin-top:8px;letter-spacing:-0.01em;">V-128</div>
+      <div style="font-size:11px;color:var(--t-2);margin-top:8px;">Now calling V-094 · about 12 min</div></div>
+    <div style="position:absolute;bottom:24px;left:0;right:0;display:flex;justify-content:center;">
+      <div style="width:112px;height:112px;background:#F4F2EC;border-radius:11px;padding:9px;position:relative;">
+        <div style="position:absolute;inset:9px;background-image:radial-gradient(#0c0c0c 38%,transparent 40%);background-size:7px 7px;"></div>
+        <span style="position:absolute;left:9px;top:9px;width:24px;height:24px;border:5px solid #0c0c0c;border-radius:3px;"></span>
+        <span style="position:absolute;right:9px;top:9px;width:24px;height:24px;border:5px solid #0c0c0c;border-radius:3px;"></span>
+        <span style="position:absolute;left:9px;bottom:9px;width:24px;height:24px;border:5px solid #0c0c0c;border-radius:3px;"></span></div></div>`;},
+};
+
+document.querySelectorAll(".device[data-screen]").forEach((d)=>{
+  const key=d.getAttribute("data-screen");
+  const screen=document.createElement("div");screen.className="device__screen";
+  const canvas=document.createElement("div");canvas.className="device__canvas";
+  if(S[key])canvas.innerHTML=S[key](canvas);
+  screen.appendChild(canvas);d.appendChild(screen);
+});
+
+/* scale canvases with ResizeObserver */
+const fit=(d)=>{const c=d.querySelector(".device__canvas");if(c&&d.clientWidth)c.style.transform="scale("+(d.clientWidth/393)+")";};
+const ro=new ResizeObserver((es)=>es.forEach(e=>fit(e.target)));
+document.querySelectorAll(".device").forEach((d)=>{fit(d);ro.observe(d);});
+window.addEventListener("load",()=>document.querySelectorAll(".device").forEach(fit));
+
+/* reveal */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:0.12,rootMargin:"-40px"});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

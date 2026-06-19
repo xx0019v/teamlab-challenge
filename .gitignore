@@ -1,0 +1,9 @@
+# os
+.DS_Store
+
+# logs / temp
+*.log
+/tmp/
+
+# local preview server artifacts
+.claude/

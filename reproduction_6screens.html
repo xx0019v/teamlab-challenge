@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>teamLab-style Immersive Guide — Reproduction</title>
+<meta name="viewport" content="width=1320" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+/* ════════════════════════════════════════════════════════════
+   DESIGN TOKENS  (Figma-mappable)
+   ════════════════════════════════════════════════════════════ */
+:root {
+  /* surfaces */
+  --ink:            #000000;
+  --room:           #0b0c0e;   /* dark exhibition room */
+  --surface:        #121316;
+  --surface-2:      #1b1d21;
+  --glass:          rgba(20,21,25,0.62);
+  --hairline:       rgba(255,255,255,0.08);
+  --hairline-2:     rgba(255,255,255,0.14);
+
+  /* text */
+  --t-1:            #F4F2EC;   /* warm white, not pure */
+  --t-2:            rgba(244,242,236,0.62);
+  --t-3:            rgba(244,242,236,0.36);
+  --t-4:            rgba(244,242,236,0.20);
+
+  /* signal accent — used ONLY for current/important state */
+  --water:          #8FD3E6;
+  --water-deep:     #3f8fa8;
+
+  /* CTA */
+  --cta:            #F4F2EC;   /* slightly warm white */
+  --cta-ink:        #14161a;
+
+  /* radius */
+  --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-xl: 28px; --r-device: 44px; --r-full: 999px;
+
+  /* shadow / blur */
+  --sh-card:   0 10px 30px rgba(0,0,0,0.45);
+  --sh-device: 0 40px 90px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.04);
+  --blur-glass: 22px;
+
+  /* fonts */
+  --sans: 'Inter','Noto Sans JP',-apple-system,'Helvetica Neue',sans-serif;
+  --jp:   'Noto Sans JP','Hiragino Kaku Gothic ProN',sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* ── dark exhibition-room page ambiance ── */
+body {
+  background: var(--room);
+  color: var(--t-1);
+  padding: 56px 32px 80px;
+  position: relative;
+  overflow-x: hidden;
+}
+body::before { /* faint light leaks at the edges of the room */
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(60% 50% at 8% 12%, rgba(143,211,230,0.05), transparent 60%),
+    radial-gradient(50% 50% at 95% 90%, rgba(255,150,200,0.04), transparent 60%);
+}
+body::after { /* film grain over the whole room */
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.page-head { max-width: 1240px; margin: 0 auto 44px; position: relative; z-index: 2; }
+.page-head h1 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+.page-head p  { font-size: 12px; color: var(--t-2); margin-top: 9px; line-height: 1.75; max-width: 760px; }
+
+.gallery {
+  max-width: 1240px; margin: 0 auto; position: relative; z-index: 2;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 52px 34px; justify-items: center;
+}
+@media (max-width: 1080px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 720px)  { .gallery { grid-template-columns: 1fr; } }
+
+.plate { width: 100%; max-width: 340px; }
+.plate__cap { margin-top: 18px; }
+.plate__cap .idx  { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--t-3); font-weight: 500; }
+.plate__cap .name { font-size: 15px; font-weight: 500; margin-top: 4px; letter-spacing: -0.005em; }
+.plate__cap .desc { font-size: 11px; color: var(--t-2); margin-top: 5px; line-height: 1.6; }
+.plate__cap .desc.jp { font-family: var(--jp); }
+
+/* ════════════════════════════════════════════════════════════
+   DEVICE  (iPhone 15-class)  — .device > .device__screen
+   ════════════════════════════════════════════════════════════ */
+.device {
+  position: relative; aspect-ratio: 393/852; border-radius: var(--r-device);
+  background: var(--ink); box-shadow: var(--sh-device);
+  overflow: hidden;
+  animation: floatY 9s ease-in-out infinite;
+}
+.device__screen { position: absolute; inset: 0; overflow: hidden; border-radius: var(--r-device); }
+/* inner vignette — gives every screen the depth of a dark room */
+.device__screen::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 28;
+  background: radial-gradient(130% 100% at 50% 42%, transparent 58%, rgba(0,0,0,0.45) 100%);
+}
+
+/* Dynamic Island */
+.island {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 84px; height: 24px; background: #000; border-radius: var(--r-full); z-index: 40;
+  box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.05);
+}
+/* iOS status bar */
+.statusbar {
+  position: absolute; top: 0; left: 0; right: 0; height: 50px; z-index: 35;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 17px 22px 0 26px;
+}
+.statusbar__time { font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: var(--t-1); }
+.statusbar__icons { display: flex; align-items: center; gap: 7px; }
+.statusbar__sig { display: flex; align-items: flex-end; gap: 2px; height: 11px; }
+.statusbar__sig i { width: 3px; background: var(--t-1); border-radius: 1px; display: block; }
+.statusbar__bat { width: 24px; height: 12px; border: 1px solid rgba(244,242,236,0.55); border-radius: 3px; position: relative; padding: 1.6px; }
+.statusbar__bat::after { content:""; display:block; height:100%; width:78%; background: var(--t-1); border-radius: 1px; }
+.statusbar__bat::before { content:""; position:absolute; right:-3px; top:3.5px; width:1.5px; height:5px; background: rgba(244,242,236,0.55); border-radius:1px; }
+/* home indicator */
+.home-indicator {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 128px; height: 5px; border-radius: var(--r-full); background: rgba(244,242,236,0.30); z-index: 40;
+}
+
+/* topbar */
+.topbar { position: absolute; top: 54px; left: 0; right: 0; height: 48px; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 18px; }
+.topbar__title { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
+.icon-back { width: 22px; height: 22px; }
+.icon-menu { display: flex; flex-direction: column; gap: 4px; }
+.icon-menu i { width: 18px; height: 1.5px; background: var(--t-1); display: block; }
+.icon-ham  { display: flex; flex-direction: column; gap: 4.5px; }
+.icon-ham i { width: 20px; height: 1.5px; background: var(--t-1); display: block; }
+
+/* artwork field */
+.artwork { position: absolute; inset: 0; overflow: hidden; }
+.artwork__layer { position: absolute; inset: 0; }
+.artwork__scrim { position: absolute; inset: 0; }
+.particles { position: absolute; inset: 0; pointer-events: none; }
+.particles b { position: absolute; border-radius: 50%; display: block; }
+
+/* glass card */
+.card-glass {
+  background: var(--glass); backdrop-filter: blur(var(--blur-glass)); -webkit-backdrop-filter: blur(var(--blur-glass));
+  border: 0.5px solid var(--hairline); border-radius: var(--r-md);
+}
+.eyebrow { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--t-2); font-weight: 500; }
+.eyebrow--water { color: var(--water); }
+
+/* primary CTA */
+.cta {
+  background: var(--cta); color: var(--cta-ink);
+  border-radius: var(--r-full); text-align: center; font-weight: 600; font-size: 13px;
+  padding: 12px; letter-spacing: 0.01em;
+}
+
+/* ════════════════════════════════════════════════════════════
+   ANIMATIONS  (respect reduced-motion)
+   ════════════════════════════════════════════════════════════ */
+@keyframes floatY { 0%,100% { transform: translateY(-3px); } 50% { transform: translateY(3px); } }
+@keyframes breathe { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes drift {
+  0%   { transform: translate(0,0); }
+  50%  { transform: translate(var(--dx,4px), var(--dy,-6px)); }
+  100% { transform: translate(0,0); }
+}
+.glow-breathe { animation: breathe 7s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .device, .glow-breathe, .particles b { animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Immersive Guide — Reproduction Set（課題1）</h1>
+  <p>teamLab的な暗闇・水・光・花・粒子・低輝度UIの美学を、高品質なオリジナルUIとして再構築。
+  Ticket / Guide / Map / Artwork Detail / Quiet Guide / Settings の6画面。作品ビジュアルは前景・後景の粒子で奥行きを作り、iOSのDynamic Island・ステータスバー・ホームインジケーターまで再現。Figma移植を前提にクラス名を構造化。</p>
+</div>
+
+<div class="gallery">
+
+  <!-- ══════════════════ 01 · TICKET / ENTRY ══════════════════ -->
+  <div class="plate">
+    <div class="device">
+      <div class="device__screen" style="background: radial-gradient(120% 80% at 50% 0%, #0e1014, #000 70%);">
+        <div class="island"></div>
+        <div class="statusbar">
+          <div class="statusbar__time">9:41</div>
+          <div class="statusbar__icons">
+            <div class="statusbar__sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></div>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 10.5l1.8-2.2a2.6 2.6 0 0 0-3.6 0L8 10.5zM3.4 5.6a7 7 0 0 1 9.2 0M.8 2.9a11 11 0 0 1 14.4 0" stroke="#F4F2EC" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <div class="statusbar__bat"></div>
+          </div>
+        </div>
+
+        <div class="topbar">
+          <div class="topbar__title" style="margin:0 auto;">Ticket</div>
+        </div>
+
+        <!-- ticket body -->
+        <div style="position:absolute; top:118px; left:0; right:0; bottom:0; padding:0 22px;">
+          <div class="eyebrow eyebrow--water">Valid Today</div>
+          <div style="font-family:var(--jp); font-size:19px; font-weight:500; margin-top:6px; letter-spacing:-0.01em;">teamLab ボーダレス</div>
+
+          <!-- ticket card -->
+          <div class="card-glass" style="margin-top:20px; padding:22px 20px 24px; border-radius:var(--r-lg); position:relative;">
+            <!-- perforation notches -->
+            <span style="position:absolute; left:-7px; top:50%; width:14px; height:14px; border-radius:50%; background:var(--ink);"></span>
+            <span style="position:absolute; right:-7px; top:50%; width:14px; height:14px; border-radius:50%; background:var(--ink);"></span>
+
+            <div style="display:flex; justify-content:center;">
+              <div style="width:152px; height:152px; background:#F4F2EC; border-radius:14px; padding:12px; position:relative;">
+                <!-- QR module field -->
+                <div style="position:absolute; inset:12px; background-image: radial-gradient(#0c0c0c 38%, transparent 40%); background-size: 9px 9px;"></div>
+                <!-- finder patterns (3 corners) -->
+                <span style="position:absolute; left:12px; top:12px; width:34px; height:34px; border:6px solid #0c0c0c; border-radius:4px;"></span>
+                <span style="position:absolute; right:12px; top:12px; width:34px; height:34px; border:6px solid #0c0c0c; border-radius:4px;"></span>
+                <span style="position:absolute; left:12px; bottom:12px; width:34px; height:34px; border:6px solid #0c0c0c; border-radius:4px;"></span>
+                <!-- finder centers -->
+                <span style="position:absolute; left:24px; top:24px; width:10px; height:10px; background:#0c0c0c; border-radius:2px;"></span>
+                <span style="position:absolute; right:24px; top:24px; width:10px; height:10px; background:#0c0c0c; border-radius:2px;"></span>
+                <span style="position:absolute; left:24px; bottom:24px; width:10px; height:10px; background:#0c0c0c; border-radius:2px;"></span>
+              </div>
+            </div>
+            <div style="text-align:center; margin-top:16px; font-size:11px; color:var(--t-2); letter-spacing:0.04em;">SCAN AT THE ENTRANCE GATE</div>
+
+            <div style="height:0.5px; background:var(--hairline); margin:18px 0;"></div>
+
+            <div style="display:flex; justify-content:space-between;">
+              <div>
+                <div style="font-size:9px; color:var(--t-3); letter-spacing:0.12em; text-transform:uppercase;">Date</div>
+                <div style="font-size:13px; font-weight:500; margin-top:3px;">Jun 18, Thu</div>
+              </div>
+              <div>
+                <div style="font-size:9px; color:var(--t-3); letter-spacing:0.12em; text-transform:uppercase;">Entry</div>
+                <div style="font-size:13px; font-weight:500; margin-top:3px;">11:00 – 11:30</div>
+              </div>
+              <div>
+                <div style="font-size:9px; color:var(--t-3); letter-spacing:0.12em; text-transform:uppercase;">Guests</div>
+                <div style="font-size:13px; font-weight:500; margin-top:3px;">2 Adults</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- entry status -->
+          <div style="display:flex; align-items:center; gap:9px; margin-top:18px; padding:0 4px;">
+            <span class="glow-breathe" style="width:8px; height:8px; border-radius:50%; background:var(--water); box-shadow:0 0 10px var(--water);"></span>
+            <span style="font-size:12px; color:var(--t-2);">Entry opens in 24 min</span>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <div class="plate__cap">
+      <div class="idx">01 / Entry</div>
+      <div class="name">Ticket / Entry</div>
+      <div class="desc jp">QR・日時・人数・入場状態。白カードと黒の対比で、暗所でもチケットだけが浮かぶ。</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ 02 · GUIDE / AREA CARDS ══════════════════ -->
+  <div class="plate">
+    <div class="device">
+      <div class="device__screen" style="background:#000;">
+        <div class="island"></div>
+        <div class="statusbar">
+          <div class="statusbar__time">9:41</div>
+          <div class="statusbar__icons">
+            <div class="statusbar__sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></div>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 10.5l1.8-2.2a2.6 2.6 0 0 0-3.6 0L8 10.5zM3.4 5.6a7 7 0 0 1 9.2 0M.8 2.9a11 11 0 0 1 14.4 0" stroke="#F4F2EC" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <div class="statusbar__bat"></div>
+          </div>
+        </div>
+
+        <div class="topbar">
+          <div class="icon-ham"><i></i><i></i><i></i></div>
+          <div class="topbar__title" style="font-family:var(--jp);">ボーダレス</div>
+          <svg class="icon-back" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3.1" stroke="#F4F2EC" stroke-width="1.5"/><path d="M12 21c5-5.4 7-8.5 7-11a7 7 0 1 0-14 0c0 2.5 2 5.6 7 11Z" stroke="#F4F2EC" stroke-width="1.5"/></svg>
+        </div>
+
+        <!-- area cards -->
+        <div style="position:absolute; top:102px; left:0; right:0; bottom:0;">
+          <!-- floral -->
+          <div style="height:206px; position:relative; overflow:hidden;">
+            <div class="artwork__layer" style="background:radial-gradient(ellipse at 32% 42%, #ff7ab8, #b41f6c 38%, #2a0518 82%);"></div>
+            <div class="artwork__layer" style="background:radial-gradient(ellipse at 78% 72%, rgba(255,205,90,0.55), transparent 46%);"></div>
+            <div class="artwork__layer" style="background:radial-gradient(ellipse at 60% 20%, rgba(190,110,255,0.30), transparent 44%);"></div>
+            <div class="particles" data-field="floral"></div>
+            <div class="artwork__scrim" style="background:linear-gradient(180deg, transparent 42%, rgba(0,0,0,0.7));"></div>
+            <div style="position:absolute; bottom:14px; left:20px; right:20px;">
+              <div class="eyebrow" style="opacity:0.85;">Floral · 12 works</div>
+              <div style="font-size:18px; font-weight:600; margin-top:3px; text-shadow:0 1px 8px rgba(0,0,0,0.5);">Flower Forest</div>
+            </div>
+          </div>
+          <!-- water (current) -->
+          <div style="height:206px; position:relative; overflow:hidden;">
+            <div class="artwork__layer" style="background:linear-gradient(180deg,#03171f,#0c6480 56%,#bfeaf5);"></div>
+            <div class="artwork__layer" style="background:repeating-linear-gradient(93deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 5px);"></div>
+            <div class="artwork__layer" style="background:radial-gradient(ellipse at 50% 98%, rgba(255,255,255,0.42), transparent 44%);"></div>
+            <div class="particles" data-field="water"></div>
+            <div class="artwork__scrim" style="background:linear-gradient(180deg, transparent 42%, rgba(0,0,0,0.62));"></div>
+            <div style="position:absolute; bottom:14px; left:20px; right:20px;">
+              <div class="eyebrow eyebrow--water">You are here · 8 works</div>
+              <div style="font-size:18px; font-weight:600; margin-top:3px; text-shadow:0 1px 8px rgba(0,0,0,0.5);">Borderless World</div>
+            </div>
+          </div>
+          <!-- forest -->
+          <div style="height:206px; position:relative; overflow:hidden;">
+            <div class="artwork__layer" style="background:radial-gradient(ellipse at 45% 55%, #4f9d5e, #16421f 55%, #06160a 90%);"></div>
+            <div class="artwork__layer" style="background:radial-gradient(circle at 72% 32%, rgba(190,225,100,0.42), transparent 44%);"></div>
+            <div class="particles" data-field="forest"></div>
+            <div class="artwork__scrim" style="background:linear-gradient(180deg, transparent 42%, rgba(0,0,0,0.62));"></div>
+            <div style="position:absolute; bottom:14px; left:20px; right:20px;">
+              <div class="eyebrow" style="opacity:0.85;">Active · 14 works</div>
+              <div style="font-size:18px; font-weight:600; margin-top:3px; text-shadow:0 1px 8px rgba(0,0,0,0.5);">Athletics Forest</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- current location pill -->
+        <div class="card-glass" style="position:absolute; bottom:20px; left:16px; right:16px; padding:11px; display:flex; align-items:center; gap:11px;">
+          <div style="width:44px; height:44px; border-radius:9px; background:linear-gradient(135deg,#0c6480,#bfeaf5); flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div class="eyebrow eyebrow--water">You are here</div>
+            <div style="font-size:13px; font-weight:600; margin-top:2px;">Borderless World · Floor 2</div>
+          </div>
+          <span style="font-size:16px; color:var(--t-3);">›</span>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <div class="plate__cap">
+      <div class="idx">02 / Guide</div>
+      <div class="name">Guide · Area Cards</div>
+      <div class="desc jp">没入作品のエリアを縦積み。現在地のみ水色で示し、暗い展示室の中の居場所が直感で分かる。</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ 03 · MAP / ROUTE ══════════════════ -->
+  <div class="plate">
+    <div class="device">
+      <div class="device__screen" style="background:#080a07;">
+        <div class="island"></div>
+        <div class="statusbar">
+          <div class="statusbar__time">9:41</div>
+          <div class="statusbar__icons">
+            <div class="statusbar__sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></div>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 10.5l1.8-2.2a2.6 2.6 0 0 0-3.6 0L8 10.5zM3.4 5.6a7 7 0 0 1 9.2 0M.8 2.9a11 11 0 0 1 14.4 0" stroke="#F4F2EC" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <div class="statusbar__bat"></div>
+          </div>
+        </div>
+
+        <!-- abstract exhibition map -->
+        <div class="artwork__layer" style="background:radial-gradient(circle at 44% 46%, #11150d, #070905 72%);"></div>
+        <svg style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 393 852" preserveAspectRatio="none">
+          <!-- faint room zones (give the space a body, not just lines) -->
+          <rect x="40" y="150" width="150" height="180" rx="22" fill="#11160c" opacity="0.55"/>
+          <rect x="210" y="300" width="150" height="200" rx="22" fill="#11160c" opacity="0.45"/>
+          <rect x="70" y="520" width="170" height="190" rx="22" fill="#11160c" opacity="0.4"/>
+          <!-- paths -->
+          <path d="M64 220 Q158 296 134 416 T214 600 Q254 690 192 768" stroke="#33421f" stroke-width="18" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <path d="M252 176 Q314 300 286 462 T198 706" stroke="#33421f" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.34"/>
+          <!-- active route to next artwork: thin water-blue dashed -->
+          <path d="M150 312 Q200 280 248 300" stroke="#8FD3E6" stroke-width="1.5" fill="none" stroke-dasharray="2 5" stroke-linecap="round" opacity="0.85"/>
+        </svg>
+        <!-- pins -->
+        <div class="glow-breathe" style="position:absolute; top:36%; left:38%; width:38px; height:38px; border-radius:50%; border:1px solid rgba(143,211,230,0.4); transform:translate(-12px,-12px);"></div>
+        <div style="position:absolute; top:36%; left:38%; width:13px; height:13px; border-radius:50%; background:var(--water); box-shadow:0 0 18px rgba(143,211,230,0.8); transform:translate(-6px,-6px);"></div>
+        <div style="position:absolute; top:35%; left:62%; width:9px; height:9px; border-radius:50%; background:#fff; opacity:0.85;"></div>
+        <div style="position:absolute; top:54%; left:54%; width:8px; height:8px; border-radius:50%; background:var(--t-3);"></div>
+        <div style="position:absolute; top:64%; left:34%; width:8px; height:8px; border-radius:50%; background:var(--t-3);"></div>
+        <!-- EXIT marker -->
+        <div style="position:absolute; bottom:31%; left:74%; display:flex; align-items:center; gap:5px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4M3 12h12m0 0-4-4m4 4-4 4" stroke="rgba(244,242,236,0.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-size:8px; letter-spacing:0.16em; color:var(--t-3); text-transform:uppercase;">Exit</span>
+        </div>
+
+        <div class="topbar">
+          <svg class="icon-back" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#F4F2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="topbar__title" style="margin:0 auto;">Map</div>
+        </div>
+
+        <!-- next-artwork sheet -->
+        <div class="card-glass" style="position:absolute; bottom:20px; left:16px; right:16px; padding:15px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:11px;">
+            <div class="eyebrow eyebrow--water">Next on route</div>
+            <div class="eyebrow">3 / 8</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:11px;">
+            <div style="width:48px; height:48px; border-radius:11px; background:radial-gradient(ellipse at 50% 70%, #d8f3fb, #1a8fb0 50%); flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600;">Forest of Lamps</div>
+              <div style="font-size:10px; color:var(--t-2); margin-top:2px;">28m · 3 min walk · Less crowded</div>
+            </div>
+            <span style="font-size:16px; color:var(--t-3);">›</span>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <div class="plate__cap">
+      <div class="idx">03 / Map</div>
+      <div class="name">Map · Route</div>
+      <div class="desc jp">展示空間用の抽象マップ。現在地・ルート・次の作品だけ。水色は現在地と進路にのみ使う。</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ 04 · ARTWORK DETAIL ══════════════════ -->
+  <div class="plate">
+    <div class="device">
+      <div class="device__screen" style="background:#000;">
+        <div class="island"></div>
+        <div class="statusbar">
+          <div class="statusbar__time">9:41</div>
+          <div class="statusbar__icons">
+            <div class="statusbar__sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></div>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 10.5l1.8-2.2a2.6 2.6 0 0 0-3.6 0L8 10.5zM3.4 5.6a7 7 0 0 1 9.2 0M.8 2.9a11 11 0 0 1 14.4 0" stroke="#F4F2EC" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <div class="statusbar__bat"></div>
+          </div>
+        </div>
+
+        <!-- Universe of Water Particles on a Rock — the showpiece -->
+        <div style="position:absolute; top:0; left:0; right:0; height:368px; overflow:hidden; background:#01060a;">
+          <!-- deep space + violet ambience high up -->
+          <div class="artwork__layer" style="background:radial-gradient(120% 80% at 50% 0%, #06141c 0%, #01060a 60%);"></div>
+          <div class="artwork__layer" style="background:radial-gradient(ellipse at 20% 18%, rgba(120,100,200,0.18), transparent 40%);"></div>
+          <!-- the luminous rock where water gathers (bottom-center mound) -->
+          <div class="artwork__layer" style="background:radial-gradient(70% 46% at 50% 96%, rgba(220,244,252,0.95), rgba(60,150,180,0.55) 32%, rgba(10,50,70,0.2) 60%, transparent 78%);"></div>
+          <div class="artwork__layer glow-breathe" style="background:radial-gradient(40% 28% at 50% 98%, rgba(255,255,255,0.9), transparent 70%);"></div>
+          <!-- falling water: defined vertical streaks of varying brightness -->
+          <div class="artwork__layer" style="opacity:0.7; -webkit-mask:linear-gradient(180deg, transparent, #000 35%, #000 88%, transparent); mask:linear-gradient(180deg, transparent, #000 35%, #000 88%, transparent); background:
+            linear-gradient(90deg, transparent 0, transparent 100%),
+            repeating-linear-gradient(90deg, transparent 0 13px, rgba(223,246,252,0.5) 13px 13.6px, transparent 14px 27px);"></div>
+          <div class="artwork__layer" style="opacity:0.45; -webkit-mask:linear-gradient(180deg, transparent, #000 40%, transparent 95%); mask:linear-gradient(180deg, transparent, #000 40%, transparent 95%); background:repeating-linear-gradient(90deg, transparent 0 7px, rgba(143,211,230,0.4) 7px 7.5px, transparent 8px 19px);"></div>
+          <!-- two brighter beams converging on the rock -->
+          <div class="artwork__layer glow-breathe" style="-webkit-mask:linear-gradient(90deg, transparent 46%, #000 49%, #000 51%, transparent 54%); mask:linear-gradient(90deg, transparent 46%, #000 49%, #000 51%, transparent 54%); background:linear-gradient(180deg, transparent 10%, rgba(255,255,255,0.5) 90%);"></div>
+          <div class="artwork__layer" style="-webkit-mask:linear-gradient(96deg, transparent 60%, #000 63%, #000 64.5%, transparent 67%); mask:linear-gradient(96deg, transparent 60%, #000 63%, #000 64.5%, transparent 67%); background:linear-gradient(180deg, transparent 10%, rgba(180,230,245,0.4) 90%);"></div>
+          <!-- dense particles, concentrated toward the light -->
+          <div class="particles" data-field="water-hero"></div>
+          <!-- scrim into the text below -->
+          <div class="artwork__scrim" style="background:linear-gradient(180deg, rgba(0,0,0,0.22) 0%, transparent 20%, transparent 64%, #000 99%);"></div>
+        </div>
+
+        <div class="topbar">
+          <svg class="icon-back" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#F4F2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="topbar__title" style="margin:0 auto; opacity:0.9;">Art work</div>
+          <div class="icon-menu"><i></i><i></i><i></i></div>
+        </div>
+
+        <!-- text block -->
+        <div style="position:absolute; top:386px; left:0; right:0; padding:0 22px;">
+          <div style="font-size:18px; font-weight:600; line-height:1.32; letter-spacing:-0.01em;">Universe of Water Particles on a Rock where People Gather</div>
+          <div style="font-size:11px; color:var(--t-3); margin-top:7px; letter-spacing:0.02em;">teamLab, 2018 · Interactive Digital Installation</div>
+          <div style="font-size:12.5px; color:var(--t-2); line-height:1.7; margin-top:13px;">Water flows across the boundaries of other works, drawn by the contours of the rock where people gather, becoming a waterfall of light.</div>
+        </div>
+
+        <!-- audio player -->
+        <div style="position:absolute; bottom:0; left:0; right:0; padding:16px 22px 26px; background:linear-gradient(180deg, transparent, #000 34%);">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;">
+            <div class="eyebrow eyebrow--water">Audio Guide</div>
+            <div style="font-size:10px; color:var(--t-3); font-variant-numeric:tabular-nums;">1:24 / 3:40</div>
+          </div>
+          <div style="height:2.5px; background:rgba(244,242,236,0.18); border-radius:2px; position:relative; margin-bottom:16px;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:38%; background:var(--t-1); border-radius:2px;"></div>
+            <div style="position:absolute; left:38%; top:-3px; width:8px; height:8px; border-radius:50%; background:var(--t-1);"></div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:40px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M6 6h2v12H6zm3.2 6 9 6V6z"/></svg>
+            <div style="width:48px; height:48px; border-radius:50%; border:1.5px solid rgba(244,242,236,0.6); display:flex; align-items:center; justify-content:center;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M16 6h2v12h-2zM5.5 18l9-6-9-6z"/></svg>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <div class="plate__cap">
+      <div class="idx">04 / Detail ★</div>
+      <div class="name">Artwork Detail</div>
+      <div class="desc jp">最重要画面。水の光が縦に流れ、底に溜まる。粒子が前後に漂い、作品が主役。音声ガイドは静かに添える。</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ 05 · QUIET GUIDE ══════════════════ -->
+  <div class="plate">
+    <div class="device">
+      <div class="device__screen" style="background:#000;">
+        <div class="island"></div>
+        <!-- ultra-dim status: only time -->
+        <div class="statusbar">
+          <div class="statusbar__time" style="opacity:0.5;">9:41</div>
+          <div class="statusbar__icons" style="opacity:0.5;">
+            <div class="statusbar__sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></div>
+            <div class="statusbar__bat"></div>
+          </div>
+        </div>
+
+        <!-- the silent screen: faint breathing pool + arrow + distance only -->
+        <div class="glow-breathe artwork__layer" style="background:radial-gradient(circle at 50% 38%, rgba(143,211,230,0.10), transparent 46%);"></div>
+
+        <div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center;">
+          <div class="eyebrow" style="margin-top:64px; opacity:0.4;">▮▮▯ Route 3 / 8</div>
+
+          <!-- arrow -->
+          <div style="margin-top:120px;">
+            <svg width="58" height="58" viewBox="0 0 80 80" fill="none">
+              <path d="M40 14 L40 66" stroke="#F4F2EC" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
+              <path d="M18 36 L40 14 L62 36" stroke="#F4F2EC" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+            </svg>
+          </div>
+
+          <!-- distance -->
+          <div style="margin-top:40px; font-size:52px; font-weight:300; letter-spacing:-0.03em; opacity:0.92;">28<span style="font-size:17px; opacity:0.5; margin-left:2px;">m</span></div>
+          <div style="font-size:11px; color:var(--t-3); margin-top:8px;">turn left at corridor</div>
+
+          <!-- next -->
+          <div style="position:absolute; bottom:96px; left:0; right:0; text-align:center;">
+            <div style="font-size:9px; letter-spacing:0.24em; text-transform:uppercase; color:var(--t-4);">Next</div>
+            <div style="font-size:13px; color:var(--t-2); margin-top:7px;">Forest of Lamps</div>
+          </div>
+          <div style="position:absolute; bottom:34px; left:0; right:0; text-align:center; font-size:8.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--t-4);">Swipe up to exit</div>
+        </div>
+        <div class="home-indicator" style="background:rgba(244,242,236,0.16);"></div>
+      </div>
+    </div>
+    <div class="plate__cap">
+      <div class="idx">05 / Quiet</div>
+      <div class="name">Quiet Guide</div>
+      <div class="desc jp">最も静かな画面。矢印・距離・方向・NEXT のみ。黒の余白を活かした「何もない美しさ」。</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ 06 · SETTINGS / ACCESSIBILITY ══════════════════ -->
+  <div class="plate">
+    <div class="device">
+      <div class="device__screen" style="background:#070708;">
+        <div class="island"></div>
+        <div class="statusbar">
+          <div class="statusbar__time">9:41</div>
+          <div class="statusbar__icons">
+            <div class="statusbar__sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:11px"></i></div>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 10.5l1.8-2.2a2.6 2.6 0 0 0-3.6 0L8 10.5zM3.4 5.6a7 7 0 0 1 9.2 0M.8 2.9a11 11 0 0 1 14.4 0" stroke="#F4F2EC" stroke-width="1.3" stroke-linecap="round"/></svg>
+            <div class="statusbar__bat"></div>
+          </div>
+        </div>
+
+        <div style="position:absolute; top:62px; left:0; right:0; padding:0 22px;">
+          <div style="font-size:24px; font-weight:600; letter-spacing:-0.015em;">Settings</div>
+        </div>
+
+        <div style="position:absolute; top:118px; left:0; right:0; padding:0 18px;">
+          <!-- DISPLAY -->
+          <div class="eyebrow" style="padding-left:4px;">Display</div>
+          <div style="background:var(--surface); border-radius:var(--r-md); margin-top:8px; overflow:hidden;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 14px;">
+              <span style="font-size:13px;">Quiet Mode</span>
+              <span style="width:38px; height:23px; border-radius:var(--r-full); background:var(--water); position:relative; display:block;"><span style="position:absolute; right:2.5px; top:2.5px; width:18px; height:18px; border-radius:50%; background:#fff;"></span></span>
+            </div>
+            <div style="height:0.5px; background:var(--hairline);"></div>
+            <div style="padding:13px 14px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+                <span style="font-size:13px;">Brightness</span>
+                <span style="font-size:11px; color:var(--t-3);">Low</span>
+              </div>
+              <div style="height:3px; background:rgba(244,242,236,0.10); border-radius:var(--r-full); position:relative;">
+                <div style="position:absolute; left:0; top:0; bottom:0; width:32%; background:var(--t-1); border-radius:var(--r-full);"></div>
+                <div style="position:absolute; left:32%; top:-4px; width:11px; height:11px; border-radius:50%; background:#fff;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACCESSIBILITY -->
+          <div class="eyebrow" style="padding-left:4px; margin-top:18px;">Accessibility</div>
+          <div style="background:var(--surface); border-radius:var(--r-md); margin-top:8px; overflow:hidden;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 14px;">
+              <span style="font-size:13px;">High contrast text</span>
+              <span style="width:38px; height:23px; border-radius:var(--r-full); background:var(--water); position:relative; display:block;"><span style="position:absolute; right:2.5px; top:2.5px; width:18px; height:18px; border-radius:50%; background:#fff;"></span></span>
+            </div>
+            <div style="height:0.5px; background:var(--hairline);"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 14px;">
+              <span style="font-size:13px;">Audio description</span>
+              <span style="width:38px; height:23px; border-radius:var(--r-full); background:rgba(244,242,236,0.16); position:relative; display:block;"><span style="position:absolute; left:2.5px; top:2.5px; width:18px; height:18px; border-radius:50%; background:#fff;"></span></span>
+            </div>
+            <div style="height:0.5px; background:var(--hairline);"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 14px;">
+              <span style="font-size:13px;">Haptic guidance</span>
+              <span style="width:38px; height:23px; border-radius:var(--r-full); background:var(--water); position:relative; display:block;"><span style="position:absolute; right:2.5px; top:2.5px; width:18px; height:18px; border-radius:50%; background:#fff;"></span></span>
+            </div>
+          </div>
+
+          <!-- LANGUAGE -->
+          <div class="eyebrow" style="padding-left:4px; margin-top:18px;">Language</div>
+          <div style="background:var(--surface); border-radius:var(--r-md); margin-top:8px; overflow:hidden;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 14px;">
+              <span style="font-size:13px;">Language</span>
+              <span style="font-size:12px; color:var(--t-3);">日本語 ›</span>
+            </div>
+          </div>
+        </div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+    <div class="plate__cap">
+      <div class="idx">06 / System</div>
+      <div class="name">Settings · Accessibility</div>
+      <div class="desc jp">Apple純正のような精密なトグル・スライダー・セクション。輝度・言語・音声・触覚を自然に配置。</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   PARTICLE FIELDS  — depth-layered drifting light
+   far layer: larger, blurred, slow, low opacity
+   near layer: small, sharp, varied drift
+   ════════════════════════════════════════════════════════════ */
+const FIELDS = {
+  floral:     { count: 30, palette: ["#ffd2e6","#ffb84d","#ff8fc0","#ffffff"], maxR: 3.2 },
+  water:      { count: 26, palette: ["#bfeaf5","#8FD3E6","#ffffff"],          maxR: 2.6 },
+  forest:     { count: 22, palette: ["#bfe87a","#7fbf5a","#e8ffd0"],          maxR: 2.4 },
+  "water-hero": { count: 64, palette: ["#dff6fc","#8FD3E6","#ffffff","#a7c8e6"], maxR: 3.0, bias: true },
+};
+
+function buildField(el, cfg) {
+  const frag = [];
+  for (let i = 0; i < cfg.count; i++) {
+    const far = Math.random() < 0.45;
+    // bias: pull particles toward the light source (bottom-centre) when requested
+    const x = cfg.bias
+      ? 50 + (Math.random() - 0.5) * 86
+      : Math.random() * 100;
+    const y = cfg.bias
+      ? 100 - Math.pow(Math.random(), 1.7) * 96   // denser near the bottom
+      : Math.random() * 100;
+    const r = (Math.random() * cfg.maxR + 0.6) * (far ? 1.7 : 1);
+    const o = far ? Math.random() * 0.22 + 0.08 : Math.random() * 0.55 + 0.25;
+    const c = cfg.palette[(Math.random() * cfg.palette.length) | 0];
+    const blur = far ? (Math.random() * 2 + 1.5) : 0;
+    const dur = (Math.random() * 6 + 6).toFixed(1);
+    const delay = (-Math.random() * 8).toFixed(1);
+    const dx = (Math.random() * 8 - 4).toFixed(1);
+    const dy = (Math.random() * -10 - 2).toFixed(1);
+    frag.push(
+      `<b style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${r.toFixed(1)}px;height:${r.toFixed(1)}px;` +
+      `background:${c};opacity:${o.toFixed(2)};filter:blur(${blur}px);box-shadow:0 0 ${(r*3).toFixed(1)}px ${c};` +
+      `--dx:${dx}px;--dy:${dy}px;animation:drift ${dur}s ease-in-out ${delay}s infinite;"></b>`
+    );
+  }
+  el.innerHTML = frag.join("");
+}
+
+document.querySelectorAll(".particles[data-field]").forEach((el) => {
+  const cfg = FIELDS[el.getAttribute("data-field")];
+  if (cfg) buildField(el, cfg);
+});
+</script>
+</body>
+</html>

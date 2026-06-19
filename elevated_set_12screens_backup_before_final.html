@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>teamLab Guide App — Elevated Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A3 portrait; margin: 14mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans JP', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  html, body { background: #050609; color: #fff; }
+  body { padding: 40px 32px; position: relative; overflow-x: hidden; }
+  /* page-wide grain texture */
+  body::before {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: radial-gradient(rgba(255,255,255,0.012) 1px, transparent 1px);
+    background-size: 3px 3px; opacity:0.6;
+  }
+
+  /* ========== COVER PAGE ========== */
+  .cover {
+    height: 100vh; min-height: 1000px; position:relative; padding: 80px 64px 64px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    border-bottom:0.5px solid rgba(255,255,255,0.08); margin-bottom:60px;
+    overflow:hidden;
+  }
+  .cover::after {
+    content:""; position:absolute; right:-200px; top:30%; width:700px; height:700px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(105,217,255,0.35), rgba(105,217,255,0) 60%);
+    filter: blur(20px);
+  }
+  .cover .eyebrow-top { font-size:11px; letter-spacing:0.18em; color:#69d9ff; font-weight:500; position:relative; z-index:1; }
+  .cover h1 { font-size: 88px; font-weight:600; line-height:1; letter-spacing:-0.025em; margin-top: 24px; position:relative; z-index:1; }
+  .cover .tagline { font-size:18px; color:rgba(255,255,255,0.78); margin-top:20px; max-width:520px; line-height:1.55; position:relative; z-index:1; font-family:'Noto Sans JP',sans-serif; }
+  .cover .meta { display:flex; gap:48px; margin-top:auto; position:relative; z-index:1; }
+  .cover .meta div { font-size:11px; letter-spacing:0.06em; color:rgba(255,255,255,0.55); text-transform:uppercase; }
+  .cover .meta div strong { display:block; color:#fff; font-size:14px; font-weight:500; letter-spacing:0; text-transform:none; margin-top:4px; font-family:'Noto Sans JP',sans-serif; }
+
+  /* ========== SECTION HEADER ========== */
+  .section-head { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:32px; padding:0 8px; position:relative; z-index:1; }
+  .section-head .num { font-size:11px; letter-spacing:0.18em; color:#69d9ff; font-weight:500; }
+  .section-head h2 { font-size:32px; font-weight:600; letter-spacing:-0.015em; margin-top:6px; }
+  .section-head .sub { font-size:12px; color:rgba(255,255,255,0.55); margin-top:6px; max-width:480px; line-height:1.55; font-family:'Noto Sans JP',sans-serif; }
+  .section-head .res { font-size:10px; color:rgba(255,255,255,0.4); letter-spacing:0.04em; }
+
+  /* ========== GRID ========== */
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:36px 28px; padding:0 8px; position:relative; z-index:1; }
+  .ph {
+    background:#050609; border-radius:34px; aspect-ratio:393/852; position:relative; overflow:hidden;
+    border:0.5px solid rgba(255,255,255,0.10); color:#fff;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 24px 60px -20px rgba(0,0,0,0.6);
+  }
+  /* phone bezel highlight */
+  .ph::after {
+    content:""; position:absolute; top:0; left:24px; right:24px; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    pointer-events:none;
+  }
+  .lbl {
+    font-size:10px; color:rgba(255,255,255,0.55); letter-spacing:0.14em; margin-top:14px;
+    text-align:center; text-transform:uppercase; font-weight:500;
+  }
+  .lbl .accent { color:#69d9ff; margin-left:6px; font-weight:600; }
+  .accent { color:#69d9ff; }
+  .eyebrow { font-size:8px; letter-spacing:0.10em; color:rgba(255,255,255,0.55); text-transform:uppercase; font-weight:500; }
+  .eyebrow.a { color:#69d9ff; }
+  .glass { background:rgba(20,22,28,0.7); backdrop-filter:blur(20px); }
+  .softglass { background:rgba(24,27,34,0.85); backdrop-filter:blur(28px); border:0.5px solid rgba(255,255,255,0.06); }
+
+  /* ========== FOOTER ========== */
+  .footer { margin-top:60px; padding:0 8px; position:relative; z-index:1; }
+  .footer h3 { font-size:11px; letter-spacing:0.18em; color:#69d9ff; font-weight:500; margin-bottom:8px; }
+  .footer .pair { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px; }
+  .foot-card { padding:24px; background:rgba(255,255,255,0.025); border-radius:20px; border:0.5px solid rgba(255,255,255,0.08); }
+  .foot-card .ttl { font-size:10px; color:#69d9ff; letter-spacing:0.14em; font-weight:500; text-transform:uppercase; }
+  .foot-card .body { font-size:13px; color:rgba(255,255,255,0.85); margin-top:10px; line-height:1.7; font-family:'Noto Sans JP',sans-serif; }
+  .credit { margin-top:48px; padding-top:24px; border-top:0.5px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; font-size:10px; color:rgba(255,255,255,0.4); letter-spacing:0.06em; }
+
+  /* ========== CONCEPT PAGE ========== */
+  .concept { padding: 80px 64px; position:relative; border-bottom:0.5px solid rgba(255,255,255,0.08); z-index:1; }
+  .concept .num { font-size:11px; letter-spacing:0.18em; color:#69d9ff; font-weight:500; }
+  .concept h2 { font-size:48px; font-weight:600; line-height:1.1; letter-spacing:-0.02em; margin-top:20px; max-width:880px; }
+  .concept .lede { font-size:16px; color:rgba(255,255,255,0.78); line-height:1.75; margin-top:32px; max-width:680px; font-family:'Noto Sans JP', sans-serif; }
+  .concept .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:64px; }
+  .pillar { padding:32px; background:rgba(255,255,255,0.025); border-radius:20px; border:0.5px solid rgba(255,255,255,0.08); position:relative; overflow:hidden; }
+  .pillar::before { content:""; position:absolute; top:0; left:32px; width:24px; height:1.5px; background:#69d9ff; }
+  .pillar .label { font-size:10px; letter-spacing:0.14em; color:#69d9ff; font-weight:500; text-transform:uppercase; margin-top:18px; }
+  .pillar h3 { font-size:22px; font-weight:600; margin-top:12px; line-height:1.3; letter-spacing:-0.01em; }
+  .pillar p { font-size:13px; color:rgba(255,255,255,0.7); line-height:1.7; margin-top:14px; font-family:'Noto Sans JP', sans-serif; }
+
+  /* ========== DESIGN SYSTEM PAGE ========== */
+  .ds-page { padding: 80px 64px; position:relative; border-bottom:0.5px solid rgba(255,255,255,0.08); z-index:1; }
+  .ds-page .num { font-size:11px; letter-spacing:0.18em; color:#69d9ff; font-weight:500; }
+  .ds-page h2 { font-size:48px; font-weight:600; line-height:1.05; letter-spacing:-0.02em; margin-top:20px; }
+  .ds-page .sub { font-size:13px; color:rgba(255,255,255,0.6); margin-top:10px; max-width:560px; line-height:1.6; font-family:'Noto Sans JP', sans-serif; }
+  .ds-section { margin-top:56px; }
+  .ds-section .title { font-size:10px; letter-spacing:0.14em; color:#69d9ff; font-weight:500; text-transform:uppercase; margin-bottom:16px; }
+  .swatches { display:grid; grid-template-columns:repeat(6,1fr); gap:14px; }
+  .swatch .chip { aspect-ratio: 1.4/1; border-radius:10px; border:0.5px solid rgba(255,255,255,0.08); }
+  .swatch .name { font-size:10px; font-weight:500; margin-top:8px; }
+  .swatch .hex { font-size:9px; color:rgba(255,255,255,0.45); margin-top:2px; letter-spacing:0.02em; }
+  .type-scale { display:grid; grid-template-columns:140px 1fr; gap:8px 24px; align-items:baseline; }
+  .type-scale .tag { font-size:10px; color:rgba(255,255,255,0.5); letter-spacing:0.04em; padding-top:4px; }
+  .type-scale .demo { color:#fff; line-height:1; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .spec-card { padding:20px; background:rgba(255,255,255,0.025); border-radius:14px; border:0.5px solid rgba(255,255,255,0.08); }
+  .spec-card .h { font-size:11px; letter-spacing:0.14em; color:#69d9ff; font-weight:500; text-transform:uppercase; }
+  .spec-card .v { font-size:24px; font-weight:600; margin-top:10px; letter-spacing:-0.01em; }
+  .spec-card .d { font-size:11px; color:rgba(255,255,255,0.6); margin-top:6px; line-height:1.6; font-family:'Noto Sans JP', sans-serif; }
+
+  /* ========== CLOSING PAGE ========== */
+  .closing { padding: 80px 64px; position:relative; z-index:1; min-height:600px; display:flex; flex-direction:column; justify-content:space-between; }
+  .closing::after { content:""; position:absolute; left:-100px; bottom:-100px; width:400px; height:400px; border-radius:50%; background: radial-gradient(circle, rgba(105,217,255,0.18), transparent 65%); filter: blur(20px); }
+  .closing .num { font-size:11px; letter-spacing:0.18em; color:#69d9ff; font-weight:500; }
+  .closing .msg { font-size:42px; font-weight:600; line-height:1.2; letter-spacing:-0.02em; margin-top:28px; max-width:780px; }
+  .closing .signoff { display:flex; justify-content:space-between; align-items:flex-end; margin-top:auto; padding-top:60px; border-top:0.5px solid rgba(255,255,255,0.08); }
+  .closing .signoff .name { font-size:14px; font-weight:500; }
+  .closing .signoff .name span { display:block; font-size:10px; color:rgba(255,255,255,0.45); margin-top:4px; letter-spacing:0.04em; }
+  .closing .signoff .date { font-size:10px; color:rgba(255,255,255,0.45); letter-spacing:0.06em; text-align:right; }
+
+  /* ========== PRINT ========== */
+  @media print {
+    body { padding:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    body::before { display:none; }
+    .cover { page-break-after: always; height:auto; min-height: 1000px; padding: 60px 48px 48px; margin-bottom:0; border:none; }
+    .concept { page-break-after: always; padding: 60px 48px; border:none; }
+    .ds-page { page-break-after: always; padding: 60px 48px; border:none; }
+    .screens-page { page-break-before: always; padding: 40px 24px 24px; }
+    .closing { page-break-before: always; padding: 60px 48px; }
+    .grid { gap: 24px 20px; }
+    .ph { box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER PAGE ============ -->
+<section class="cover">
+  <div>
+    <div class="eyebrow-top">TEAMLAB GUIDE APP — UI / UX DESIGNER CHALLENGE</div>
+    <h1>Quiet Guide<br/>for Immersive Space</h1>
+    <div class="tagline">没入空間を邪魔しない、静かで直感的な展示ガイドUI。<br/>暗所・回遊・身体的没入という展示会場の特徴に応えた、12画面の拡張提案。</div>
+  </div>
+  <div class="meta">
+    <div>Designer<strong>アヴェンダニョ シンタロウ</strong></div>
+    <div>University<strong>中央大学</strong></div>
+    <div>Date<strong>2026.06.15</strong></div>
+    <div>Device<strong>iPhone 15 · 393 × 852pt</strong></div>
+  </div>
+</section>
+
+<!-- ============ CONCEPT PAGE ============ -->
+<section class="concept">
+  <div class="num">01 / CONCEPT</div>
+  <h2>アプリは、作品体験の<br/>背景に徹するべきだ。</h2>
+  <p class="lede">
+    チームラボの展示会場には、暗所・回遊・身体的没入という3つの強い特徴があります。
+    通常の明るく情報量の多いアプリUIは、瞳孔を狭め、立ち止まる時間を増やし、没入を切らす要因になりがちです。
+    本提案では、アプリが主役になるのをやめて、必要な情報だけを最小限の光と短い時間で伝える設計に切り替えます。
+  </p>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="label">PRINCIPLE 01</div>
+      <h3>暗所での視認性を最優先する</h3>
+      <p>背景は深い黒、文字は白を透明度で4段階に分解。アクセントは Water Blue 1色のみに絞り、装飾色を持たない。本文は14pt未満を使わない。</p>
+    </div>
+    <div class="pillar">
+      <div class="label">PRINCIPLE 02</div>
+      <h3>歩きながら片手で完結する</h3>
+      <p>すべてのインタラクティブ要素を44pt以上、間隔は8pt以上確保。主要CTAは画面下半分。戻る／メニューは左上に集約し、視線移動を最小化する。</p>
+    </div>
+    <div class="pillar">
+      <div class="label">PRINCIPLE 03</div>
+      <h3>画面を見る時間そのものを減らす</h3>
+      <p>Quiet Mode では情報を方向・距離・作品名だけに絞り、案内は振動で補う。ナレーションは自動再生しない。アプリは「読むもの」ではなく「合図」に。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESIGN SYSTEM PAGE ============ -->
+<section class="ds-page">
+  <div class="num">02 / DESIGN SYSTEM</div>
+  <h2>Tokens, not values.</h2>
+  <p class="sub">色・タイポグラフィ・余白・角丸をすべて Variable と Style 経由で管理。画面側で hardcoded された値を持たない構造にしました。</p>
+
+  <div class="ds-section">
+    <div class="title">COLOR TOKENS · 14</div>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#050609;"></div><div class="name">Base / Black</div><div class="hex">#050609</div></div>
+      <div class="swatch"><div class="chip" style="background:#111318;"></div><div class="name">Base / Dark Gray</div><div class="hex">#111318</div></div>
+      <div class="swatch"><div class="chip" style="background:#181B22;"></div><div class="name">Surface / Card</div><div class="hex">#181B22</div></div>
+      <div class="swatch"><div class="chip" style="background:rgba(255,255,255,0.08);"></div><div class="name">Surface / Glass</div><div class="hex">#FFFFFF 8%</div></div>
+      <div class="swatch"><div class="chip" style="background:rgba(0,0,0,0.6);"></div><div class="name">Surface / Scrim</div><div class="hex">#000000 60%</div></div>
+      <div class="swatch"><div class="chip" style="background:#FFFFFF;"></div><div class="name">Text / Primary</div><div class="hex">#FFFFFF</div></div>
+      <div class="swatch"><div class="chip" style="background:rgba(255,255,255,0.72);"></div><div class="name">Text / Secondary</div><div class="hex">#FFFFFF 72%</div></div>
+      <div class="swatch"><div class="chip" style="background:rgba(255,255,255,0.48);"></div><div class="name">Text / Tertiary</div><div class="hex">#FFFFFF 48%</div></div>
+      <div class="swatch"><div class="chip" style="background:#69D9FF;"></div><div class="name">Accent / Water</div><div class="hex">#69D9FF</div></div>
+      <div class="swatch"><div class="chip" style="background:#2B6CFF;"></div><div class="name">Accent / Deep</div><div class="hex">#2B6CFF</div></div>
+      <div class="swatch"><div class="chip" style="background:#A8F1FF;"></div><div class="name">Accent / Soft</div><div class="hex">#A8F1FF</div></div>
+      <div class="swatch"><div class="chip" style="background:#FFCC66;"></div><div class="name">Status / Attention</div><div class="hex">#FFCC66</div></div>
+      <div class="swatch"><div class="chip" style="background:#7CE2A4;"></div><div class="name">Status / Success</div><div class="hex">#7CE2A4</div></div>
+      <div class="swatch"><div class="chip" style="background:#FF5A5F;"></div><div class="name">Status / Error</div><div class="hex">#FF5A5F</div></div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="title">TYPOGRAPHY · INTER + NOTO SANS JP</div>
+    <div class="type-scale">
+      <div class="tag">Display / Large</div><div class="demo" style="font-size:32px; font-weight:700;">Quiet guide for immersive space</div>
+      <div class="tag">Title / Large</div><div class="demo" style="font-size:24px; font-weight:700;">Universe of Water Particles</div>
+      <div class="tag">Title / Medium</div><div class="demo" style="font-size:20px; font-weight:600;">on a Rock where People Gather</div>
+      <div class="tag">Body / Large</div><div class="demo" style="font-size:16px; font-weight:400;">作品体験を背景から支えるUIを目指しました。</div>
+      <div class="tag">Body / Medium</div><div class="demo" style="font-size:14px; font-weight:400;">暗所での視認性とタップ領域を最優先しています。</div>
+      <div class="tag">Caption</div><div class="demo" style="font-size:12px; font-weight:400;">28m · turn left at corridor</div>
+      <div class="tag">Label</div><div class="demo" style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase;">YOU ARE HERE</div>
+    </div>
+  </div>
+
+  <div class="ds-section">
+    <div class="title">SPACING · RADIUS · MOTION</div>
+    <div class="grid-3">
+      <div class="spec-card">
+        <div class="h">SPACING</div>
+        <div class="v">4 / 8 / 16 / 24 / 32 / 48</div>
+        <div class="d">8pt グリッドベース。画面マージン24pt、カード内16〜20pt、セクション間32pt以上。</div>
+      </div>
+      <div class="spec-card">
+        <div class="h">RADIUS</div>
+        <div class="v">8 / 16 / 24 / 999</div>
+        <div class="d">Tag は full、Card は 24、Bottom Sheet は上部のみ 24。一貫した4段階に集約。</div>
+      </div>
+      <div class="spec-card">
+        <div class="h">MOTION</div>
+        <div class="v">180 / 240 / 360ms</div>
+        <div class="d">Exit は Enter の60-70%の時間。Reduced motion 時は標準easingのみ、duration半減。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREENS PAGE ============ -->
+<section class="screens-page">
+
+<div class="section-head">
+  <div>
+    <div class="num">03 / SCREENS</div>
+    <h2>Elevated Set — 12 screens</h2>
+    <div class="sub">公式アプリの構造（Hamburger Topbar · 縦積み Area Card · 浮動 You-are-here · Audio Guide）を保持しつつ、来場前から帰宅後までの体験アークをカバーする5画面を新規提案。</div>
+  </div>
+  <div class="res">393 × 852 PT</div>
+</div>
+
+<div class="grid">
+
+<!-- 01 ONBOARDING -->
+<div>
+  <div class="ph">
+    <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 30%, rgba(105,217,255,0.18), transparent 55%);"></div>
+    <div style="padding:24px 24px 0;">
+      <div class="eyebrow a">WELCOME</div>
+      <div style="font-size:24px; font-weight:600; line-height:1.25; margin-top:8px;">Quiet guide for<br>immersive space</div>
+    </div>
+    <div style="display:flex; justify-content:center; margin-top:60px;">
+      <div style="width:120px; height:120px; border-radius:999px; background:radial-gradient(circle,#69d9ff,#1a8acc 60%,transparent); opacity:0.6;"></div>
+    </div>
+    <div style="position:absolute; bottom:120px; left:24px; right:24px;">
+      <div style="font-size:11px; line-height:1.7; color:rgba(255,255,255,0.7);">Three short steps to set up audio, haptics and your language. Skip anytime.</div>
+    </div>
+    <div style="position:absolute; bottom:24px; left:14px; right:14px; display:flex; gap:8px; align-items:center;">
+      <div style="display:flex; gap:4px;">
+        <div style="width:18px; height:3px; border-radius:999px; background:#69d9ff;"></div>
+        <div style="width:6px; height:3px; border-radius:999px; background:rgba(255,255,255,0.2);"></div>
+        <div style="width:6px; height:3px; border-radius:999px; background:rgba(255,255,255,0.2);"></div>
+      </div>
+      <div style="flex:1;"></div>
+      <div style="background:#69d9ff; color:#0a1a2a; border-radius:999px; padding:9px 18px; font-size:11px; font-weight:600;">Continue ›</div>
+    </div>
+  </div>
+  <div class="lbl">01 · Onboarding</div>
+</div>
+
+<!-- 02 HOME -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px 10px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="display:flex; flex-direction:column; gap:3px;">
+        <div style="height:1.5px; background:rgba(255,255,255,0.85); width:16px;"></div>
+        <div style="height:1.5px; background:rgba(255,255,255,0.85); width:20px;"></div>
+      </div>
+      <div style="font-size:11px; font-weight:500;">teamLab Borderless</div>
+      <div style="width:18px; height:18px; border:1.5px solid #69d9ff; border-radius:999px; position:relative; box-shadow:0 0 12px rgba(105,217,255,0.5);"><div style="position:absolute; inset:4px; background:#69d9ff; border-radius:999px;"></div></div>
+    </div>
+    <div style="padding:62px 8px 8px;">
+      <div style="height:135px; background:linear-gradient(135deg,#3a0a4a,#d4537e 40%,#ef9f27); border-radius:18px; margin-bottom:8px; position:relative; overflow:hidden;">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55));"></div>
+        <div style="position:absolute; top:10px; left:14px;" class="eyebrow">FLORAL · 5 ROOMS</div>
+        <div style="position:absolute; bottom:10px; left:14px; font-size:13px; font-weight:600;">teamLab Borderless</div>
+      </div>
+      <div style="height:135px; background:linear-gradient(135deg,#0a2a3a,#1a8acc 50%,#a8f1ff); border-radius:18px; margin-bottom:8px; position:relative; overflow:hidden;">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55));"></div>
+        <div style="position:absolute; top:10px; left:14px;" class="eyebrow a">YOU ARE HERE</div>
+        <div style="position:absolute; bottom:10px; left:14px; font-size:13px; font-weight:600;">Borderless World</div>
+      </div>
+      <div style="height:135px; background:linear-gradient(135deg,#1a3a1a,#5dcaa5 50%,#97c459); border-radius:18px; position:relative; overflow:hidden;">
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55));"></div>
+        <div style="position:absolute; top:10px; left:14px;" class="eyebrow">ACTIVE · 6 ROOMS</div>
+        <div style="position:absolute; bottom:10px; left:14px; font-size:13px; font-weight:600;">Athletics Forest</div>
+      </div>
+    </div>
+    <div class="softglass" style="position:absolute; left:12px; right:12px; bottom:18px; border-radius:18px; padding:12px; display:flex; gap:12px; align-items:center;">
+      <div style="width:42px; height:42px; border-radius:10px; background:linear-gradient(135deg,#1a8acc,#a8f1ff);"></div>
+      <div style="flex:1;">
+        <div class="eyebrow a">YOU ARE HERE</div>
+        <div style="font-size:11px; font-weight:600; margin-top:1px;">Borderless World</div>
+        <div style="font-size:8px; color:rgba(255,255,255,0.5); margin-top:1px;">3 artworks nearby</div>
+      </div>
+      <div style="font-size:14px; color:rgba(255,255,255,0.4);">›</div>
+    </div>
+  </div>
+  <div class="lbl">02 · Home</div>
+</div>
+
+<!-- 03 AREA -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="width:28px; height:28px; border-radius:999px; background:rgba(24,27,34,0.7); display:flex; align-items:center; justify-content:center; font-size:13px;">‹</div>
+      <div style="font-size:11px; font-weight:500;">Borderless World</div>
+      <div style="width:28px; height:28px;"></div>
+    </div>
+    <div style="height:220px; background:linear-gradient(135deg,#0a2a3a,#1a8acc 50%,#a8f1ff); position:relative;">
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, #050609);"></div>
+      <div style="position:absolute; bottom:18px; left:18px;">
+        <div class="eyebrow a">YOU ARE HERE</div>
+        <div style="font-size:20px; font-weight:600; margin-top:4px;">Borderless World</div>
+        <div style="font-size:10px; color:rgba(255,255,255,0.65); margin-top:3px;">8 artworks · 35 min suggested</div>
+      </div>
+    </div>
+    <div style="padding:10px 14px;">
+      <div style="font-size:9px; letter-spacing:0.05em; color:rgba(255,255,255,0.5); margin-bottom:8px;">ARTWORKS IN THIS AREA</div>
+      <div style="display:flex; gap:10px; align-items:center; padding:8px 0;">
+        <div style="width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg,#69d9ff,#2b6cff);"></div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:500;">Universe of Water Particles</div>
+          <div style="font-size:8px; color:rgba(255,255,255,0.5); margin-top:2px;">5 min · Now playing audio</div>
+        </div>
+        <div style="background:rgba(105,217,255,0.15); color:#69d9ff; border-radius:999px; padding:3px 7px; font-size:8px;">Live</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; padding:8px 0; opacity:0.7;">
+        <div style="width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg,#3a0a4a,#d4537e);"></div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:500;">Forest of Resonating Lamps</div>
+          <div style="font-size:8px; color:rgba(255,255,255,0.5); margin-top:2px;">4 min · 28m away</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; padding:8px 0; opacity:0.5;">
+        <div style="width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg,#1a3a1a,#5dcaa5);"></div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:500;">Crystal Universe</div>
+          <div style="font-size:8px; color:#7ce2a4; margin-top:2px;">✓ Visited</div>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute; left:14px; right:14px; bottom:18px;">
+      <div style="background:#69d9ff; color:#0a1a2a; border-radius:999px; text-align:center; padding:10px; font-size:11px; font-weight:600;">Start Quiet Guide ▶</div>
+    </div>
+  </div>
+  <div class="lbl">03 · Area Detail</div>
+</div>
+
+<!-- 04 ARTWORK DETAIL -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="width:28px; height:28px; border-radius:999px; background:rgba(24,27,34,0.7); display:flex; align-items:center; justify-content:center; font-size:13px;">‹</div>
+      <div class="eyebrow">ARTWORK 03 / 47</div>
+      <div style="width:28px; height:28px; border-radius:999px; background:rgba(24,27,34,0.7); display:flex; align-items:center; justify-content:center;">
+        <div style="display:flex; flex-direction:column; gap:2px;">
+          <div style="height:1.5px; width:12px; background:#fff;"></div>
+          <div style="height:1.5px; width:12px; background:#fff;"></div>
+          <div style="height:1.5px; width:12px; background:#fff;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="height:280px; background:radial-gradient(ellipse at 50% 70%, #a8f1ff, #1a8acc 40%, #050a14 90%); position:relative;">
+      <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, #050609);"></div>
+    </div>
+    <div style="padding:0 18px;">
+      <div class="eyebrow a">UNIVERSE OF WATER PARTICLES</div>
+      <div style="font-size:15px; font-weight:600; line-height:1.3; margin-top:6px;">on a Rock where People Gather</div>
+      <div style="display:flex; gap:6px; margin-top:10px;">
+        <div style="background:rgba(255,255,255,0.06); border-radius:6px; padding:3px 7px; font-size:8px;">teamLab</div>
+        <div style="background:rgba(255,255,255,0.06); border-radius:6px; padding:3px 7px; font-size:8px;">2018</div>
+        <div style="background:rgba(255,255,255,0.06); border-radius:6px; padding:3px 7px; font-size:8px;">Installation</div>
+      </div>
+      <div style="font-size:10px; line-height:1.65; color:rgba(255,255,255,0.78); margin-top:12px;">Crossing the boundaries of other works, water flows from the Athletics Forest…</div>
+    </div>
+    <div class="softglass" style="position:absolute; left:14px; right:14px; bottom:78px; border-radius:20px; padding:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div>
+          <div class="eyebrow a">AUDIO GUIDE</div>
+          <div style="font-size:10px; font-weight:500; margin-top:1px;">Narrated by teamLab</div>
+        </div>
+        <div style="font-size:9px; color:rgba(255,255,255,0.5);">1:24 / 3:40</div>
+      </div>
+      <div style="width:100%; height:3px; background:rgba(255,255,255,0.1); border-radius:999px; position:relative; margin-bottom:12px;">
+        <div style="position:absolute; left:0; top:0; bottom:0; width:38%; background:#69d9ff; border-radius:999px;"></div>
+        <div style="position:absolute; left:38%; top:-3px; width:9px; height:9px; border-radius:999px; background:#69d9ff;"></div>
+      </div>
+      <div style="display:flex; justify-content:center; gap:24px; align-items:center;">
+        <div style="font-size:14px; opacity:0.7;">⏮</div>
+        <div style="width:44px; height:44px; border-radius:999px; background:#69d9ff; color:#0a1a2a; display:flex; align-items:center; justify-content:center; font-size:13px;">▶</div>
+        <div style="font-size:14px; opacity:0.7;">⏭</div>
+      </div>
+    </div>
+    <div style="position:absolute; left:14px; right:14px; bottom:14px; display:flex; gap:8px;">
+      <div style="flex:1; background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.1); border-radius:999px; text-align:center; padding:8px; font-size:10px;">Nearby</div>
+      <div style="flex:1; background:#69d9ff; color:#0a1a2a; border-radius:999px; text-align:center; padding:8px; font-size:10px; font-weight:600;">Quiet Mode</div>
+    </div>
+  </div>
+  <div class="lbl">04 · Artwork Detail</div>
+</div>
+
+<!-- 05 MAP -->
+<div>
+  <div class="ph" style="background:#0a0d14;">
+    <div style="position:absolute; inset:0; background:radial-gradient(circle at 30% 35%, rgba(105,217,255,0.07), transparent 55%), radial-gradient(circle at 70% 70%, rgba(43,108,255,0.05), transparent 55%);"></div>
+    <div style="position:absolute; inset:0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 28px 28px;"></div>
+    <div style="position:absolute; top:32%; left:38%; width:14px; height:14px; border-radius:999px; background:#69d9ff; box-shadow:0 0 24px #69d9ff;"></div>
+    <div style="position:absolute; top:32%; left:38%; width:34px; height:34px; border-radius:999px; border:1px solid rgba(105,217,255,0.4); transform:translate(-10px,-10px);"></div>
+    <div style="position:absolute; top:22%; left:62%; width:10px; height:10px; border-radius:999px; background:#7ce2a4;"></div>
+    <div style="position:absolute; top:48%; left:25%; width:10px; height:10px; border-radius:999px; background:#ffcc66;"></div>
+    <div style="position:absolute; top:50%; left:65%; width:10px; height:10px; border-radius:999px; background:rgba(255,255,255,0.3);"></div>
+    <div style="position:absolute; top:14px; left:14px; right:14px; display:flex; gap:8px;">
+      <div class="glass" style="flex:1; border-radius:999px; padding:8px 12px; font-size:10px; color:rgba(255,255,255,0.85);">Floor 2 · Borderless World</div>
+      <div class="glass" style="width:36px; height:36px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:11px;">⚙</div>
+    </div>
+    <div class="softglass" style="position:absolute; left:0; right:0; bottom:0; border-top-left-radius:24px; border-top-right-radius:24px; padding:14px;">
+      <div style="width:40px; height:3px; background:rgba(255,255,255,0.2); border-radius:999px; margin:0 auto 12px;"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div class="eyebrow a">NEXT ON ROUTE</div>
+        <div style="font-size:8px; color:rgba(255,255,255,0.4);">3 / 8</div>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+        <div style="width:48px; height:48px; border-radius:12px; background:radial-gradient(circle, #69d9ff, #1a8acc); flex-shrink:0;"></div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:600;">Forest of Lamps</div>
+          <div style="font-size:9px; color:rgba(255,255,255,0.55); margin-top:1px;">28m · 3 min · Less crowded</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <div style="flex:1; background:rgba(255,255,255,0.06); border-radius:999px; text-align:center; padding:8px; font-size:10px;">View Detail</div>
+        <div style="flex:1; background:#69d9ff; color:#0a1a2a; border-radius:999px; text-align:center; padding:8px; font-size:10px; font-weight:600;">Quiet Guide ▶</div>
+      </div>
+    </div>
+  </div>
+  <div class="lbl">05 · Map</div>
+</div>
+
+<!-- 06 ROUTE PLAN -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="width:28px; height:28px; border-radius:999px; background:rgba(24,27,34,0.7); display:flex; align-items:center; justify-content:center; font-size:13px;">‹</div>
+      <div style="font-size:11px; font-weight:500;">Your Route</div>
+      <div style="width:28px; height:28px;"></div>
+    </div>
+    <div style="padding:62px 18px 0;">
+      <div class="eyebrow">8 ARTWORKS · 1H 20M</div>
+      <div style="font-size:20px; font-weight:600; margin-top:6px;">Less crowded path</div>
+      <div style="font-size:10px; color:rgba(255,255,255,0.55); margin-top:6px;">Suggested for next 90 minutes based on current crowd density</div>
+    </div>
+    <div style="padding:24px 18px 0; position:relative;">
+      <div style="position:absolute; left:30px; top:32px; bottom:120px; width:1px; background:linear-gradient(180deg,#69d9ff,rgba(255,255,255,0.1));"></div>
+      <div style="display:flex; gap:12px; padding:8px 0; align-items:center;">
+        <div style="width:22px; height:22px; border-radius:999px; background:#69d9ff; box-shadow:0 0 12px rgba(105,217,255,0.5); display:flex; align-items:center; justify-content:center; color:#0a1a2a; font-size:10px; font-weight:700;">1</div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:500;">Universe of Water Particles</div>
+          <div style="font-size:8px; color:rgba(255,255,255,0.5);">5 min · Now</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; padding:8px 0; align-items:center;">
+        <div style="width:22px; height:22px; border-radius:999px; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:10px;">2</div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:500;">Forest of Lamps</div>
+          <div style="font-size:8px; color:rgba(255,255,255,0.5);">28m · 4 min</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; padding:8px 0; align-items:center; opacity:0.7;">
+        <div style="width:22px; height:22px; border-radius:999px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; font-size:10px;">3</div>
+        <div style="flex:1;">
+          <div style="font-size:11px; font-weight:500;">Crystal Universe</div>
+          <div style="font-size:8px; color:rgba(255,255,255,0.5);">42m · 6 min</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; padding:8px 0; align-items:center; opacity:0.5;">
+        <div style="width:22px; height:22px; border-radius:999px; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; font-size:10px;">4</div>
+        <div style="flex:1;">
+          <div style="font-size:11px;">Drawing on the Water Surface</div>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute; left:14px; right:14px; bottom:18px;">
+      <div style="background:#69d9ff; color:#0a1a2a; border-radius:999px; text-align:center; padding:10px; font-size:11px; font-weight:600;">Start Route</div>
+    </div>
+  </div>
+  <div class="lbl">06 · Route Plan</div>
+</div>
+
+<!-- 07 QUIET MODE -->
+<div>
+  <div class="ph" style="background:#000;">
+    <div style="padding:30px 24px 0; opacity:0.5;">
+      <div class="eyebrow">▮▮▯ ROUTE 3 / 8</div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:center; margin-top:50px;">
+      <div style="width:140px; height:140px; border-radius:999px; background:radial-gradient(circle, rgba(105,217,255,0.12), transparent 70%); display:flex; align-items:center; justify-content:center;">
+        <svg width="70" height="70" viewBox="0 0 80 80" fill="none">
+          <path d="M40 12 L40 68" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+          <path d="M14 38 L40 12 L66 38" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        </svg>
+      </div>
+    </div>
+    <div style="position:absolute; bottom:220px; left:0; right:0; text-align:center;">
+      <div style="font-size:34px; font-weight:700; letter-spacing:-0.02em; opacity:0.9;">28<span style="font-size:16px; font-weight:400; opacity:0.6;">m</span></div>
+      <div style="font-size:10px; opacity:0.5; margin-top:4px;">turn left at corridor</div>
+    </div>
+    <div style="position:absolute; bottom:80px; left:24px; right:24px; text-align:center; padding-top:18px; border-top:0.5px solid rgba(255,255,255,0.08);">
+      <div class="eyebrow">NEXT</div>
+      <div style="font-size:13px; opacity:0.75; margin-top:6px;">Forest of Resonating Lamps</div>
+      <div style="font-size:9px; opacity:0.4; margin-top:8px; line-height:1.6;">tip · stand still and<br>watch the color travel</div>
+    </div>
+    <div style="position:absolute; bottom:24px; left:0; right:0; text-align:center;">
+      <div style="font-size:8px; opacity:0.3; letter-spacing:0.06em;">▼ SWIPE TO EXIT</div>
+    </div>
+  </div>
+  <div class="lbl">07 · Quiet Mode</div>
+</div>
+
+<!-- 08 MEMORY ALBUM -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="width:28px;"></div>
+      <div style="font-size:11px; font-weight:500;">Your Visit</div>
+      <div style="width:28px; height:28px;"></div>
+    </div>
+    <div style="padding:62px 18px 0;">
+      <div style="font-size:22px; font-weight:600;">8<span style="font-size:13px; font-weight:400; color:rgba(255,255,255,0.5);"> / 47 artworks</span></div>
+      <div style="font-size:9px; color:rgba(255,255,255,0.5); margin-top:4px;">Sun · Jun 15 · 2h 14m</div>
+    </div>
+    <div style="padding:18px 18px 0; display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
+      <div style="aspect-ratio:1; border-radius:10px; background:linear-gradient(135deg,#3a0a4a,#d4537e);"></div>
+      <div style="aspect-ratio:1; border-radius:10px; background:linear-gradient(135deg,#1a8acc,#a8f1ff);"></div>
+      <div style="aspect-ratio:1; border-radius:10px; background:linear-gradient(135deg,#1a3a1a,#5dcaa5);"></div>
+      <div style="aspect-ratio:1; border-radius:10px; background:linear-gradient(135deg,#7f77dd,#534ab7);"></div>
+      <div style="aspect-ratio:1; border-radius:10px; background:linear-gradient(135deg,#ef9f27,#ba7517);"></div>
+      <div style="aspect-ratio:1; border-radius:10px; background:linear-gradient(135deg,#69d9ff,#2b6cff);"></div>
+    </div>
+    <div style="padding:18px 18px 0;">
+      <div class="eyebrow">SHARE</div>
+      <div style="background:#181B22; border-radius:14px; padding:14px; margin-top:8px; display:flex; gap:10px; align-items:center;">
+        <div style="width:40px; height:40px; border-radius:8px; background:linear-gradient(135deg,#1a8acc,#a8f1ff);"></div>
+        <div style="flex:1; font-size:10px; color:rgba(255,255,255,0.78); line-height:1.5;">Generate a quiet photo album with the artwork names captioned.</div>
+      </div>
+    </div>
+    <div style="position:absolute; left:14px; right:14px; bottom:18px;">
+      <div style="background:#69d9ff; color:#0a1a2a; border-radius:999px; text-align:center; padding:10px; font-size:11px; font-weight:600;">Save & Share</div>
+    </div>
+  </div>
+  <div class="lbl">08 · Memory Album <span class="accent">NEW</span></div>
+</div>
+
+<!-- 09 ACCESSIBILITY MODE -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="width:28px; height:28px; border-radius:999px; background:rgba(24,27,34,0.7); display:flex; align-items:center; justify-content:center; font-size:13px;">‹</div>
+      <div style="font-size:11px; font-weight:500;">Accessibility</div>
+      <div style="width:28px;"></div>
+    </div>
+    <div style="padding:62px 18px 0;">
+      <div style="font-size:18px; font-weight:600;">Made for everyone</div>
+      <div style="font-size:10px; color:rgba(255,255,255,0.6); margin-top:6px; line-height:1.6;">Adjust the app to your needs. Settings sync to Quiet Mode automatically.</div>
+    </div>
+    <div style="padding:18px 18px 0;">
+      <div style="background:#181B22; border-radius:14px; overflow:hidden;">
+        <div style="padding:12px 14px; border-bottom:0.5px solid rgba(255,255,255,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:11px;">High contrast text</span>
+            <div style="width:30px; height:18px; border-radius:999px; background:#69d9ff; position:relative;"><div style="position:absolute; right:2px; top:2px; width:14px; height:14px; border-radius:999px; background:#fff;"></div></div>
+          </div>
+        </div>
+        <div style="padding:12px 14px; border-bottom:0.5px solid rgba(255,255,255,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:11px;">Text size</span>
+            <span style="font-size:10px; color:rgba(255,255,255,0.6);">120%</span>
+          </div>
+          <div style="height:3px; background:rgba(255,255,255,0.1); border-radius:999px; position:relative;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:55%; background:#69d9ff; border-radius:999px;"></div>
+            <div style="position:absolute; left:55%; top:-4px; width:11px; height:11px; border-radius:999px; background:#fff;"></div>
+          </div>
+        </div>
+        <div style="padding:12px 14px; border-bottom:0.5px solid rgba(255,255,255,0.06);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:11px;">Audio description</span>
+            <div style="width:30px; height:18px; border-radius:999px; background:#69d9ff; position:relative;"><div style="position:absolute; right:2px; top:2px; width:14px; height:14px; border-radius:999px; background:#fff;"></div></div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:11px;">Reduce motion</span>
+            <div style="width:30px; height:18px; border-radius:999px; background:rgba(255,255,255,0.15); position:relative;"><div style="position:absolute; left:2px; top:2px; width:14px; height:14px; border-radius:999px; background:#fff;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(105,217,255,0.06); border:0.5px solid rgba(105,217,255,0.2); border-radius:14px; padding:12px; margin-top:14px;">
+        <div class="eyebrow a">VENUE STAFF</div>
+        <div style="font-size:10px; color:rgba(255,255,255,0.78); margin-top:4px; line-height:1.5;">Need help? Show this screen to nearby staff for assistance.</div>
+      </div>
+    </div>
+  </div>
+  <div class="lbl">09 · Accessibility <span class="accent">NEW</span></div>
+</div>
+
+<!-- 10 TICKET -->
+<div>
+  <div class="ph">
+    <div class="glass" style="position:absolute; top:0; left:0; right:0; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+      <div style="width:28px;"></div>
+      <div style="font-size:11px; font-weight:500;">Ticket</div>
+      <div style="width:28px;"></div>
+    </div>
+    <div style="padding:62px 18px 0;">
+      <div class="eyebrow a">VALID TODAY</div>
+      <div style="font-size:16px; font-weight:600; margin-top:4px;">teamLab Borderless</div>
+    </div>
+    <div class="softglass" style="margin:14px 18px; border-radius:20px; padding:18px; text-align:center;">
+      <div style="background:#fff; width:140px; height:140px; margin:0 auto; border-radius:12px; padding:8px;">
+        <div style="width:100%; height:100%; background-image:radial-gradient(#000 30%, transparent 32%); background-size:12px 12px;"></div>
+      </div>
+      <div style="margin-top:14px; font-size:9px; color:rgba(255,255,255,0.55);">Adult · Jun 15 (Sun)</div>
+      <div style="font-size:11px; font-weight:500; margin-top:1px;">Entry 10:00 – 18:00</div>
+    </div>
+    <div style="padding:0 18px;">
+      <div style="background:rgba(105,217,255,0.08); border:0.5px solid rgba(105,217,255,0.2); border-radius:14px; padding:12px; display:flex; gap:10px; align-items:center;">
+        <div style="font-size:14px; color:#a8f1ff;">⌖</div>
+        <div style="font-size:10px; color:#a8f1ff; line-height:1.5;">Scan at the entrance gate</div>
+      </div>
+    </div>
+    <div style="padding:14px 18px 0;">
+      <div class="eyebrow">GROUP</div>
+      <div style="background:#181B22; border-radius:14px; padding:12px; margin-top:6px;">
+        <div style="display:flex; justify-content:space-between;">
+          <span style="font-size:10px;">2 adults · 1 child</span>
+          <span style="font-size:10px; color:rgba(255,255,255,0.55);">¥9,400</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lbl">10 · Ticket</div>
+</div>
+
+<!-- 11 SETTINGS -->
+<div>
+  <div class="ph">
+    <div style="padding:22px 18px 14px;">
+      <div style="font-size:18px; font-weight:600;">Settings</div>
+    </div>
+    <div style="padding:0 18px;">
+      <div class="eyebrow">DISPLAY</div>
+      <div style="background:#181B22; border-radius:14px; overflow:hidden; margin-top:6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:11px 12px; border-bottom:0.5px solid rgba(255,255,255,0.06);">
+          <span style="font-size:11px;">Quiet Guide Mode</span>
+          <div style="width:30px; height:18px; border-radius:999px; background:#69d9ff; position:relative;"><div style="position:absolute; right:2px; top:2px; width:14px; height:14px; border-radius:999px; background:#fff;"></div></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:11px 12px; border-bottom:0.5px solid rgba(255,255,255,0.06);">
+          <span style="font-size:11px;">Haptic feedback</span>
+          <div style="width:30px; height:18px; border-radius:999px; background:#69d9ff; position:relative;"><div style="position:absolute; right:2px; top:2px; width:14px; height:14px; border-radius:999px; background:#fff;"></div></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:11px 12px;">
+          <span style="font-size:11px;">Language</span>
+          <span style="font-size:10px; color:rgba(255,255,255,0.5);">日本語 ›</span>
+        </div>
+      </div>
+      <div class="eyebrow" style="margin-top:14px;">AUDIO</div>
+      <div style="background:#181B22; border-radius:14px; overflow:hidden; margin-top:6px;">
+        <div style="padding:11px 12px; font-size:11px; border-bottom:0.5px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between;"><span>Auto-play on approach</span><span style="color:rgba(255,255,255,0.5); font-size:10px;">On</span></div>
+        <div style="padding:11px 12px; font-size:11px;">Headphone reminder</div>
+      </div>
+      <div class="eyebrow" style="margin-top:14px;">ACCOUNT</div>
+      <div style="background:#181B22; border-radius:14px; overflow:hidden; margin-top:6px;">
+        <div style="padding:11px 12px; font-size:11px; border-bottom:0.5px solid rgba(255,255,255,0.06);">Ticket history</div>
+        <div style="padding:11px 12px; font-size:11px;">About teamLab</div>
+      </div>
+    </div>
+  </div>
+  <div class="lbl">11 · Settings</div>
+</div>
+
+<!-- 12 SPLASH -->
+<div>
+  <div class="ph">
+    <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 55%, rgba(105,217,255,0.22), transparent 55%);"></div>
+    <div style="position:absolute; top:35%; left:30%; width:4px; height:4px; border-radius:999px; background:rgba(168,241,255,0.6); box-shadow:0 0 16px rgba(168,241,255,0.6);"></div>
+    <div style="position:absolute; top:50%; left:60%; width:3px; height:3px; border-radius:999px; background:rgba(168,241,255,0.4); box-shadow:0 0 12px rgba(168,241,255,0.4);"></div>
+    <div style="position:absolute; top:65%; left:40%; width:5px; height:5px; border-radius:999px; background:rgba(105,217,255,0.7); box-shadow:0 0 20px rgba(105,217,255,0.7);"></div>
+    <div style="position:absolute; top:42%; left:70%; width:2px; height:2px; border-radius:999px; background:rgba(168,241,255,0.5);"></div>
+    <div style="position:absolute; top:43%; left:0; right:0; text-align:center;">
+      <div style="font-size:24px; font-weight:500; letter-spacing:0.04em;">teamLab</div>
+      <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:14px; letter-spacing:0.05em;">Enter the immersive world</div>
+    </div>
+    <div style="position:absolute; bottom:60px; left:0; right:0; text-align:center;">
+      <div style="display:inline-block; width:24px; height:1.5px; background:#69d9ff; opacity:0.6;"></div>
+    </div>
+  </div>
+  <div class="lbl">12 · Splash</div>
+</div>
+
+</div>
+
+<div class="footer">
+  <h3>04 / WHAT CHANGED</h3>
+  <div class="pair">
+    <div class="foot-card">
+      <div class="ttl">FIDELITY TO ORIGINAL</div>
+      <div class="body">公式アプリの主要構造を保持。Hamburger Topbar、中央タイトル、ロケーションピン、縦積みのエリアカード、浮動「You are here」、Artwork Detail の音声ガイド — どれも変えていません。</div>
+    </div>
+    <div class="foot-card">
+      <div class="ttl">WHAT WE PROPOSE BEYOND</div>
+      <div class="body">Onboarding · Route Plan · Quiet Mode · Memory Album · Accessibility の5画面を新規追加。「来る前 → 入る → 巡る → 思い出す」の体験アーク全体をカバーします。</div>
+    </div>
+  </div>
+  <div class="credit">
+    <div>QUIET GUIDE FOR IMMERSIVE SPACE</div>
+    <div>AVENDANO SHINTARO · 2026.06.15</div>
+  </div>
+</div>
+
+</section>
+
+<!-- ============ CLOSING PAGE ============ -->
+<section class="closing">
+  <div>
+    <div class="num">05 / CLOSING</div>
+    <h2 class="msg">アプリが主役にならず、<br/>作品体験を背景から支える存在に。</h2>
+  </div>
+  <div class="signoff">
+    <div class="name">
+      アヴェンダニョ シンタロウ
+      <span>中央大学 · f24ba001@chuo.ac.jp</span>
+    </div>
+    <div class="date">
+      TEAMLAB INC.<br/>UI / UX DESIGNER CHALLENGE<br/>2026.06.15
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

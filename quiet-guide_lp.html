@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quiet Guide — A Guide App for Immersive Spaces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&display=swap" rel="stylesheet" />
+<style>
+/* ════════════════════════════════════════════════════════════
+   QUIET GUIDE — Portfolio LP / Case Study
+   Tokens are shared with reproduction_6screens.html
+   ════════════════════════════════════════════════════════════ */
+:root {
+  --ink:#000; --room:#0a0b0d; --room-2:#0e0f12; --surface:#121316; --surface-2:#1b1d21;
+  --glass:rgba(20,21,25,0.55); --hairline:rgba(244,242,236,0.08); --hairline-2:rgba(244,242,236,0.14);
+  --t-1:#F4F2EC; --t-2:rgba(244,242,236,0.60); --t-3:rgba(244,242,236,0.34); --t-4:rgba(244,242,236,0.18);
+  --water:#8FD3E6; --water-deep:#3f8fa8;
+  --r-md:16px; --r-lg:22px; --r-xl:28px; --r-device:42px; --r-full:999px;
+  --sh-card:0 16px 50px rgba(0,0,0,0.5);
+  --sans:'Inter','Noto Sans JP',-apple-system,sans-serif;
+  --jp:'Noto Sans JP',sans-serif;
+  --serif:'Source Serif 4',serif;
+  --gutter:clamp(22px,6vw,120px);
+  --section-y:clamp(90px,14vh,200px);
+}
+* { box-sizing:border-box; margin:0; padding:0; -webkit-font-smoothing:antialiased; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--sans); background:var(--room); color:var(--t-1); line-height:1.6; overflow-x:hidden; position:relative; }
+
+/* film grain + vignette over the whole page (the dark room) */
+body::before { content:""; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:0.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:radial-gradient(130% 90% at 50% 30%, transparent 60%, rgba(0,0,0,0.5)); }
+
+.wrap { max-width:1280px; margin:0 auto; padding:0 var(--gutter); position:relative; z-index:2; }
+.eyebrow { font-size:10px; letter-spacing:0.26em; text-transform:uppercase; color:var(--t-3); font-weight:500; }
+.eyebrow--water { color:var(--water); }
+.serif { font-family:var(--serif); font-weight:300; }
+.jp { font-family:var(--jp); }
+
+/* reveal on scroll */
+.reveal { opacity:0; transform:translateY(14px); transition:opacity 1s cubic-bezier(.22,.61,.36,1), transform 1s cubic-bezier(.22,.61,.36,1); }
+.reveal.in { opacity:1; transform:none; }
+@media (prefers-reduced-motion:reduce){ .reveal{opacity:1;transform:none;transition:none;} .device,.glow-breathe,.particles b{animation:none!important;} }
+
+/* light pools */
+.pool { position:absolute; border-radius:50%; pointer-events:none; filter:blur(8px); animation:breathe 8s ease-in-out infinite; }
+@keyframes breathe { 0%,100%{opacity:.5;} 50%{opacity:1;} }
+@keyframes floatY { 0%,100%{transform:translateY(-4px);} 50%{transform:translateY(4px);} }
+@keyframes drift { 0%{transform:translate(0,0);} 50%{transform:translate(var(--dx,4px),var(--dy,-6px));} 100%{transform:translate(0,0);} }
+.particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.particles b { position:absolute; border-radius:50%; display:block; }
+
+/* ── DEVICE (re-used language from the 6-screen file) ── */
+.device { position:relative; aspect-ratio:393/852; border-radius:var(--r-device); background:var(--ink); overflow:hidden;
+  box-shadow:var(--sh-card), inset 0 0 0 1px rgba(244,242,236,0.05); }
+.device.float { animation:floatY 9s ease-in-out infinite; }
+.device__screen { position:absolute; inset:0; overflow:hidden; border-radius:var(--r-device); }
+.device__screen::after { content:""; position:absolute; inset:0; pointer-events:none; z-index:8;
+  background:radial-gradient(130% 100% at 50% 42%, transparent 58%, rgba(0,0,0,0.45)); }
+/* fixed 393×852 canvas, scaled to fit the device — keeps inner px coords intact */
+.device__canvas { position:absolute; top:0; left:0; width:393px; height:852px; transform-origin:0 0; }
+.island { position:absolute; top:9px; left:50%; transform:translateX(-50%); width:78px; height:22px; background:#000; border-radius:var(--r-full); z-index:14; }
+.sbar { position:absolute; top:0; left:0; right:0; height:46px; z-index:12; display:flex; align-items:center; justify-content:space-between; padding:15px 20px 0 24px; }
+.sbar .time { font-size:12.5px; font-weight:600; }
+.sbar .ic { display:flex; gap:6px; align-items:center; }
+.sbar .sig { display:flex; align-items:flex-end; gap:1.6px; height:10px; }
+.sbar .sig i { width:2.6px; background:var(--t-1); border-radius:1px; display:block; }
+.sbar .bat { width:21px; height:10.5px; border:1px solid rgba(244,242,236,0.55); border-radius:2.5px; padding:1.3px; }
+.sbar .bat::after { content:""; display:block; height:100%; width:76%; background:var(--t-1); border-radius:1px; }
+.home-ind { position:absolute; bottom:7px; left:50%; transform:translateX(-50%); width:108px; height:4px; border-radius:var(--r-full); background:rgba(244,242,236,0.28); z-index:14; }
+.topbar { position:absolute; top:50px; left:0; right:0; height:42px; z-index:11; display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+.topbar__t { font-size:13px; font-weight:600; }
+.ico-back { width:20px; height:20px; }
+.ico-ham { display:flex; flex-direction:column; gap:4px; } .ico-ham i { width:18px; height:1.4px; background:var(--t-1); display:block; }
+.ico-menu { display:flex; flex-direction:column; gap:3.4px; } .ico-menu i { width:16px; height:1.4px; background:var(--t-1); display:block; }
+.artwork__layer { position:absolute; inset:0; }
+.scrim { position:absolute; inset:0; }
+.eb { font-size:7px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(244,242,236,0.55); font-weight:500; }
+.eb--w { color:var(--water); }
+.glass { background:var(--glass); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:0.5px solid var(--hairline); border-radius:var(--r-md); }
+
+/* ════════════════ 1 · HERO ════════════════ */
+.hero { min-height:100vh; min-height:100dvh; display:flex; align-items:center; position:relative; padding:120px 0 80px; }
+.hero__grid { display:grid; grid-template-columns:1.15fr 0.85fr; gap:clamp(30px,5vw,80px); align-items:center; width:100%; }
+.hero__title { font-family:var(--serif); font-weight:300; font-size:clamp(56px,9vw,128px); line-height:0.94; letter-spacing:-0.02em; }
+.hero__sub { font-family:var(--serif); font-size:clamp(17px,2.2vw,24px); color:var(--t-2); margin-top:22px; font-weight:300; }
+.hero__copy { font-size:14px; color:var(--t-3); margin-top:30px; max-width:380px; line-height:1.8; }
+.hero__tags { display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:44px; }
+.hero__tags span { font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--t-3); }
+.hero__device { justify-self:center; width:min(300px,72vw); }
+.hero__vrule { position:absolute; left:calc(var(--gutter) - 1px); top:0; bottom:0; width:0.5px; background:var(--hairline); }
+.hero__scroll { position:absolute; bottom:34px; left:var(--gutter); font-size:9px; letter-spacing:0.24em; text-transform:uppercase; color:var(--t-4); }
+
+/* ════════════════ 2 · MANIFESTO ════════════════ */
+.manifesto { padding:var(--section-y) 0; }
+.manifesto__statement { font-family:var(--serif); font-weight:300; font-size:clamp(30px,5vw,64px); line-height:1.18; letter-spacing:-0.01em; max-width:18ch; }
+.manifesto__statement em { font-style:italic; color:var(--water); }
+.manifesto__jp { font-family:var(--jp); font-size:14px; color:var(--t-3); margin-top:36px; max-width:46ch; line-height:2; }
+
+/* ════════════════ section header ════════════════ */
+.sec-head { display:flex; align-items:baseline; gap:18px; margin-bottom:54px; }
+.sec-head .no { font-family:var(--serif); font-size:15px; color:var(--water); font-style:italic; }
+.sec-head h2 { font-family:var(--serif); font-weight:300; font-size:clamp(26px,4vw,44px); letter-spacing:-0.01em; }
+
+/* ════════════════ 3 · PROBLEM ════════════════ */
+.problem { padding:var(--section-y) 0; }
+.problem__grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(30px,6vw,90px); }
+.problem__lead { font-family:var(--serif); font-size:clamp(22px,3vw,34px); font-weight:300; line-height:1.35; letter-spacing:-0.01em; }
+.problem__body { font-size:14px; color:var(--t-2); line-height:1.9; max-width:42ch; }
+.problem__body.jp { font-family:var(--jp); font-size:13px; color:var(--t-3); margin-top:18px; }
+
+/* ════════════════ 4 · SOLUTION ════════════════ */
+.solution { padding:var(--section-y) 0; }
+.principles { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,3vw,48px); }
+.principle { padding-top:26px; border-top:0.5px solid var(--hairline-2); }
+.principle .n { font-size:11px; letter-spacing:0.2em; color:var(--water); font-weight:500; }
+.principle h3 { font-family:var(--serif); font-weight:400; font-size:clamp(22px,2.6vw,30px); margin-top:16px; letter-spacing:-0.005em; }
+.principle p { font-size:12.5px; color:var(--t-2); line-height:1.8; margin-top:14px; }
+.principle p.jp { font-family:var(--jp); font-size:11.5px; color:var(--t-3); margin-top:6px; }
+
+/* ════════════════ 5 · SHOWCASE ════════════════ */
+.showcase { padding:var(--section-y) 0; }
+.showcase__hero { display:grid; grid-template-columns:0.85fr 1fr 0.85fr; gap:clamp(18px,3vw,44px); align-items:center; margin-bottom:clamp(40px,7vw,90px); }
+.showcase__rest { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(22px,3vw,48px); }
+.shot { }
+.shot__cap { margin-top:18px; }
+.shot__cap .idx { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:var(--t-3); font-weight:500; }
+.shot__cap .nm { font-size:15px; font-weight:500; margin-top:5px; }
+.shot__cap .ds { font-family:var(--jp); font-size:11.5px; color:var(--t-2); margin-top:6px; line-height:1.6; }
+.shot--hero .shot__cap .nm { font-size:18px; }
+
+/* ════════════════ 6 · UX DETAIL ════════════════ */
+.uxdetail { padding:var(--section-y) 0; }
+.ux-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--hairline); border:0.5px solid var(--hairline); border-radius:var(--r-lg); overflow:hidden; }
+.ux-cell { background:var(--room-2); padding:clamp(24px,3vw,40px); }
+.ux-cell .k { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--water); font-weight:500; }
+.ux-cell .v { font-family:var(--serif); font-size:clamp(18px,2.2vw,24px); font-weight:400; margin-top:10px; }
+.ux-cell .d { font-size:12px; color:var(--t-2); margin-top:10px; line-height:1.7; }
+.ux-cell .d.jp { font-family:var(--jp); font-size:11px; color:var(--t-3); margin-top:3px; }
+
+/* ════════════════ 7 · VISUAL DESIGN ════════════════ */
+.visual { padding:var(--section-y) 0; }
+.chips { display:flex; flex-wrap:wrap; gap:10px; }
+.chip { font-size:11px; letter-spacing:0.04em; color:var(--t-2); padding:9px 16px; border:0.5px solid var(--hairline-2); border-radius:var(--r-full); }
+
+/* ════════════════ 8 · DESIGN SYSTEM ════════════════ */
+.dsys { padding:var(--section-y) 0; }
+.dsys__grid { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:clamp(28px,4vw,64px); }
+.dsys__grid h4 { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--water); margin-bottom:18px; }
+.swatches { display:flex; flex-direction:column; gap:10px; }
+.sw { display:flex; align-items:center; gap:12px; font-size:11.5px; }
+.sw i { width:24px; height:24px; border-radius:6px; border:0.5px solid var(--hairline-2); display:block; flex-shrink:0; }
+.sw .nm { color:var(--t-1); } .sw .hx { color:var(--t-3); margin-left:auto; font-variant-numeric:tabular-nums; }
+.tk { display:flex; flex-direction:column; gap:13px; }
+.tk .row { display:flex; justify-content:space-between; align-items:baseline; font-size:12px; padding-bottom:11px; border-bottom:0.5px solid var(--hairline); }
+.tk .row .l { color:var(--t-2); } .tk .row .r { color:var(--t-3); font-size:10.5px; }
+
+/* ════════════════ 9 · HANDOFF ════════════════ */
+.handoff { padding:var(--section-y) 0; }
+.handoff__grid { display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(24px,3vw,52px); }
+.handoff__grid h4 { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--water); margin-bottom:16px; }
+.handoff__grid ul { list-style:none; display:flex; flex-direction:column; gap:9px; }
+.handoff__grid li { font-size:12px; color:var(--t-2); font-variant-numeric:tabular-nums; }
+.handoff__grid li::before { content:"— "; color:var(--t-4); }
+
+/* ════════════════ 10 · CLOSING ════════════════ */
+.closing { min-height:88vh; display:flex; flex-direction:column; justify-content:center; position:relative; padding:var(--section-y) 0; }
+.closing__msg { font-family:var(--serif); font-weight:300; font-size:clamp(30px,5.5vw,68px); line-height:1.1; letter-spacing:-0.015em; max-width:20ch; }
+.closing__jp { font-family:var(--jp); font-size:14px; color:var(--t-3); margin-top:30px; }
+.closing__sign { margin-top:clamp(60px,10vh,120px); padding-top:22px; border-top:0.5px solid var(--hairline); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; }
+.closing__sign .who { font-family:var(--serif); font-size:16px; }
+.closing__sign .who span { display:block; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--t-3); margin-top:8px; font-family:var(--sans); }
+.closing__sign .meta { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--t-3); text-align:right; line-height:2; }
+
+/* ════════════════ RESPONSIVE ════════════════ */
+@media (max-width:980px){
+  .hero__grid{grid-template-columns:1fr; text-align:left;}
+  .hero__device{grid-row:1; margin-bottom:10px; width:min(240px,60vw);}
+  .problem__grid{grid-template-columns:1fr; gap:30px;}
+  .principles{grid-template-columns:1fr; gap:0;}
+  .principle{padding:24px 0; border-top:0.5px solid var(--hairline-2);}
+  .showcase__hero{grid-template-columns:1fr; max-width:340px; margin-inline:auto;}
+  .showcase__rest{grid-template-columns:1fr 1fr;}
+  .ux-grid{grid-template-columns:1fr;}
+  .dsys__grid{grid-template-columns:1fr; gap:40px;}
+  .handoff__grid{grid-template-columns:1fr 1fr; gap:32px;}
+}
+@media (max-width:560px){
+  .showcase__rest{grid-template-columns:1fr; max-width:320px; margin-inline:auto;}
+  .handoff__grid{grid-template-columns:1fr;}
+  .hero__vrule{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════ 1 · HERO ════════════════════════════ -->
+<header class="hero">
+  <div class="hero__vrule"></div>
+  <div class="pool" style="width:760px; height:760px; left:-200px; bottom:-260px; background:radial-gradient(circle,rgba(143,211,230,0.14),transparent 62%);"></div>
+  <div class="particles" id="hero-particles"></div>
+  <div class="wrap hero__grid">
+    <div class="reveal in">
+      <div class="eyebrow eyebrow--water">UI / UX Design · Immersive Space</div>
+      <h1 class="hero__title">Quiet<br/>Guide</h1>
+      <div class="hero__sub">A Guide App for Immersive Spaces</div>
+      <p class="hero__copy">A quiet interface for an immersive world — designed to guide visitors through dark, immersive exhibitions without ever competing with the art.</p>
+      <div class="hero__tags">
+        <span>UI / UX Design</span><span>Immersive Space</span><span>Design System</span><span>6 Screens</span>
+      </div>
+    </div>
+    <div class="hero__device reveal in">
+      <!-- 04 Artwork Detail — the showpiece -->
+      <div class="device float" id="hero-device">
+        <div class="device__screen">
+         <div class="device__canvas" style="background:#000;">
+          <div class="island"></div>
+          <div class="sbar"><div class="time">9:41</div><div class="ic"><div class="sig"><i style="height:3px"></i><i style="height:5px"></i><i style="height:7px"></i><i style="height:10px"></i></div><div class="bat"></div></div></div>
+          <div style="position:absolute; top:0; left:0; right:0; height:360px; overflow:hidden; background:#01060a;">
+            <div class="artwork__layer" style="background:radial-gradient(120% 80% at 50% 0%, #06141c, #01060a 60%);"></div>
+            <div class="artwork__layer" style="background:radial-gradient(ellipse at 20% 18%, rgba(120,100,200,0.18), transparent 40%);"></div>
+            <div class="artwork__layer" style="background:radial-gradient(70% 46% at 50% 96%, rgba(220,244,252,0.95), rgba(60,150,180,0.55) 32%, rgba(10,50,70,0.2) 60%, transparent 78%);"></div>
+            <div class="artwork__layer glow-breathe" style="background:radial-gradient(40% 28% at 50% 98%, rgba(255,255,255,0.9), transparent 70%); animation:breathe 7s ease-in-out infinite;"></div>
+            <div class="artwork__layer" style="opacity:0.7; -webkit-mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent); mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent); background:repeating-linear-gradient(90deg, transparent 0 13px, rgba(223,246,252,0.5) 13px 13.6px, transparent 14px 27px);"></div>
+            <div class="artwork__layer" style="opacity:0.45; -webkit-mask:linear-gradient(180deg,transparent,#000 40%,transparent 95%); mask:linear-gradient(180deg,transparent,#000 40%,transparent 95%); background:repeating-linear-gradient(90deg, transparent 0 7px, rgba(143,211,230,0.4) 7px 7.5px, transparent 8px 19px);"></div>
+            <div class="particles" id="hero-water"></div>
+            <div class="scrim" style="background:linear-gradient(180deg, rgba(0,0,0,0.22), transparent 20%, transparent 64%, #000 99%);"></div>
+          </div>
+          <div class="topbar">
+            <svg class="ico-back" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#F4F2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="topbar__t" style="margin:0 auto; opacity:0.9;">Art work</div>
+            <div class="ico-menu"><i></i><i></i><i></i></div>
+          </div>
+          <div style="position:absolute; top:378px; left:0; right:0; padding:0 20px;">
+            <div style="font-size:17px; font-weight:600; line-height:1.32; letter-spacing:-0.01em;">Universe of Water Particles on a Rock where People Gather</div>
+            <div style="font-size:10px; color:var(--t-3); margin-top:7px;">teamLab, 2018 · Interactive Digital Installation</div>
+          </div>
+          <div style="position:absolute; bottom:0; left:0; right:0; padding:14px 20px 22px; background:linear-gradient(180deg,transparent,#000 34%);">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px;">
+              <div class="eb eb--w">Audio Guide</div><div style="font-size:9px; color:var(--t-3);">1:24 / 3:40</div>
+            </div>
+            <div style="height:2.5px; background:rgba(244,242,236,0.18); border-radius:2px; position:relative; margin-bottom:14px;">
+              <div style="position:absolute; left:0; top:0; bottom:0; width:38%; background:var(--t-1); border-radius:2px;"></div>
+              <div style="position:absolute; left:38%; top:-3px; width:7px; height:7px; border-radius:50%; background:var(--t-1);"></div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:36px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M6 6h2v12H6zm3.2 6 9 6V6z"/></svg>
+              <div style="width:44px; height:44px; border-radius:50%; border:1.5px solid rgba(244,242,236,0.6); display:flex; align-items:center; justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M8 5v14l11-7z"/></svg></div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M16 6h2v12h-2zM5.5 18l9-6-9-6z"/></svg>
+            </div>
+          </div>
+          <div class="home-ind"></div>
+         </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero__scroll">Scroll ↓</div>
+</header>
+
+<!-- ════════════════════════════ 2 · MANIFESTO ════════════════════════════ -->
+<section class="manifesto">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="margin-bottom:40px;">01 — Manifesto</div>
+    <h2 class="manifesto__statement">The interface should not become the experience. It should stay behind it. Guiding only when needed. <em>Silent</em> when it is not.</h2>
+    <p class="manifesto__jp">アプリは主役にならず、作品体験の裏側で静かに来場者を支える。必要なときだけ現れ、それ以外のときは沈黙する。</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 3 · PROBLEM ════════════════════════════ -->
+<section class="problem">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">02</span><h2>The problem with light in the dark.</h2></div>
+    <div class="problem__grid">
+      <p class="problem__lead">In an immersive exhibition, the experience is the darkness, the sound, the movement of the body, and the distance to the artwork.</p>
+      <div>
+        <p class="problem__body">A bright, information-dense app interface breaks that immersion the moment it is opened. The screen becomes the brightest object in the room.</p>
+        <p class="problem__body jp">没入型展示では、暗闇・音・身体の動き・作品との距離が体験の中心になる。明るく情報量の多い通常のUIは、開いた瞬間にその没入を壊してしまう。だからこそ、暗所でも迷わず、作品を邪魔しないガイドUIを設計した。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 4 · SOLUTION ════════════════════════════ -->
+<section class="solution">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">03</span><h2>Three quiet principles.</h2></div>
+    <div class="principles">
+      <div class="principle">
+        <div class="n">01</div><h3>Low Brightness</h3>
+        <p>Deep black surfaces, a single water-blue accent used only where it carries meaning. Nothing decorative emits light.</p>
+        <p class="jp">背景は深い黒、色は意味のある場所だけ。装飾は光らない。</p>
+      </div>
+      <div class="principle">
+        <div class="n">02</div><h3>Less Text</h3>
+        <p>Information appears only when needed. In front of an artwork, the screen holds direction, distance, and one short hint.</p>
+        <p class="jp">情報は必要なときだけ。作品の前では方向・距離・短いヒントだけ。</p>
+      </div>
+      <div class="principle">
+        <div class="n">03</div><h3>Move with the Visitor</h3>
+        <p>Large tap areas, current location and the next artwork first. A guide you can follow without staring at the screen.</p>
+        <p class="jp">現在地と次の作品を優先。画面を見続けなくても歩けるUI。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 5 · SHOWCASE ════════════════════════════ -->
+<section class="showcase">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">04</span><h2>Six screens, one quiet system.</h2></div>
+
+    <!-- hero row: 04 Artwork Detail centre, large -->
+    <div class="showcase__hero">
+      <!-- 03 Map (small left) -->
+      <div class="shot">
+        <div class="device" data-screen="map"></div>
+        <div class="shot__cap"><div class="idx">03 / Map</div><div class="nm">Map · Route</div><div class="ds">地図情報を削ぎ落とし、現在地・ルート・出口に集中した抽象マップ。</div></div>
+      </div>
+      <!-- 04 Artwork Detail (centre, large) -->
+      <div class="shot shot--hero">
+        <div class="device float" data-screen="detail"></div>
+        <div class="shot__cap"><div class="idx">04 / Detail ★</div><div class="nm">Artwork Detail</div><div class="ds">作品を主役にしながら、音声ガイドと補助情報を最小限で支える画面。</div></div>
+      </div>
+      <!-- 05 Quiet Guide (small right) -->
+      <div class="shot">
+        <div class="device" data-screen="quiet"></div>
+        <div class="shot__cap"><div class="idx">05 / Quiet</div><div class="nm">Quiet Guide</div><div class="ds">方向と距離だけで案内する、最も静かなナビゲーション画面。</div></div>
+      </div>
+    </div>
+
+    <!-- rest row -->
+    <div class="showcase__rest">
+      <div class="shot">
+        <div class="device" data-screen="ticket"></div>
+        <div class="shot__cap"><div class="idx">01 / Entry</div><div class="nm">Ticket / Entry</div><div class="ds">入場に必要な情報だけを整理した、暗所でも読みやすいチケット画面。</div></div>
+      </div>
+      <div class="shot">
+        <div class="device" data-screen="guide"></div>
+        <div class="shot__cap"><div class="idx">02 / Guide</div><div class="nm">Guide · Area Cards</div><div class="ds">現在地と次の展示を静かに示す、没入空間のためのエリアガイド。</div></div>
+      </div>
+      <div class="shot">
+        <div class="device" data-screen="settings"></div>
+        <div class="shot__cap"><div class="idx">06 / System</div><div class="nm">Settings</div><div class="ds">明るさ・音声・言語・アクセシビリティを調整できる設定画面。</div></div>
+      </div>
+    </div>
+    <p style="font-size:11px; color:var(--t-4); margin-top:34px; letter-spacing:0.04em;">※ 各画面の原寸インタラクティブ版は <code style="color:var(--t-3);">reproduction_6screens.html</code> に収録。</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 6 · UX DETAIL ════════════════════════════ -->
+<section class="uxdetail">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">05</span><h2>Designed for the dark.</h2></div>
+    <div class="ux-grid">
+      <div class="ux-cell"><div class="k">Contrast</div><div class="v">Dark-room first</div><div class="d">Body text ≥ 14pt, contrast tuned for dilated eyes.</div><div class="d jp">暗所基準のコントラスト。</div></div>
+      <div class="ux-cell"><div class="k">Hierarchy</div><div class="v">1 screen · 1 intention</div><div class="d">Each screen carries a single clear purpose.</div><div class="d jp">1画面1意図。</div></div>
+      <div class="ux-cell"><div class="k">Color</div><div class="v">Water-blue, only where it matters</div><div class="d">Used for current location and active guidance — never decoration.</div><div class="d jp">重要情報だけを水色で。</div></div>
+      <div class="ux-cell"><div class="k">Silence</div><div class="v">Quiet Mode · Audio · Accessibility</div><div class="d">Brightness, sound and motion can all step back further.</div><div class="d jp">余白とQuiet Modeで静けさをつくる。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 7 · VISUAL DESIGN ════════════════════════════ -->
+<section class="visual">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">06</span><h2>The texture of a dark room.</h2></div>
+    <div class="chips">
+      <span class="chip">Deep black background</span><span class="chip">Water-blue accent</span><span class="chip">Film grain</span>
+      <span class="chip">Inner vignette</span><span class="chip">Glass cards</span><span class="chip">Layered particles</span>
+      <span class="chip">Soft glow</span><span class="chip">iOS-like frame</span><span class="chip">Typographic hierarchy</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 8 · DESIGN SYSTEM ════════════════════════════ -->
+<section class="dsys">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">07</span><h2>Tokens, not values.</h2></div>
+    <div class="dsys__grid">
+      <div>
+        <h4>Color</h4>
+        <div class="swatches">
+          <div class="sw"><i style="background:#000"></i><span class="nm">Ink</span><span class="hx">#000000</span></div>
+          <div class="sw"><i style="background:#0B0C0E"></i><span class="nm">Room</span><span class="hx">#0B0C0E</span></div>
+          <div class="sw"><i style="background:#121316"></i><span class="nm">Surface</span><span class="hx">#121316</span></div>
+          <div class="sw"><i style="background:#1B1D21"></i><span class="nm">Surface 2</span><span class="hx">#1B1D21</span></div>
+          <div class="sw"><i style="background:#8FD3E6"></i><span class="nm">Water</span><span class="hx">#8FD3E6</span></div>
+          <div class="sw"><i style="background:#F4F2EC"></i><span class="nm">Text Primary</span><span class="hx">#F4F2EC</span></div>
+          <div class="sw"><i style="background:rgba(244,242,236,0.08)"></i><span class="nm">Hairline</span><span class="hx">8%</span></div>
+          <div class="sw"><i style="background:rgba(20,21,25,0.62)"></i><span class="nm">Glass</span><span class="hx">.62</span></div>
+        </div>
+      </div>
+      <div>
+        <h4>Typography</h4>
+        <div class="tk">
+          <div class="row"><span class="l">Screen Title</span><span class="r">24 / 600</span></div>
+          <div class="row"><span class="l">Card Title</span><span class="r">18 / 600</span></div>
+          <div class="row"><span class="l">Body</span><span class="r">12.5–13 / 400 · lh 1.7</span></div>
+          <div class="row"><span class="l">Label</span><span class="r">8–9 · .22em · upper</span></div>
+          <div class="row"><span class="l">Distance</span><span class="r">52 / 300</span></div>
+          <div class="row"><span class="l">Family</span><span class="r">Inter · Noto Sans JP</span></div>
+        </div>
+      </div>
+      <div>
+        <h4>Spacing · Radius</h4>
+        <div class="tk">
+          <div class="row"><span class="l">Screen margin</span><span class="r">22</span></div>
+          <div class="row"><span class="l">Card padding</span><span class="r">14–22</span></div>
+          <div class="row"><span class="l">Section gap</span><span class="r">18 · 8pt grid</span></div>
+          <div class="row"><span class="l">Radius</span><span class="r">10 / 16 / 22 / 28</span></div>
+          <div class="row"><span class="l">Device · Full</span><span class="r">44 / 999</span></div>
+          <div class="row"><span class="l">Card shadow</span><span class="r">0 10 30 · .45</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 9 · FIGMA HANDOFF ════════════════════════════ -->
+<section class="handoff">
+  <div class="wrap reveal">
+    <div class="sec-head"><span class="no">08</span><h2>Built to hand off.</h2></div>
+    <div class="handoff__grid">
+      <div><h4>Pages</h4><ul><li>00_Cover &amp; Tokens</li><li>01_Components</li><li>02_Screens Reproduction</li></ul></div>
+      <div><h4>Frames</h4><ul><li>01_Ticket_Entry</li><li>02_Guide_AreaCards</li><li>03_Map_Route</li><li>04_Artwork_Detail</li><li>05_Quiet_Guide</li><li>06_Accessibility_Settings</li></ul></div>
+      <div><h4>Components</h4><ul><li>iPhone Frame</li><li>iOS Status Bar</li><li>Dynamic Island</li><li>Home Indicator</li><li>Glass Card</li><li>Primary CTA</li><li>Audio Player</li><li>Route Pin</li><li>Toggle Row</li><li>Particle Field</li><li>Artwork Visual Layer</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ 10 · CLOSING ════════════════════════════ -->
+<section class="closing">
+  <div class="pool" style="width:660px; height:660px; right:-200px; bottom:-220px; background:radial-gradient(circle,rgba(143,211,230,0.12),transparent 64%);"></div>
+  <div class="wrap reveal">
+    <div class="eyebrow" style="margin-bottom:30px;">09 — Closing</div>
+    <h2 class="closing__msg">Let the artwork remain the center of the experience.</h2>
+    <p class="closing__jp">アプリは主役にならず、来場者を静かに支える。</p>
+    <div class="closing__sign">
+      <div class="who">Avendano Shintaro<span>UI / UX Designer Challenge</span></div>
+      <div class="meta">Quiet Guide<br/>for Immersive Spaces<br/>2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ MOCK TEMPLATES (cloned into [data-screen]) ════════════════════════════ -->
+<template id="tpl-shared-chrome"></template>
+
+<script>
+/* ════════════════ particle fields ════════════════ */
+function scatter(el, count, palette, opts={}){
+  if(!el) return;
+  const out=[];
+  for(let i=0;i<count;i++){
+    const far=Math.random()<0.45;
+    const x = opts.bias ? 50+(Math.random()-0.5)*86 : Math.random()*100;
+    const y = opts.bias ? 100-Math.pow(Math.random(),1.7)*96 : Math.random()*100;
+    const r=(Math.random()*(opts.maxR||2.6)+0.6)*(far?1.6:1);
+    const o=far?Math.random()*0.2+0.07:Math.random()*0.5+0.22;
+    const c=palette[(Math.random()*palette.length)|0];
+    const blur=far?(Math.random()*2+1.4):0;
+    const dur=(Math.random()*6+6).toFixed(1), delay=(-Math.random()*8).toFixed(1);
+    const dx=(Math.random()*8-4).toFixed(1), dy=(Math.random()*-10-2).toFixed(1);
+    out.push(`<b style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${r.toFixed(1)}px;height:${r.toFixed(1)}px;background:${c};opacity:${o.toFixed(2)};filter:blur(${blur}px);box-shadow:0 0 ${(r*3).toFixed(1)}px ${c};--dx:${dx}px;--dy:${dy}px;animation:drift ${dur}s ease-in-out ${delay}s infinite;"></b>`);
+  }
+  el.innerHTML=out.join("");
+}
+scatter(document.getElementById("hero-particles"), 28, ["#8FD3E6","#bfeaf5","#ffffff"]);
+scatter(document.getElementById("hero-water"), 60, ["#dff6fc","#8FD3E6","#ffffff","#a7c8e6"], {bias:true,maxR:3});
+
+/* ════════════════ screen builders (mini reproductions for the showcase) ════════════════ */
+const CHROME = (title, opts={}) => `
+  <div class="island"></div>
+  <div class="sbar"><div class="time">9:41</div><div class="ic"><div class="sig"><i style="height:3px"></i><i style="height:5px"></i><i style="height:7px"></i><i style="height:10px"></i></div><div class="bat"></div></div></div>
+  ${title!==null?`<div class="topbar">${opts.back?'<svg class="ico-back" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#F4F2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>':(opts.ham?'<div class="ico-ham"><i></i><i></i><i></i></div>':'<span style="width:20px"></span>')}<div class="topbar__t" style="margin:0 auto;">${title}</div>${opts.menu?'<div class="ico-menu"><i></i><i></i><i></i></div>':'<span style="width:20px"></span>'}</div>`:''}
+  <div class="home-ind"></div>`;
+
+const SCREENS = {
+  ticket: (s)=>{ s.style.background='radial-gradient(120% 80% at 50% 0%, #0e1014, #000 70%)'; return CHROME('Ticket')+`
+    <div style="position:absolute; top:110px; left:0; right:0; padding:0 20px;">
+      <div class="eb eb--w">Valid Today</div>
+      <div style="font-family:var(--jp); font-size:17px; font-weight:500; margin-top:5px;">teamLab ボーダレス</div>
+      <div class="glass" style="margin-top:16px; padding:18px; border-radius:var(--r-lg); position:relative;">
+        <span style="position:absolute; left:-6px; top:50%; width:12px; height:12px; border-radius:50%; background:#000;"></span>
+        <span style="position:absolute; right:-6px; top:50%; width:12px; height:12px; border-radius:50%; background:#000;"></span>
+        <div style="width:120px; height:120px; background:#F4F2EC; border-radius:11px; margin:0 auto; padding:9px; position:relative;">
+          <div style="position:absolute; inset:9px; background-image:radial-gradient(#0c0c0c 38%,transparent 40%); background-size:7px 7px;"></div>
+          <span style="position:absolute; left:9px; top:9px; width:26px; height:26px; border:5px solid #0c0c0c; border-radius:3px;"></span>
+          <span style="position:absolute; right:9px; top:9px; width:26px; height:26px; border:5px solid #0c0c0c; border-radius:3px;"></span>
+          <span style="position:absolute; left:9px; bottom:9px; width:26px; height:26px; border:5px solid #0c0c0c; border-radius:3px;"></span>
+        </div>
+        <div style="height:0.5px; background:var(--hairline); margin:16px 0;"></div>
+        <div style="display:flex; justify-content:space-between; font-size:11px;">
+          <div><div class="eb">Date</div><div style="margin-top:3px;">Jun 18</div></div>
+          <div><div class="eb">Entry</div><div style="margin-top:3px;">11:00</div></div>
+          <div><div class="eb">Guests</div><div style="margin-top:3px;">2</div></div>
+        </div>
+      </div>
+    </div>`; },
+
+  guide: (s)=>{ s.style.background='#000'; return CHROME('ボーダレス',{ham:true,menu:false})+`
+    <div style="position:absolute; top:92px; left:0; right:0; bottom:0;">
+      <div style="height:33.3%; position:relative; overflow:hidden;">
+        <div class="artwork__layer" style="background:radial-gradient(ellipse at 32% 42%, #ff7ab8, #b41f6c 38%, #2a0518 82%);"></div>
+        <div class="artwork__layer" style="background:radial-gradient(ellipse at 78% 72%, rgba(255,205,90,0.5), transparent 46%);"></div>
+        <div class="scrim" style="background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,0.65));"></div>
+        <div style="position:absolute; bottom:12px; left:16px;"><div class="eb">Floral · 12</div><div style="font-size:15px; font-weight:600; margin-top:2px;">Flower Forest</div></div>
+      </div>
+      <div style="height:33.3%; position:relative; overflow:hidden;">
+        <div class="artwork__layer" style="background:linear-gradient(180deg,#03171f,#0c6480 56%,#bfeaf5);"></div>
+        <div class="artwork__layer" style="background:repeating-linear-gradient(93deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 5px);"></div>
+        <div class="scrim" style="background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,0.6));"></div>
+        <div style="position:absolute; bottom:12px; left:16px;"><div class="eb eb--w">You are here · 8</div><div style="font-size:15px; font-weight:600; margin-top:2px;">Borderless World</div></div>
+      </div>
+      <div style="height:33.3%; position:relative; overflow:hidden;">
+        <div class="artwork__layer" style="background:radial-gradient(ellipse at 45% 55%, #4f9d5e, #16421f 55%, #06160a 90%);"></div>
+        <div class="scrim" style="background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,0.6));"></div>
+        <div style="position:absolute; bottom:12px; left:16px;"><div class="eb">Active · 14</div><div style="font-size:15px; font-weight:600; margin-top:2px;">Athletics Forest</div></div>
+      </div>
+    </div>`; },
+
+  map: (s)=>{ s.style.background='#080a07'; return CHROME('Map',{back:true})+`
+    <div class="artwork__layer" style="background:radial-gradient(circle at 44% 46%, #11150d, #070905 72%);"></div>
+    <svg style="position:absolute; inset:0; width:100%; height:100%;" viewBox="0 0 393 852" preserveAspectRatio="none">
+      <rect x="40" y="150" width="150" height="180" rx="22" fill="#11160c" opacity="0.5"/>
+      <rect x="210" y="300" width="150" height="200" rx="22" fill="#11160c" opacity="0.42"/>
+      <path d="M64 220 Q158 296 134 416 T214 600 Q254 690 192 768" stroke="#33421f" stroke-width="18" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M150 312 Q200 280 248 300" stroke="#8FD3E6" stroke-width="1.5" fill="none" stroke-dasharray="2 5" stroke-linecap="round" opacity="0.85"/>
+    </svg>
+    <div style="position:absolute; top:36%; left:38%; width:32px; height:32px; border-radius:50%; border:1px solid rgba(143,211,230,0.4); transform:translate(-10px,-10px); animation:breathe 7s ease-in-out infinite;"></div>
+    <div style="position:absolute; top:36%; left:38%; width:12px; height:12px; border-radius:50%; background:var(--water); box-shadow:0 0 16px rgba(143,211,230,0.8); transform:translate(-6px,-6px);"></div>
+    <div style="position:absolute; top:35%; left:62%; width:8px; height:8px; border-radius:50%; background:#fff; opacity:0.85;"></div>
+    <div class="glass" style="position:absolute; bottom:18px; left:14px; right:14px; padding:13px;">
+      <div style="display:flex; justify-content:space-between; margin-bottom:9px;"><div class="eb eb--w">Next on route</div><div class="eb">3 / 8</div></div>
+      <div style="display:flex; align-items:center; gap:9px;">
+        <div style="width:42px; height:42px; border-radius:10px; background:radial-gradient(ellipse at 50% 70%, #d8f3fb, #1a8fb0 50%);"></div>
+        <div style="flex:1;"><div style="font-size:12px; font-weight:600;">Forest of Lamps</div><div style="font-size:9px; color:var(--t-2); margin-top:1px;">28m · 3 min</div></div>
+      </div>
+    </div>`; },
+
+  detail: (s)=>{ s.style.background='#000'; const id='w'+Math.random().toString(36).slice(2,7); setTimeout(()=>scatter(document.getElementById(id),52,["#dff6fc","#8FD3E6","#ffffff"],{bias:true,maxR:2.8}),0); return CHROME('Art work',{back:true,menu:true})+`
+    <div style="position:absolute; top:0; left:0; right:0; height:340px; overflow:hidden; background:#01060a;">
+      <div class="artwork__layer" style="background:radial-gradient(120% 80% at 50% 0%, #06141c, #01060a 60%);"></div>
+      <div class="artwork__layer" style="background:radial-gradient(70% 46% at 50% 96%, rgba(220,244,252,0.95), rgba(60,150,180,0.55) 32%, rgba(10,50,70,0.2) 60%, transparent 78%);"></div>
+      <div class="artwork__layer" style="background:radial-gradient(40% 28% at 50% 98%, rgba(255,255,255,0.85), transparent 70%); animation:breathe 7s ease-in-out infinite;"></div>
+      <div class="artwork__layer" style="opacity:0.65; -webkit-mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent); mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent); background:repeating-linear-gradient(90deg, transparent 0 13px, rgba(223,246,252,0.5) 13px 13.6px, transparent 14px 27px);"></div>
+      <div class="particles" id="${id}"></div>
+      <div class="scrim" style="background:linear-gradient(180deg, rgba(0,0,0,0.22), transparent 20%, transparent 64%, #000 99%);"></div>
+    </div>
+    <div style="position:absolute; top:356px; left:0; right:0; padding:0 18px;">
+      <div style="font-size:15px; font-weight:600; line-height:1.32;">Universe of Water Particles on a Rock where People Gather</div>
+      <div style="font-size:9px; color:var(--t-3); margin-top:6px;">teamLab, 2018 · Interactive Digital Installation</div>
+    </div>
+    <div style="position:absolute; bottom:0; left:0; right:0; padding:12px 18px 20px; background:linear-gradient(180deg,transparent,#000 34%);">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;"><div class="eb eb--w">Audio Guide</div><div style="font-size:8px; color:var(--t-3);">1:24 / 3:40</div></div>
+      <div style="height:2px; background:rgba(244,242,236,0.18); border-radius:2px; position:relative; margin-bottom:12px;"><div style="position:absolute; left:0; top:0; bottom:0; width:38%; background:var(--t-1); border-radius:2px;"></div></div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:30px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M6 6h2v12H6zm3.2 6 9 6V6z"/></svg>
+        <div style="width:38px; height:38px; border-radius:50%; border:1.4px solid rgba(244,242,236,0.6); display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M8 5v14l11-7z"/></svg></div>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M16 6h2v12h-2zM5.5 18l9-6-9-6z"/></svg>
+      </div>
+    </div>`; },
+
+  quiet: (s)=>{ s.style.background='#000'; return CHROME(null)+`
+    <div class="artwork__layer" style="background:radial-gradient(circle at 50% 38%, rgba(143,211,230,0.10), transparent 46%); animation:breathe 8s ease-in-out infinite;"></div>
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;">
+      <div class="eb" style="margin-top:60px; opacity:0.4;">▮▮▯ Route 3 / 8</div>
+      <div style="margin-top:110px;"><svg width="50" height="50" viewBox="0 0 80 80" fill="none"><path d="M40 14 L40 66" stroke="#F4F2EC" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/><path d="M18 36 L40 14 L62 36" stroke="#F4F2EC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/></svg></div>
+      <div style="margin-top:36px; font-size:46px; font-weight:300; letter-spacing:-0.03em; opacity:0.92;">28<span style="font-size:15px; opacity:0.5;">m</span></div>
+      <div style="font-size:10px; color:var(--t-3); margin-top:7px;">turn left at corridor</div>
+      <div style="position:absolute; bottom:80px; left:0; right:0; text-align:center;"><div class="eb" style="color:var(--t-4);">Next</div><div style="font-size:12px; color:var(--t-2); margin-top:6px;">Forest of Lamps</div></div>
+    </div>`; },
+
+  settings: (s)=>{ s.style.background='#070708'; const tg=(on)=>`<span style="width:34px; height:21px; border-radius:999px; background:${on?'var(--water)':'rgba(244,242,236,0.16)'}; position:relative; display:block;"><span style="position:absolute; ${on?'right':'left'}:2.5px; top:2.5px; width:16px; height:16px; border-radius:50%; background:#fff;"></span></span>`; return CHROME(null)+`
+    <div style="position:absolute; top:58px; left:0; right:0; padding:0 20px;"><div style="font-size:22px; font-weight:600; letter-spacing:-0.015em;">Settings</div></div>
+    <div style="position:absolute; top:108px; left:0; right:0; padding:0 16px;">
+      <div class="eb" style="padding-left:4px;">Display</div>
+      <div style="background:var(--surface); border-radius:14px; margin-top:7px; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 13px;"><span style="font-size:12px;">Quiet Mode</span>${tg(1)}</div>
+        <div style="height:0.5px; background:var(--hairline);"></div>
+        <div style="padding:12px 13px;"><div style="display:flex; justify-content:space-between; margin-bottom:9px;"><span style="font-size:12px;">Brightness</span><span style="font-size:10px; color:var(--t-3);">Low</span></div><div style="height:3px; background:rgba(244,242,236,0.1); border-radius:999px; position:relative;"><div style="position:absolute; left:0; top:0; bottom:0; width:32%; background:var(--t-1); border-radius:999px;"></div></div></div>
+      </div>
+      <div class="eb" style="padding-left:4px; margin-top:16px;">Accessibility</div>
+      <div style="background:var(--surface); border-radius:14px; margin-top:7px; overflow:hidden;">
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 13px;"><span style="font-size:12px;">High contrast text</span>${tg(1)}</div>
+        <div style="height:0.5px; background:var(--hairline);"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 13px;"><span style="font-size:12px;">Audio description</span>${tg(0)}</div>
+        <div style="height:0.5px; background:var(--hairline);"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 13px;"><span style="font-size:12px;">Haptic guidance</span>${tg(1)}</div>
+      </div>
+    </div>`; },
+};
+
+document.querySelectorAll(".device[data-screen]").forEach((d)=>{
+  const key=d.getAttribute("data-screen");
+  const screen=document.createElement("div");
+  screen.className="device__screen";
+  const canvas=document.createElement("div");
+  canvas.className="device__canvas";
+  if(SCREENS[key]) canvas.innerHTML=SCREENS[key](canvas);
+  screen.appendChild(canvas);
+  d.appendChild(screen);
+});
+
+/* scale every fixed 393×852 canvas to its device width — ResizeObserver keeps it exact
+   through load, font reflow, resize and orientation change */
+const fit = (d)=>{ const c=d.querySelector(".device__canvas"); if(c && d.clientWidth) c.style.transform="scale("+(d.clientWidth/393)+")"; };
+const ro = new ResizeObserver((entries)=>{ entries.forEach(e=>fit(e.target)); });
+document.querySelectorAll(".device").forEach((d)=>{ fit(d); ro.observe(d); });
+window.addEventListener("load", ()=>document.querySelectorAll(".device").forEach(fit));
+
+/* ════════════════ scroll reveal ════════════════ */
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+},{ threshold:0.12, rootMargin:"-40px" });
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
