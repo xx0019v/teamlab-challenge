@@ -3,78 +3,305 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quiet Guide — teamLab UI/UX Designer Challenge · Avendano Shintaro</title>
+<title>Quiet Guide — teamLab UI/UX Designer Challenge · アヴェンダニョ シンタロウ</title>
+<meta name="description" content="teamLab 展示ガイドアプリの忠実な再現とデザインシステム、そして展示体験のUX提案。" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500;600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
 <style>
-  :root{--ink:#0a0b0d;--t1:#F4F2EC;--t2:rgba(244,242,236,.6);--t3:rgba(244,242,236,.34);--water:#8FD3E6;--line:rgba(244,242,236,.08);}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--ink);color:var(--t1);font-family:Inter,'Noto Sans JP',sans-serif;line-height:1.6;
-    min-height:100vh;display:flex;align-items:center;padding:clamp(40px,8vw,120px);position:relative;overflow-x:hidden;}
-  body::after{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(130% 90% at 50% 30%,transparent 60%,rgba(0,0,0,.5));}
-  .wrap{max-width:980px;margin:0 auto;width:100%;position:relative;z-index:1;}
-  .pool{position:fixed;right:-200px;bottom:-220px;width:640px;height:640px;border-radius:50%;
-    background:radial-gradient(circle,rgba(143,211,230,.12),transparent 64%);filter:blur(8px);pointer-events:none;}
-  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--water);}
-  h1{font-family:'Source Serif 4',serif;font-weight:300;font-size:clamp(40px,7vw,84px);line-height:.98;letter-spacing:-.02em;margin-top:22px;}
-  .sub{font-family:'Source Serif 4',serif;font-size:clamp(15px,2vw,20px);color:var(--t2);margin-top:18px;}
-  .jp{font-family:'Noto Sans JP',sans-serif;font-size:13px;color:var(--t3);margin-top:10px;line-height:1.9;}
-  .grid{margin-top:clamp(40px,6vw,72px);display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  a.card{display:block;text-decoration:none;background:rgba(244,242,236,.025);border:.5px solid var(--line);border-radius:18px;
-    padding:24px 26px;transition:background .3s,border-color .3s;}
-  a.card:hover{background:rgba(143,211,230,.05);border-color:rgba(143,211,230,.25);}
-  a.card .k{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--water);}
-  a.card .t{font-family:'Source Serif 4',serif;font-size:21px;color:var(--t1);margin-top:10px;}
-  a.card .d{font-family:'Noto Sans JP',sans-serif;font-size:12px;color:var(--t2);margin-top:8px;line-height:1.6;}
-  .ext{margin-top:36px;display:flex;flex-wrap:wrap;gap:10px 22px;}
-  .ext a{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t3);text-decoration:none;border-bottom:.5px solid var(--line);padding-bottom:2px;}
-  .ext a:hover{color:var(--water);border-color:var(--water);}
-  .foot{margin-top:48px;padding-top:22px;border-top:.5px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
-    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);}
-  @media(max-width:680px){.grid{grid-template-columns:1fr;}}
+/* ============================================================
+   Quiet Guide — Index (Editorial table of contents)
+   Contemporary Japanese Editorial × Immersive Museum
+   ============================================================ */
+:root{
+  --ink:#000; --room:#0a0b0d; --surface:#121316;
+  --t1:#F4F2EC; --t2:rgba(244,242,236,.62); --t3:rgba(244,242,236,.36); --t4:rgba(244,242,236,.18);
+  --water:#8FD3E6; --line:rgba(244,242,236,.08); --line2:rgba(244,242,236,.16);
+  --sans:Inter,'Noto Sans JP',sans-serif; --jp:'Noto Sans JP',sans-serif; --serif:'Source Serif 4',serif; --mono:'JetBrains Mono',monospace;
+  --gutter:clamp(24px,7vw,128px);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--room);color:var(--t1);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;position:relative;}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(130% 90% at 50% 25%,transparent 62%,rgba(0,0,0,.5));}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--gutter);position:relative;z-index:2;}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--t3);}
+.eyebrow .w{color:var(--water);}
+.jp{font-family:var(--jp);}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+/* ---- HERO ---- */
+.hero{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,72px);align-items:center;padding:120px 0 64px;position:relative;}
+.hero__kicker{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.hero__kicker .ln{width:32px;height:.5px;background:var(--water);}
+.hero__title{font-family:var(--serif);font-weight:300;font-size:clamp(48px,8vw,108px);line-height:.96;letter-spacing:-.02em;}
+.hero__lead{font-family:var(--jp);font-weight:300;font-size:clamp(14px,1.7vw,17px);color:var(--t2);margin-top:26px;max-width:38ch;line-height:1.95;}
+.hero__en{font-family:var(--serif);font-style:italic;font-size:clamp(15px,1.8vw,19px);color:var(--t3);margin-top:16px;}
+.hero__tags{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:40px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);}
+.hero__device{justify-self:center;width:min(300px,72vw);}
+.hero__vrule{position:absolute;left:calc(var(--gutter) - 1px);top:0;bottom:0;width:.5px;background:var(--line);}
+.hero__next{position:absolute;bottom:30px;left:var(--gutter);font-family:var(--mono);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--t4);}
+
+/* device (393×852 canvas, scaled) — Artwork Detail */
+.device{position:relative;aspect-ratio:393/852;border-radius:40px;background:var(--ink);overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 0 0 1px rgba(244,242,236,.05);animation:floatY 9s ease-in-out infinite;}
+.device__screen{position:absolute;inset:0;overflow:hidden;border-radius:40px;}
+.device__screen::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:8;background:radial-gradient(130% 100% at 50% 42%,transparent 58%,rgba(0,0,0,.45));}
+.dcanvas{position:absolute;top:0;left:0;width:393px;height:852px;transform-origin:0 0;background:#01060a;}
+.layer{position:absolute;inset:0;}
+.particles{position:absolute;inset:0;overflow:hidden;}
+.particles b{position:absolute;border-radius:50%;display:block;}
+@keyframes floatY{0%,100%{transform:translateY(-4px);}50%{transform:translateY(4px);}}
+@keyframes drift{0%{transform:translate(0,0);}50%{transform:translate(var(--dx,4px),var(--dy,-6px));}100%{transform:translate(0,0);}}
+@keyframes breathe{0%,100%{opacity:.55;}50%{opacity:1;}}
+
+/* ---- INDEX (editorial table of contents) ---- */
+.index{padding:clamp(80px,12vh,160px) 0;}
+.index__head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:18px;border-bottom:.5px solid var(--line2);margin-bottom:8px;}
+.index__head h2{font-family:var(--serif);font-weight:300;font-size:clamp(22px,3vw,34px);letter-spacing:-.01em;}
+.index__head .meta{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);}
+.entry{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(20px,4vw,64px);align-items:center;padding:clamp(26px,3.4vw,40px) 0;border-bottom:.5px solid var(--line);text-decoration:none;color:inherit;position:relative;transition:padding-left .5s cubic-bezier(.22,.61,.36,1);}
+.entry__no{font-family:var(--serif);font-weight:300;font-size:clamp(34px,4.5vw,60px);line-height:1;color:var(--t4);transition:color .5s,transform .5s;letter-spacing:-.02em;}
+.entry__body{min-width:0;}
+.entry__role{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--water);}
+.entry__role.opt{color:var(--t3);}
+.entry__t{font-family:var(--jp);font-weight:500;font-size:clamp(19px,2.4vw,28px);margin-top:9px;letter-spacing:.01em;line-height:1.25;}
+.entry__en{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-top:7px;}
+.entry__d{font-family:var(--jp);font-size:12.5px;color:var(--t2);margin-top:12px;line-height:1.8;max-width:46ch;}
+.entry__arrow{font-family:var(--serif);font-size:22px;color:var(--t4);transition:color .5s,transform .5s;}
+.entry:hover{padding-left:14px;}
+.entry:hover .entry__no{color:var(--water);}
+.entry:hover .entry__arrow{color:var(--t1);transform:translateX(6px);}
+
+/* ---- DESIGN SYSTEM (web, honest spec) ---- */
+.dsys{padding:clamp(60px,10vh,130px) 0;}
+.dsys__head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:46px;}
+.dsys__head h2{font-family:var(--serif);font-weight:300;font-size:clamp(22px,3vw,34px);letter-spacing:-.01em;}
+.dsys__head .note{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);max-width:26ch;text-align:right;line-height:1.7;}
+.dsys__grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:clamp(28px,4vw,60px);}
+.dsys__grid h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--water);margin-bottom:16px;}
+.sw{display:flex;align-items:center;gap:12px;font-size:11.5px;padding:6px 0;}
+.sw i{width:22px;height:22px;border-radius:5px;border:.5px solid var(--line2);flex-shrink:0;}
+.sw .nm{color:var(--t1);} .sw .hx{color:var(--t3);margin-left:auto;font-family:var(--mono);font-size:10px;}
+.tk{display:flex;flex-direction:column;}
+.tk .row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:9px 0;border-bottom:.5px solid var(--line);}
+.tk .row .l{color:var(--t2);} .tk .row .r{color:var(--t3);font-family:var(--mono);font-size:10.5px;}
+.comp{display:flex;flex-wrap:wrap;gap:8px;}
+.comp span{font-family:var(--mono);font-size:10px;color:var(--t2);padding:7px 12px;border:.5px solid var(--line2);border-radius:4px;}
+
+/* ---- FOOT ---- */
+.foot{padding:clamp(50px,8vh,100px) 0 70px;border-top:.5px solid var(--line);}
+.foot__links{display:flex;flex-wrap:wrap;gap:14px 30px;}
+.foot__links a{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--t2);text-decoration:none;border-bottom:.5px solid var(--line);padding-bottom:3px;transition:color .4s,border-color .4s;}
+.foot__links a:hover{color:var(--water);border-color:var(--water);}
+.foot__sign{margin-top:44px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t3);}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1);}
+.reveal.in{opacity:1;transform:none;}
+
+/* ---- responsive ---- */
+@media(max-width:920px){
+  .hero{grid-template-columns:1fr;}
+  .hero__device{grid-row:1;width:min(230px,56vw);margin-bottom:8px;}
+  .hero__vrule{display:none;}
+  .dsys__grid{grid-template-columns:1fr;gap:38px;}
+}
+@media(max-width:600px){
+  .entry{grid-template-columns:auto 1fr;gap:18px;}
+  .entry__arrow{display:none;}
+  .dsys__head{flex-direction:column;gap:10px;} .dsys__head .note{text-align:left;}
+}
 </style>
 </head>
 <body>
-  <div class="pool"></div>
-  <div class="wrap">
-    <div class="eyebrow">teamLab UI / UX Designer Challenge</div>
-    <h1>Quiet Guide<br/>for Immersive Space</h1>
-    <div class="sub">A quiet interface for an immersive world.</div>
-    <div class="jp">暗い展示空間で迷わせない。作品の邪魔をしない、静かな案内。<br/>提供デザインの再現とデザインシステム、そして展示体験のUX提案。</div>
 
-    <div class="grid">
-      <a class="card" href="assignment1_case_study.html">
-        <div class="k">Task 1 · Case Study</div>
-        <div class="t">Reproduction &amp; Design System</div>
-        <div class="d">提供デザインの再現と、開発で使えるデザインシステムの構築。</div>
-      </a>
-      <a class="card" href="reproduction_6screens.html">
-        <div class="k">Task 1 · Screens</div>
-        <div class="t">6 Screens — Reproduction</div>
-        <div class="d">Splash / Guide / Artwork List / Detail / Map / Virtual Queue の原寸再現。</div>
-      </a>
-      <a class="card" href="quiet-guide_lp.html">
-        <div class="k">Task 2 · Proposal</div>
-        <div class="t">Quiet Guide Mode — LP</div>
-        <div class="d">低輝度・少情報・振動中心の展示体験UX提案。</div>
-      </a>
-      <a class="card" href="elevated_set_12screens.html">
-        <div class="k">Task 2 · Extended</div>
-        <div class="t">Elevated Set — 12 Screens</div>
-        <div class="d">来場前から余韻まで、体験アーク全体をカバーする拡張提案。</div>
-      </a>
-    </div>
-
-    <div class="ext">
-      <a href="https://www.figma.com/design/HAfwLTPJoD6Uh1ZUomAylE">Design Data · Figma ↗</a>
-      <a href="https://github.com/xx0019v/teamlab-challenge">Source · GitHub ↗</a>
-    </div>
-
-    <div class="foot">
-      <span>Avendano Shintaro · 専門学校 中央情報大学校</span>
-      <span>2026 · Supplemental</span>
+<!-- ============ HERO ============ -->
+<header class="hero wrap">
+  <div class="hero__vrule"></div>
+  <div class="reveal in">
+    <div class="hero__kicker"><span class="ln"></span><span class="eyebrow"><span class="w">teamLab</span> UI / UX Designer Challenge</span></div>
+    <h1 class="hero__title">Quiet Guide<br/>for Immersive<br/>Space</h1>
+    <p class="hero__lead">暗い展示空間で、迷わせない。作品の邪魔をしない、静かな案内。<br/>提供アプリの忠実な再現とデザインシステム、そして展示体験のUX提案。</p>
+    <p class="hero__en">A quiet interface for an immersive world.</p>
+    <div class="hero__tags"><span>Reproduction</span><span>Design System</span><span>UX Proposal</span><span>6 + 12 Screens</span></div>
+  </div>
+  <div class="hero__device reveal in">
+    <div class="device">
+      <div class="device__screen">
+        <div class="dcanvas" id="hero-canvas">
+          <!-- iOS status -->
+          <div style="position:absolute;top:0;left:0;right:0;height:46px;z-index:12;display:flex;align-items:center;justify-content:space-between;padding:15px 20px 0 24px;">
+            <div style="font-size:12.5px;font-weight:600;">9:41</div>
+            <div style="display:flex;gap:6px;align-items:center;"><div style="display:flex;align-items:flex-end;gap:1.6px;height:10px;"><i style="width:2.6px;height:3px;background:#F4F2EC;display:block;"></i><i style="width:2.6px;height:5px;background:#F4F2EC;display:block;"></i><i style="width:2.6px;height:7px;background:#F4F2EC;display:block;"></i><i style="width:2.6px;height:10px;background:#F4F2EC;display:block;"></i></div><div style="width:21px;height:10.5px;border:1px solid rgba(244,242,236,.55);border-radius:2.5px;padding:1.3px;"><div style="height:100%;width:76%;background:#F4F2EC;border-radius:1px;"></div></div></div>
+          </div>
+          <div style="position:absolute;top:9px;left:50%;transform:translateX(-50%);width:78px;height:22px;background:#000;border-radius:999px;z-index:14;"></div>
+          <!-- artwork hero -->
+          <div style="position:absolute;top:0;left:0;right:0;height:360px;overflow:hidden;">
+            <div class="layer" style="background:radial-gradient(120% 80% at 50% 0%,#06141c,#01060a 60%);"></div>
+            <div class="layer" style="background:radial-gradient(70% 46% at 50% 96%,rgba(220,244,252,.95),rgba(60,150,180,.55) 32%,rgba(10,50,70,.2) 60%,transparent 78%);"></div>
+            <div class="layer" style="background:radial-gradient(40% 28% at 50% 98%,rgba(255,255,255,.85),transparent 70%);animation:breathe 7s ease-in-out infinite;"></div>
+            <div class="layer" style="opacity:.65;-webkit-mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent);mask:linear-gradient(180deg,transparent,#000 35%,#000 88%,transparent);background:repeating-linear-gradient(90deg,transparent 0 13px,rgba(223,246,252,.5) 13px 13.6px,transparent 14px 27px);"></div>
+            <div class="particles" id="hero-particles"></div>
+            <div class="layer" style="background:linear-gradient(180deg,rgba(0,0,0,.22),transparent 20%,transparent 64%,#000 99%);"></div>
+          </div>
+          <div style="position:absolute;top:50px;left:0;right:0;height:42px;z-index:11;display:flex;align-items:center;justify-content:space-between;padding:0 16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#F4F2EC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div style="font-size:13px;font-weight:600;opacity:.9;">Art work</div>
+            <div style="display:flex;flex-direction:column;gap:3.4px;"><i style="width:16px;height:1.4px;background:#F4F2EC;display:block;"></i><i style="width:16px;height:1.4px;background:#F4F2EC;display:block;"></i><i style="width:16px;height:1.4px;background:#F4F2EC;display:block;"></i></div>
+          </div>
+          <div style="position:absolute;top:378px;left:0;right:0;padding:0 18px;">
+            <div style="font-size:15px;font-weight:600;line-height:1.32;">Universe of Water Particles on a Rock where People Gather</div>
+            <div style="font-size:9px;color:rgba(244,242,236,.34);margin-top:6px;">teamLab, 2018 · Interactive Digital Installation</div>
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 18px 20px;background:linear-gradient(180deg,transparent,#000 34%);">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;"><div style="font-family:var(--mono);font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:var(--water);">Audio Guide</div><div style="font-size:8px;color:rgba(244,242,236,.34);">1:24 / 3:40</div></div>
+            <div style="height:2px;background:rgba(244,242,236,.18);border-radius:2px;position:relative;margin-bottom:12px;"><div style="position:absolute;left:0;top:0;bottom:0;width:38%;background:#F4F2EC;border-radius:2px;"></div></div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:30px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M6 6h2v12H6zm3.2 6 9 6V6z"/></svg>
+              <div style="width:38px;height:38px;border-radius:50%;border:1.4px solid rgba(244,242,236,.6);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M8 5v14l11-7z"/></svg></div>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#F4F2EC"><path d="M16 6h2v12h-2zM5.5 18l9-6-9-6z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="hero__next">↓ Index</div>
+</header>
+
+<!-- ============ INDEX (editorial contents) ============ -->
+<section class="index wrap reveal">
+  <div class="index__head">
+    <h2>Contents</h2>
+    <div class="meta">課題1 必須 · 課題2 任意</div>
+  </div>
+
+  <a class="entry" href="assignment1_case_study.html">
+    <div class="entry__no">01</div>
+    <div class="entry__body">
+      <div class="entry__role">Task 1 · Required</div>
+      <div class="entry__t jp">提供デザインの再現とデザインシステム</div>
+      <div class="entry__en">Reproduction &amp; Design System</div>
+      <div class="entry__d jp">見た目を真似るのではなく、開発チームが使えるデータとして再構築。再現の規律・構造・命名をまとめたケーススタディ。</div>
+    </div>
+    <div class="entry__arrow">↗</div>
+  </a>
+
+  <a class="entry" href="reproduction_6screens.html">
+    <div class="entry__no">02</div>
+    <div class="entry__body">
+      <div class="entry__role">Task 1 · UI Study</div>
+      <div class="entry__t jp">6画面の原寸再現</div>
+      <div class="entry__en">Six Screens — Reproduction</div>
+      <div class="entry__d jp">Splash / Guide / Artwork List / Artwork Detail / Map / Virtual Queue。本物のアプリ通りの低輝度UIを忠実に再現。</div>
+    </div>
+    <div class="entry__arrow">↗</div>
+  </a>
+
+  <a class="entry" href="quiet-guide_lp.html">
+    <div class="entry__no">03</div>
+    <div class="entry__body">
+      <div class="entry__role opt">Task 2 · Optional Proposal</div>
+      <div class="entry__t jp">Quiet Guide Mode の提案</div>
+      <div class="entry__en">Quiet Guide — UX Proposal</div>
+      <div class="entry__d jp">暗所・回遊・身体的没入を踏まえた、低輝度・少情報・振動中心のガイド体験。アプリが作品体験を背景から支える。</div>
+    </div>
+    <div class="entry__arrow">↗</div>
+  </a>
+
+  <a class="entry" href="elevated_set_12screens.html">
+    <div class="entry__no">04</div>
+    <div class="entry__body">
+      <div class="entry__role opt">Task 2 · Extended</div>
+      <div class="entry__t jp">12画面の体験拡張</div>
+      <div class="entry__en">Elevated Set — 12 Screens</div>
+      <div class="entry__d jp">来場前から余韻まで、Onboarding・Route・Memory・Accessibility を含む体験アーク全体の提案。</div>
+    </div>
+    <div class="entry__arrow">↗</div>
+  </a>
+</section>
+
+<!-- ============ DESIGN SYSTEM (web, honest) ============ -->
+<section class="dsys wrap reveal">
+  <div class="dsys__head">
+    <h2>Design System</h2>
+    <div class="note">Web上で実際に使用したトークン。<br/>Component specification prepared for Figma handoff.</div>
+  </div>
+  <div class="dsys__grid">
+    <div>
+      <h4>Color Tokens</h4>
+      <div class="sw"><i style="background:#000"></i><span class="nm">Ink</span><span class="hx">#000000</span></div>
+      <div class="sw"><i style="background:#0B0C0E"></i><span class="nm">Room</span><span class="hx">#0B0C0E</span></div>
+      <div class="sw"><i style="background:#121316"></i><span class="nm">Surface</span><span class="hx">#121316</span></div>
+      <div class="sw"><i style="background:#F4F2EC"></i><span class="nm">Warm White</span><span class="hx">#F4F2EC</span></div>
+      <div class="sw"><i style="background:#8FD3E6"></i><span class="nm">Water</span><span class="hx">#8FD3E6</span></div>
+      <div class="sw"><i style="background:rgba(244,242,236,.08)"></i><span class="nm">Hairline</span><span class="hx">8%</span></div>
+    </div>
+    <div>
+      <h4>Type · Spacing · Radius</h4>
+      <div class="tk">
+        <div class="row"><span class="l">Display / Serif</span><span class="r">Source Serif 4</span></div>
+        <div class="row"><span class="l">UI / Sans</span><span class="r">Inter</span></div>
+        <div class="row"><span class="l">日本語</span><span class="r">Noto Sans JP · lh 1.8</span></div>
+        <div class="row"><span class="l">Mono / Label</span><span class="r">JetBrains Mono</span></div>
+        <div class="row"><span class="l">Spacing</span><span class="r">8pt grid</span></div>
+        <div class="row"><span class="l">Radius</span><span class="r">device 40 · card 14</span></div>
+      </div>
+    </div>
+    <div>
+      <h4>Components · for handoff</h4>
+      <div class="comp"><span>App Bar</span><span>Artwork Card</span><span>Guide Card</span><span>Map Pin</span><span>Queue Status</span><span>Audio Player</span><span>Status Badge</span><span>Bottom Nav</span><span>Info Row</span><span>Divider</span></div>
+      <div style="font-family:var(--jp);font-size:11px;color:var(--t3);margin-top:18px;line-height:1.8;">Figma の <span style="font-family:var(--mono);">01_Components</span> ページへ、上記を仕様付きで配置する手順を用意済み。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOT ============ -->
+<footer class="foot wrap reveal">
+  <div class="foot__links">
+    <a href="https://www.figma.com/design/HAfwLTPJoD6Uh1ZUomAylE">Design Data · Figma ↗</a>
+    <a href="https://github.com/xx0019v/teamlab-challenge">Source · GitHub ↗</a>
+  </div>
+  <div class="foot__sign">
+    <span>Avendano Shintaro · 専門学校 中央情報大学校</span>
+    <span>2026 · Quiet Guide for Immersive Space</span>
+  </div>
+</footer>
+
+<script>
+/* particle field for the hero device */
+(function(){
+  const el=document.getElementById("hero-particles");
+  if(!el) return;
+  const pal=["#dff6fc","#8FD3E6","#ffffff","#a7c8e6"];
+  const out=[];
+  for(let i=0;i<54;i++){
+    const far=Math.random()<0.45;
+    const x=50+(Math.random()-0.5)*86;
+    const y=100-Math.pow(Math.random(),1.7)*96;
+    const r=(Math.random()*2.8+0.6)*(far?1.6:1);
+    const o=far?Math.random()*0.2+0.07:Math.random()*0.5+0.22;
+    const c=pal[(Math.random()*pal.length)|0];
+    const bl=far?(Math.random()*2+1.4):0;
+    const dur=(Math.random()*6+6).toFixed(1),de=(-Math.random()*8).toFixed(1);
+    const dx=(Math.random()*8-4).toFixed(1),dy=(Math.random()*-10-2).toFixed(1);
+    out.push(`<b style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;width:${r.toFixed(1)}px;height:${r.toFixed(1)}px;background:${c};opacity:${o.toFixed(2)};filter:blur(${bl}px);box-shadow:0 0 ${(r*3).toFixed(1)}px ${c};--dx:${dx}px;--dy:${dy}px;animation:drift ${dur}s ease-in-out ${de}s infinite;"></b>`);
+  }
+  el.innerHTML=out.join("");
+})();
+
+/* scale the hero device canvas to its width */
+function fitHero(){
+  const d=document.querySelector(".device"), c=document.getElementById("hero-canvas");
+  if(d&&c&&d.clientWidth) c.style.transform="scale("+(d.clientWidth/393)+")";
+}
+new ResizeObserver(fitHero).observe(document.querySelector(".device"));
+fitHero();
+window.addEventListener("load",fitHero);
+
+/* scroll reveal */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:0.1,rootMargin:"-40px"});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
