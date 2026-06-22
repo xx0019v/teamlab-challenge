@@ -32,6 +32,16 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;back
 
 /* ---- HERO ---- */
 .hero{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,72px);align-items:center;padding:120px 0 64px;position:relative;}
+/* Concept-visual background (Canva AI) — layered so typography stays readable */
+.hero__bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.hero__bg img{width:100%;height:100%;object-fit:cover;object-position:62% 50%;opacity:.9;}
+.hero__bg::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(90deg,var(--room) 4%,rgba(10,11,13,.7) 32%,rgba(10,11,13,.15) 62%,rgba(10,11,13,.55) 100%),
+  radial-gradient(130% 100% at 50% 38%,transparent 55%,rgba(0,0,0,.55));}
+.hero__bg-grain{position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.hero__credit{position:absolute;right:var(--gutter);bottom:30px;z-index:5;font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--t4);}
+.hero>.reveal,.hero__device{position:relative;z-index:2;}
 .hero__kicker{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
 .hero__kicker .ln{width:32px;height:.5px;background:var(--water);}
 .hero__title{font-family:var(--serif);font-weight:300;font-size:clamp(48px,8vw,108px);line-height:.96;letter-spacing:-.02em;}
@@ -117,6 +127,11 @@ body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;back
 
 <!-- ============ HERO ============ -->
 <header class="hero wrap">
+  <div class="hero__bg">
+    <img src="assets/quiet-guide-hero-desktop.jpg" alt="" width="1920" height="1080" decoding="async" fetchpriority="high" />
+    <div class="hero__bg-grain"></div>
+  </div>
+  <div class="hero__credit">Concept Visual</div>
   <div class="hero__vrule"></div>
   <div class="reveal in">
     <div class="hero__kicker"><span class="ln"></span><span class="eyebrow"><span class="w">teamLab</span> UI / UX Designer Challenge</span></div>
